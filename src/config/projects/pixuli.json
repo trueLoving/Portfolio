@@ -3450,16 +3450,8 @@
     },
     "images": [
         {
-            "url": "https://i.ibb.co/v6yPYfTb/landing-Page.png",
-            "alt": "Scheds Landing Page"
-        },
-        {
-            "url": "https://i.ibb.co/6Jms8X4K/generated-Schedules.png",
-            "alt": "Scheds Generated Schedules"
-        },
-        {
-            "url": "https://i.ibb.co/WpPxRqMr/customizations-Section.png",
-            "alt": "Scheds Customizations Section"
+            "url": "https://raw.githubusercontent.com/sakura0922/Media/main/images/pixuli-desktop.png",
+            "alt": "pixuli-desktop"
         }
     ]
 }

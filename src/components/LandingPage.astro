@@ -3,40 +3,25 @@ import AppLayout from '../layouts/AppLayout';
 
 // 背景资源路径（从 public/background 目录）
 // public 目录下的文件可以直接通过 URL 访问
-const imageBackgroundPaths = [
-  '/background/images/mac-background1.jpg',
-  '/background/images/mac-background2.jpg',
-  '/background/images/mac-background3.jpg',
-];
+const backgroundPaths:string[] = [];
 
 const videoBackgroundPaths = [
   '/background/video/Glowing-Star-Girl-4096x2160.mp4',
 ];
 
 function getRandomBackground() {
-  const totalBackgrounds = imageBackgroundPaths.length + videoBackgroundPaths.length;
-  const randomIndex = Math.floor(Math.random() * totalBackgrounds) + 1;
-  return `bg-${randomIndex}`;
+  return `bg-0`;
 }
-
-// 创建背景映射
-const imageBackgroundMap = Object.fromEntries(
-  imageBackgroundPaths.map((path, index) => [
-    `bg-${index + 1}`,
-    { type: 'image' as const, src: path },
-  ])
-);
 
 const videoBackgroundMap = Object.fromEntries(
   videoBackgroundPaths.map((path, index) => [
-    `bg-${imageBackgroundPaths.length + index + 1}`,
+    `bg-${backgroundPaths.length + index + 1}`,
     { type: 'video' as const, src: path },
   ])
 );
 
 // 合并所有背景
 const backgroundMap = {
-  ...imageBackgroundMap,
   ...videoBackgroundMap,
 };
 ---
