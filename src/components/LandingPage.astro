@@ -1,66 +1,43 @@
 ---
-import { getImage } from 'astro:assets';
 import AppLayout from '../layouts/AppLayout';
-import macBackground1 from '../assets/images/mac-background1.jpg';
-import macBackground2 from '../assets/images/mac-background2.jpg';
-import macBackground3 from '../assets/images/mac-background3.jpg';
-// Import video - in Astro, video imports return the URL directly
-import glowingStarVideo from '../assets/video/Glowing-Star-Girl-4096x2160.mp4';
 
-// Image backgrounds
-const imageBackgrounds = [macBackground1, macBackground2, macBackground3];
+// 背景资源路径（从 public/background 目录）
+// public 目录下的文件可以直接通过 URL 访问
+const imageBackgroundPaths = [
+  '/background/images/mac-background1.jpg',
+  '/background/images/mac-background2.jpg',
+  '/background/images/mac-background3.jpg',
+];
 
-// Debug: Log video import to understand its structure
-console.log('Video import type:', typeof glowingStarVideo);
-console.log('Video import value:', glowingStarVideo);
-
-// Video backgrounds - in Astro, imported videos are URLs (strings)
-// Handle different possible formats from Astro
-const getVideoUrl = (video: any): string => {
-  if (typeof video === 'string') return video;
-  if (video?.src) return video.src;
-  if (video?.default) return video.default;
-  // If it's an object with a toString, try that
-  if (video && typeof video.toString === 'function') {
-    const url = video.toString();
-    if (url && url !== '[object Object]') return url;
-  }
-  return String(video);
-};
-
-const videoBackgrounds = [getVideoUrl(glowingStarVideo)];
+const videoBackgroundPaths = [
+  '/background/video/Glowing-Star-Girl-4096x2160.mp4',
+];
 
 function getRandomBackground() {
-  const totalBackgrounds = imageBackgrounds.length + videoBackgrounds.length;
+  const totalBackgrounds = imageBackgroundPaths.length + videoBackgroundPaths.length;
   const randomIndex = Math.floor(Math.random() * totalBackgrounds) + 1;
   return `bg-${randomIndex}`;
 }
 
-// Optimize image backgrounds
-const optimizedImageBackgrounds = await Promise.all(
-  imageBackgrounds.map((bg) =>
-    getImage({
-      src: bg,
-      width: 3500,
-    })
-  )
-);
-
-// Create background map with type information
+// 创建背景映射
 const imageBackgroundMap = Object.fromEntries(
-  optimizedImageBackgrounds.map((bg, index) => [`bg-${index + 1}`, { type: 'image' as const, src: bg.src }])
-);
-
-const videoBackgroundMap = Object.fromEntries(
-  videoBackgrounds.map((video, index) => [
-    `bg-${imageBackgrounds.length + index + 1}`,
-    { type: 'video' as const, src: video },
+  imageBackgroundPaths.map((path, index) => [
+    `bg-${index + 1}`,
+    { type: 'image' as const, src: path },
   ])
 );
 
-const backgroundMap = { 
-  // ...imageBackgroundMap, 
-  ...videoBackgroundMap 
+const videoBackgroundMap = Object.fromEntries(
+  videoBackgroundPaths.map((path, index) => [
+    `bg-${imageBackgroundPaths.length + index + 1}`,
+    { type: 'video' as const, src: path },
+  ])
+);
+
+// 合并所有背景
+const backgroundMap = {
+  ...imageBackgroundMap,
+  ...videoBackgroundMap,
 };
 ---
 

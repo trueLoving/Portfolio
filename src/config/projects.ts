@@ -5,10 +5,10 @@
 
 import type { Project } from '../types';
 
-import scheds from './projects/scheds.json';
-import portfolio from './projects/portfolio.json';
+import pixuli from './projects/pixuli.json';
+import stationuli from './projects/stationuli.json';
 
 export const projects: readonly Project[] = [
-  // scheds,
-  // portfolio,
+  pixuli,
+  stationuli,
 ] as Project[];

@@ -2,25 +2,16 @@
 import '../../styles/global.css';
 // @ts-ignore - package exports named AstroSeo but types may not resolve correctly in some setups
 import { AstroSeo } from '@astrolib/seo';
-import { getImage } from 'astro:assets';
-import macBackground1 from '../../assets/images/mac-background1.jpg';
-import macBackground2 from '../../assets/images/mac-background2.jpg';
-import macBackground3 from '../../assets/images/mac-background3.jpg';
 import { userConfig } from '../../config/index';
-
-const backgrounds = await Promise.all([
-  getImage({ src: macBackground1, width: 3500 }),
-  getImage({ src: macBackground2, width: 3500 }),
-  getImage({ src: macBackground3, width: 3500 }),
-]);
 
 // Build safe defaults for SEO
 const siteOrigin = Astro.site ? new URL('/', Astro.site).origin : undefined;
 const canonicalUrl = Astro.props.canonical || siteOrigin;
 const ogUrl = Astro.props.openGraph?.url || siteOrigin;
 // Use first background as a basic OG image if available and site is known
-const ogImageUrl = siteOrigin && backgrounds[0]?.src
-  ? new URL(backgrounds[0].src, siteOrigin).toString()
+// 从 public/background 目录获取背景图片
+const ogImageUrl = siteOrigin
+  ? new URL('/background/images/mac-background1.jpg', siteOrigin).toString()
   : undefined;
 ---
 
@@ -98,14 +89,24 @@ const ogImageUrl = siteOrigin && backgrounds[0]?.src
 <link rel='sitemap' href='/sitemap-index.xml' />
 
 <!-- Preload background images for performance -->
-{
-  backgrounds.map((bg) => (
-    <link
-      rel='preload'
-      href={bg.src}
-      as='image'
-      type='image/webp'
-      fetchpriority='high'
-    />
-  ))
-}
+<link
+  rel='preload'
+  href='/background/images/mac-background1.jpg'
+  as='image'
+  type='image/jpeg'
+  fetchpriority='high'
+/>
+<link
+  rel='preload'
+  href='/background/images/mac-background2.jpg'
+  as='image'
+  type='image/jpeg'
+  fetchpriority='high'
+/>
+<link
+  rel='preload'
+  href='/background/images/mac-background3.jpg'
+  as='image'
+  type='image/jpeg'
+  fetchpriority='high'
+/>

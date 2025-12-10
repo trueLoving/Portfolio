@@ -296,13 +296,13 @@ export default function MacToolbar({
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
                     <img 
-                      src="/src/assets/images/me.png" 
+                      src="/me.png" 
                       alt={`${userConfig.name}'s Avatar`}
                       className="relative w-24 h-24 rounded-full object-cover ring-4 ring-white/50 shadow-lg transition-transform duration-300 group-hover:scale-105"
                       onError={(e) => {
                         // Fallback to SVG if PNG fails
                         const target = e.target as HTMLImageElement;
-                        target.src = '/src/assets/images/me.svg';
+                        target.src = '/background/images/me.svg';
                       }}
                     />
                   </div>

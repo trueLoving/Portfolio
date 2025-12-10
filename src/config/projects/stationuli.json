@@ -1,0 +1,1181 @@
+{
+    "id": "stationuli",
+    "title": "Stationuli",
+    "description": "\ud83d\udd17 Stationuli - Fully Offline & Private P2P Transfer & Control | PC-Android Bridge",
+    "repoUrl": "https://github.com/trueLoving/Stationuli",
+    "liveUrl": "https://github.com/trueLoving/Stationuli/releases/tag/v0.0.1",
+    "techStack": [
+        "React",
+        "TypeScript",
+        "Tailwind CSS",
+        "Tauri",
+        "Rust"
+    ],
+    "structure": {
+        "root": "Stationuli",
+        "children": [
+            {
+                "name": ".editorconfig",
+                "type": "file"
+            },
+            {
+                "name": ".github",
+                "type": "directory",
+                "children": [
+                    {
+                        "name": "INTERACTION_FLOW.md",
+                        "type": "file"
+                    },
+                    {
+                        "name": "RELEASE_NOTES_TEMPLATE.md",
+                        "type": "file"
+                    },
+                    {
+                        "name": "RELEASE_NOTES_TEMPLATE.zh-CN.md",
+                        "type": "file"
+                    },
+                    {
+                        "name": "design",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "README.md",
+                                "type": "file"
+                            },
+                            {
+                                "name": "cross-platform-resource-sharing.md",
+                                "type": "file"
+                            },
+                            {
+                                "name": "device-discovery-and-file-transfer.md",
+                                "type": "file"
+                            },
+                            {
+                                "name": "testing.md",
+                                "type": "file"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "workflows",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "release.yml",
+                                "type": "file"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": ".gitignore",
+                "type": "file"
+            },
+            {
+                "name": ".husky",
+                "type": "directory",
+                "children": [
+                    {
+                        "name": "pre-commit",
+                        "type": "file"
+                    }
+                ]
+            },
+            {
+                "name": ".prettierignore",
+                "type": "file"
+            },
+            {
+                "name": ".vscode",
+                "type": "directory",
+                "children": [
+                    {
+                        "name": "extensions.json",
+                        "type": "file"
+                    },
+                    {
+                        "name": "settings.json",
+                        "type": "file"
+                    }
+                ]
+            },
+            {
+                "name": "CHANGELOG.md",
+                "type": "file"
+            },
+            {
+                "name": "CHANGELOG.zh-CN.md",
+                "type": "file"
+            },
+            {
+                "name": "CONTRIBUTING.md",
+                "type": "file"
+            },
+            {
+                "name": "CONTRIBUTING.zh-CN.md",
+                "type": "file"
+            },
+            {
+                "name": "Cargo.toml",
+                "type": "file"
+            },
+            {
+                "name": "LICENSE",
+                "type": "file"
+            },
+            {
+                "name": "README.md",
+                "type": "file"
+            },
+            {
+                "name": "README.zh-CN.md",
+                "type": "file"
+            },
+            {
+                "name": "apps",
+                "type": "directory",
+                "children": [
+                    {
+                        "name": "desktop",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "README.md",
+                                "type": "file"
+                            },
+                            {
+                                "name": "index.html",
+                                "type": "file"
+                            },
+                            {
+                                "name": "package.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "postcss.config.js",
+                                "type": "file"
+                            },
+                            {
+                                "name": "public",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "logo.png",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "src",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "App.css",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "App.tsx",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "api",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "device.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "deviceAdapter.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "file.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "fileAdapter.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "components",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "AddDeviceDialog.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "DeviceCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "FileSelectionCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ReceivedFilesCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ServiceStatusCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Sidebar.tsx",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "constants.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "hooks",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "useDiscovery.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useFileTransfer.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "main.tsx",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "types.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "utils.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "vite-env.d.ts",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "src-tauri",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "Cargo.toml",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "build.rs",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "capabilities",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "default.json",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "icons",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "128x128.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "128x128@2x.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "32x32.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "64x64.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square107x107Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square142x142Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square150x150Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square284x284Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square30x30Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square310x310Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square44x44Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square71x71Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square89x89Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "StoreLogo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.icns",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.ico",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.png",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "src",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "api",
+                                                "type": "directory",
+                                                "children": [
+                                                    {
+                                                        "name": "device.rs",
+                                                        "type": "file"
+                                                    },
+                                                    {
+                                                        "name": "file.rs",
+                                                        "type": "file"
+                                                    },
+                                                    {
+                                                        "name": "mod.rs",
+                                                        "type": "file"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "discovery.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lib.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "logging.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "main.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "state.rs",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "tauri.conf.json",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "tailwind.config.js",
+                                "type": "file"
+                            },
+                            {
+                                "name": "tsconfig.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "tsconfig.node.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "vite.config.ts",
+                                "type": "file"
+                            },
+                            {
+                                "name": "vitest.config.ts",
+                                "type": "file"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "mobile",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "README.md",
+                                "type": "file"
+                            },
+                            {
+                                "name": "index.html",
+                                "type": "file"
+                            },
+                            {
+                                "name": "package.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "postcss.config.js",
+                                "type": "file"
+                            },
+                            {
+                                "name": "public",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "logo.png",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "src",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "App.css",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "App.tsx",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "README.md",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "api",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "device.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "deviceAdapter.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "file.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "fileAdapter.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "components",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "AddDeviceDialog.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "BottomNavigation.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ControlTab.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "DeviceCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "FileCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "FileSelectionCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ReceivedFilesCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ServiceStatusCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "TransferTab.tsx",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "constants.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "hooks",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "useDiscovery.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useFileTransfer.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "main.tsx",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "types.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "utils.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "vite-env.d.ts",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "src-tauri",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": ".gitignore",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "Cargo.toml",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "README.md",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "build.rs",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "capabilities",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "default.json",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "icons",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "107x107.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "128x128.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "128x128@2x.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "142x142.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "150x150.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "284x284.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "30x30.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "310x310.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "32x32.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "44x44.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "64x64.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "71x71.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "89x89.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square107x107Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square142x142Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square150x150Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square284x284Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square30x30Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square310x310Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square44x44Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square71x71Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Square89x89Logo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "StoreLogo.png",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.icns",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.ico",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "icon.png",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "sign-apk",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "README.md",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "generate-keystore.sh",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "keystore.properties.example",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "setup-android-signing.sh",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "src",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "api",
+                                                "type": "directory",
+                                                "children": [
+                                                    {
+                                                        "name": "device.rs",
+                                                        "type": "file"
+                                                    },
+                                                    {
+                                                        "name": "file.rs",
+                                                        "type": "file"
+                                                    },
+                                                    {
+                                                        "name": "mod.rs",
+                                                        "type": "file"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "discovery.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "file_ops.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "lib.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "logging.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "main.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "state.rs",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "tauri.conf.json",
+                                        "type": "file"
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "tailwind.config.js",
+                                "type": "file"
+                            },
+                            {
+                                "name": "tsconfig.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "tsconfig.node.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "vite.config.ts",
+                                "type": "file"
+                            },
+                            {
+                                "name": "vitest.config.ts",
+                                "type": "file"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "logo.png",
+                "type": "file"
+            },
+            {
+                "name": "package.json",
+                "type": "file"
+            },
+            {
+                "name": "packages",
+                "type": "directory",
+                "children": [
+                    {
+                        "name": "common",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "package.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "src",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "api",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "components",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "AddDeviceDialog.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "DevTools.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "DeviceCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "DeviceList",
+                                                "type": "directory",
+                                                "children": [
+                                                    {
+                                                        "name": "DeviceItem.tsx",
+                                                        "type": "file"
+                                                    },
+                                                    {
+                                                        "name": "DeviceList.tsx",
+                                                        "type": "file"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "EmptyState.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "FileCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "FileSelectionCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ReceivedFilesCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "ServiceStatusCard.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Spinner.test.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Spinner.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Tooltip.test.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "Tooltip.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "TransferProgress",
+                                                "type": "directory",
+                                                "children": [
+                                                    {
+                                                        "name": "TransferProgress.tsx",
+                                                        "type": "file"
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "name": "WelcomeEmptyState.tsx",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "constants",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "config.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "hooks",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useDeviceDiscovery.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useDiscovery.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useFileTransfer.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "useLogs.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "index.ts",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "stores",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "deviceStore.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "transferStore.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "types",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "device.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "transfer.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "utils",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "format.test.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "format.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "index.ts",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "validation.ts",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "name": "tsconfig.json",
+                                "type": "file"
+                            },
+                            {
+                                "name": "vitest.config.ts",
+                                "type": "file"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "core",
+                        "type": "directory",
+                        "children": [
+                            {
+                                "name": "Cargo.toml",
+                                "type": "file"
+                            },
+                            {
+                                "name": "src",
+                                "type": "directory",
+                                "children": [
+                                    {
+                                        "name": "crypto",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "encryption.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "key_exchange.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "mod.rs",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "file",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "chunk.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "mod.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "resume.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "transfer.rs",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    },
+                                    {
+                                        "name": "lib.rs",
+                                        "type": "file"
+                                    },
+                                    {
+                                        "name": "p2p",
+                                        "type": "directory",
+                                        "children": [
+                                            {
+                                                "name": "mdns.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "mod.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "quic.rs",
+                                                "type": "file"
+                                            },
+                                            {
+                                                "name": "tcp.rs",
+                                                "type": "file"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "pnpm-lock.yaml",
+                "type": "file"
+            },
+            {
+                "name": "pnpm-workspace.yaml",
+                "type": "file"
+            },
+            {
+                "name": "rustfmt.toml",
+                "type": "file"
+            },
+            {
+                "name": "vitest.config.ts",
+                "type": "file"
+            },
+            {
+                "name": "vitest.setup.ts",
+                "type": "file"
+            },
+            {
+                "name": "vitest.workspace.ts",
+                "type": "file"
+            }
+        ]
+    },
+    "images": [
+        {
+            "url": "https://i.ibb.co/v6yPYfTb/landing-Page.png",
+            "alt": "Scheds Landing Page"
+        },
+        {
+            "url": "https://i.ibb.co/6Jms8X4K/generated-Schedules.png",
+            "alt": "Scheds Generated Schedules"
+        },
+        {
+            "url": "https://i.ibb.co/WpPxRqMr/customizations-Section.png",
+            "alt": "Scheds Customizations Section"
+        }
+    ]
+}
