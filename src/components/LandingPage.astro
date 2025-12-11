@@ -1,33 +1,14 @@
 ---
 import AppLayout from '../layouts/AppLayout';
+import { getBackgroundMap, getRandomBackgroundKey } from '../config/background';
 
-// 背景资源路径（从 public/background 目录）
-// public 目录下的文件可以直接通过 URL 访问
-const backgroundPaths:string[] = [];
-
-const videoBackgroundPaths = [
-  '/background/video/Glowing-Star-Girl-4096x2160.mp4',
-];
-
-function getRandomBackground() {
-  return `bg-0`;
-}
-
-const videoBackgroundMap = Object.fromEntries(
-  videoBackgroundPaths.map((path, index) => [
-    `bg-${backgroundPaths.length + index + 1}`,
-    { type: 'video' as const, src: path },
-  ])
-);
-
-// 合并所有背景
-const backgroundMap = {
-  ...videoBackgroundMap,
-};
+// 从配置文件获取背景资源
+const backgroundMap = getBackgroundMap();
+const initialBg = getRandomBackgroundKey();
 ---
 
 <AppLayout
   client:load
-  initialBg={getRandomBackground()}
+  initialBg={initialBg}
   backgroundMap={backgroundMap}
 />

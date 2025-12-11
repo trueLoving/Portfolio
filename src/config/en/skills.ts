@@ -21,3 +21,4 @@ export const skills: readonly string[] = [
   'MySQL',
   'PostgreSQL',
 ] as const;
+

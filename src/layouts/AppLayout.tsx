@@ -14,16 +14,7 @@ import ContactWidget from '../components/global/ContactWidget';
 import ShortcutHint from '../components/global/ShortcutHint';
 import WelcomeTour from '../components/global/WelcomeTour';
 import { I18nProvider } from '../i18n/context';
-
-interface BackgroundItem {
-  type: 'image' | 'video';
-  src: string;
-}
-
-interface AppLayoutProps {
-  initialBg: string;
-  backgroundMap: Record<string, BackgroundItem>;
-}
+import type { BackgroundItem, AppLayoutProps } from '../types';
 
 type TutorialStep = {
   title: string;
@@ -66,7 +57,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
 
   const activeApps = state.windows;
-  const currentBackground = backgroundMap[currentBg];
+  const currentBackground = backgroundMap[currentBg] || Object.values(backgroundMap)[0];
 
   // Ensure video plays when mounted or background changes
   useEffect(() => {

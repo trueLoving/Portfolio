@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useUserConfig } from '../../config';
+import { useI18n } from '../../i18n/context';
 import DraggableWindow from './DraggableWindow';
 
 interface ResumeViewerProps {
@@ -9,6 +10,7 @@ interface ResumeViewerProps {
 
 export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
   const userConfig = useUserConfig();
+  const { locale } = useI18n();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
@@ -38,6 +40,7 @@ export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
       <div className="h-full bg-white">
         <figure className="h-full">
           <object 
+            key={`${locale}-${userConfig.resume.localPath}`}
             data={userConfig.resume.localPath} 
             type="application/pdf" 
             width="100%" 

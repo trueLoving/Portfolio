@@ -3,15 +3,15 @@ import '../../styles/global.css';
 // @ts-ignore - package exports named AstroSeo but types may not resolve correctly in some setups
 import { AstroSeo } from '@astrolib/seo';
 import { userConfig } from '../../config/index';
+import { backgroundConfig } from '../../config/background';
 
 // Build safe defaults for SEO
 const siteOrigin = Astro.site ? new URL('/', Astro.site).origin : undefined;
 const canonicalUrl = Astro.props.canonical || siteOrigin;
 const ogUrl = Astro.props.openGraph?.url || siteOrigin;
-// Use first background as a basic OG image if available and site is known
-// 从 public/background 目录获取背景图片
-const ogImageUrl = siteOrigin
-  ? new URL('/background/images/mac-background1.jpg', siteOrigin).toString()
+// Use configured background as OG image if available and site is known
+const ogImageUrl = siteOrigin && backgroundConfig.defaultOgImage
+  ? new URL(backgroundConfig.defaultOgImage, siteOrigin).toString()
   : undefined;
 ---
 
@@ -89,17 +89,21 @@ const ogImageUrl = siteOrigin
 <link rel='sitemap' href='/sitemap-index.xml' />
 
 <!-- Preload background images for performance -->
-<link
-  rel='preload'
-  href='/background/images/mac-background1.jpg'
-  as='image'
-  type='image/jpeg'
-  fetchpriority='high'
-/>
-<link
-  rel='preload'
-  href='/background/video/Glowing-Star-Girl-4096x2160.mp4'
-  as='video'
-  type='video/mp4'
-  fetchpriority='high'
-/>
+{backgroundConfig.defaultPreloadImage && (
+  <link
+    rel='preload'
+    href={backgroundConfig.defaultPreloadImage}
+    as='image'
+    type={backgroundConfig.defaultPreloadImage.endsWith('.svg') ? 'image/svg+xml' : 'image/jpeg'}
+    fetchpriority='high'
+  />
+)}
+{backgroundConfig.defaultPreloadVideo && (
+  <link
+    rel='preload'
+    href={backgroundConfig.defaultPreloadVideo}
+    as='video'
+    type='video/mp4'
+    fetchpriority='high'
+  />
+)}

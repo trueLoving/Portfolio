@@ -27,3 +27,4 @@ export const getTranslations = (locale: Locale): Translations => {
   return locales[locale] || locales[defaultLocale];
 };
 
+

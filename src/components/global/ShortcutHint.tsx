@@ -1,14 +1,16 @@
 import React from 'react';
 import { IoSearch, IoMail, IoDocumentTextOutline } from 'react-icons/io5';
 import { FaRegKeyboard } from 'react-icons/fa';
+import { useI18n } from '../../i18n/context';
 
 export default function ShortcutHint() {
+  const { t } = useI18n();
 
   const shortcuts = [
-    { key: '(CTRL/⌘)+K', label: 'Search', icon: <IoSearch size={14} /> },
-    { key: '(CTRL/⌘)+C', label: 'Contact', icon: <IoMail size={14} /> },
-    { key: '? or (CTRL/⌘)+H', label: 'Help', icon: <FaRegKeyboard size={14} /> },
-    { key: '(CTRL/⌘)+M or (CTRL/⌘)+Up', label: 'Mission Control', icon: <IoDocumentTextOutline size={14} /> },
+    { key: '(CTRL/⌘)+K', label: t('shortcutHint.search'), icon: <IoSearch size={14} /> },
+    { key: '(CTRL/⌘)+C', label: t('shortcutHint.contact'), icon: <IoMail size={14} /> },
+    { key: '? or (CTRL/⌘)+H', label: t('shortcutHint.help'), icon: <FaRegKeyboard size={14} /> },
+    { key: '(CTRL/⌘)+M or (CTRL/⌘)+Up', label: t('shortcutHint.missionControl'), icon: <IoDocumentTextOutline size={14} /> },
 
   ];
   

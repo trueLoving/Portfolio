@@ -60,7 +60,7 @@ export default function MacToolbar({
       setCurrentDateTime(new Date());
     }, 60000);
 
-    return () => clearInterval(timer);
+    return () => clearInterval(timer as unknown as NodeJS.Timeout);
   }, []);
 
   useEffect(() => {
@@ -316,11 +316,6 @@ export default function MacToolbar({
                       src="/me.png" 
                       alt={`${userConfig.name}'s Avatar`}
                       className="relative w-24 h-24 rounded-full object-cover ring-4 ring-white/50 shadow-lg transition-transform duration-300 group-hover:scale-105"
-                      onError={(e) => {
-                        // Fallback to SVG if PNG fails
-                        const target = e.target as HTMLImageElement;
-                        target.src = '/background/images/me.svg';
-                      }}
                     />
                   </div>
                   <div className="text-center">

@@ -151,5 +151,11 @@ export interface Translations {
     english: string;
     chinese: string;
   };
+  shortcutHint: {
+    search: string;
+    contact: string;
+    help: string;
+    missionControl: string;
+  };
 }
 

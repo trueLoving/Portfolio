@@ -185,9 +185,14 @@ export interface DraggableWindowProps {
   className?: string;
 }
 
+export interface BackgroundItem {
+  type: 'image' | 'video';
+  src: string;
+}
+
 export interface AppLayoutProps {
   initialBg: string;
-  backgroundMap: Record<string, string>;
+  backgroundMap: Record<string, BackgroundItem>;
 }
 
 // ============================================

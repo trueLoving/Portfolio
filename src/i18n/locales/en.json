@@ -148,6 +148,12 @@
     "switch": "Switch Language",
     "english": "English",
     "chinese": "中文"
+  },
+  "shortcutHint": {
+    "search": "Search",
+    "contact": "Contact",
+    "help": "Help",
+    "missionControl": "Mission Control"
   }
 }
 

@@ -7,3 +7,4 @@ export function updateHtmlLang(locale: string) {
   }
 }
 
+

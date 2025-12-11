@@ -15,3 +15,4 @@ export const personal: PersonalInfo = {
   yearOfBirth: 1999,
 };
 
+

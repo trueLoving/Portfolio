@@ -149,6 +149,12 @@
     "switch": "切换语言",
     "english": "English",
     "chinese": "中文"
+  },
+  "shortcutHint": {
+    "search": "搜索",
+    "contact": "联系",
+    "help": "帮助",
+    "missionControl": "调度中心"
   }
 }
 
