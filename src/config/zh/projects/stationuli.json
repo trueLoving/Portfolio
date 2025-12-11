@@ -1165,5 +1165,13 @@
         ]
     },
     "images": [
+        {
+            "url": "/projects/stationuli/desktop.png",
+            "alt": "stationuli-desktop"
+        },
+        {
+            "url": "/projects/stationuli/mobile.png",
+            "alt": "stationuli-mobile"
+        }
     ]
 }

@@ -3450,8 +3450,16 @@
     },
     "images": [
         {
-            "url": "https://raw.githubusercontent.com/sakura0922/Media/main/images/pixuli-desktop.png",
+            "url": "/projects/pixuli/web.png",
+            "alt": "pixuli-web"
+        },
+        {
+            "url": "/projects/pixuli/desktop.png",
             "alt": "pixuli-desktop"
+        },
+        {
+            "url": "/projects/pixuli/mobile.png",
+            "alt": "pixuli-mobile"
         }
     ]
 }
