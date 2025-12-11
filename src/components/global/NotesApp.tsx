@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import {
-    FaGraduationCap, FaBriefcase, FaChevronLeft, FaBookOpen,
-    FaCode, FaUsers, FaPalette, FaTrophy
+    FaGraduationCap, FaBriefcase, FaChevronLeft,
+    FaCode
 } from 'react-icons/fa';
 import { userConfig } from '../../config/index';
 import DraggableWindow from './DraggableWindow';
@@ -10,11 +10,7 @@ export type Section =
     | 'menu'
     | 'education'
     | 'experience'
-    | 'courses'
-    | 'skills'
-    | 'roles'
-    | 'activities'
-    | 'competitions';
+    | 'skills';
 
 interface NotesAppProps {
     isOpen: boolean;
@@ -73,11 +69,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
 
     const education = userConfig.education || [];
     const experience = userConfig.experience || [];
-    const courses = userConfig.courses || [];
     const skills = userConfig.skills || [];
-    const roles = userConfig.extraCurricularRoles || [];
-    const activities = userConfig.extraCurricularActivities || [];
-    const competitions = userConfig.competitions || [];
 
     const renderBackButton = () => (
         <button
@@ -189,27 +181,6 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
         </div>
     );
 
-    const renderCourses = () => (
-        <div className="space-y-6">
-            {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Courses</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {courses.map((item, index) => {
-                    const itemId = `courses-${index}`;
-                    return (
-                        <div key={itemId} className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                            <h3 className="text-xl font-semibold text-gray-200 mb-2">{item.title}</h3>
-                            <div className="text-gray-300 mb-2">{item.institution}, {item.location}</div>
-                            <div className="text-gray-400 mb-3">{item.year}</div>
-                            <p className="text-gray-300 mb-4">{item.description}</p>
-                            {item.images && item.images.length > 0 && renderImageCarousel(itemId, item.images)}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-
     const renderSkills = () => {
         // Build a simple frequency map of how many projects use each skill
         const freq: Record<string, number> = {};
@@ -253,87 +224,11 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
         );
     };
 
-    const renderExtraCurricularRoles = () => (
-        <div className="space-y-6">
-            {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Extracurricular Roles</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {roles.map((item, index) => {
-                    const itemId = `roles-${index}`;
-                    return (
-                        <div key={itemId} className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                            <h3 className="text-xl font-semibold text-gray-200 mb-2">{item.role}</h3>
-                            <div className="text-gray-300 mb-2">{item.institution}, {item.location}</div>
-                            <div className="text-gray-400 mb-3">{item.year}</div>
-                            {item.images && item.images.length > 0 && renderImageCarousel(itemId, item.images)}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-
-    const renderExtraCurricularActivities = () => (
-        <div className="space-y-6">
-            {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Extracurricular Activities</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {activities.map((item, index) => {
-                    const itemId = `activities-${index}`;
-                    return (
-                        <div key={itemId} className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                            <h3 className="text-xl font-semibold text-gray-200 mb-2">{item.title}</h3>
-                            <div className="text-gray-300 mb-2">{item.institution}, {item.location}</div>
-                            <div className="text-gray-400 mb-3">{item.year}</div>
-                            {item.images && item.images.length > 0 && renderImageCarousel(itemId, item.images)}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-
-    const renderCompetitions = () => (
-        <div className="space-y-6">
-            {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Competitions</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {competitions.map((item, index) => {
-                    const itemId = `competitions-${index}`;
-                    return (
-                        <div key={itemId} className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow">
-                            <h3 className="text-xl font-semibold text-gray-200 mb-2">{item.title}</h3>
-                            <div className="text-gray-300 mb-2">{item.description}</div>
-                            <div className="text-gray-400 mb-3">Achievement: {item.achievement} ({item.year})</div>
-                            {item.images && item.images.length > 0 && renderImageCarousel(itemId, item.images)}
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
-    );
-
     const renderMenu = () => (
         <div>
             <h2 className="text-2xl font-bold text-gray-200 mb-6">My Notes</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {/* Competitions */}
-                <button
-                    type="button"
-                    className="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-                    onClick={() => handleSectionClick('competitions')}
-                    aria-label="Open Competitions section"
-                >
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-12 h-12 bg-orange-600 rounded-xl flex items-center justify-center">
-                            <FaTrophy size={28} className="text-white" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Competitions</h3>
-                    </div>
-                    <p className="text-gray-400">View my competition history and achievements</p>
-                </button>
-
                 {/* Education */}
                 <button
                     type="button"
@@ -365,52 +260,6 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                     </div>
                     <p className="text-gray-400">Explore my professional work experience</p>
                 </button>
-                {/* Extracurricular Roles */}
-                <button
-                    type="button"
-                    className="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-                    onClick={() => handleSectionClick('roles')}
-                    aria-label="Open Extracurricular Roles section"
-                >
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center">
-                            <FaUsers size={28} className="text-white" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Extracurricular Roles</h3>
-                    </div>
-                    <p className="text-gray-400">My involvement in student activities and roles</p>
-                </button>
-
-                {/* Extracurricular Activities */}
-                <button
-                    type="button"
-                    className="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-                    onClick={() => handleSectionClick('activities')}
-                    aria-label="Open Extracurricular Activities section"
-                >
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-12 h-12 bg-pink-600 rounded-xl flex items-center justify-center">
-                            <FaPalette size={28} className="text-white" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Extracurricular Activities</h3>
-                    </div>
-                    <p className="text-gray-400">My participation in events and activities</p>
-                </button>
-                {/* Courses */}
-                <button
-                    type="button"
-                    className="bg-gray-800/50 p-4 rounded-lg hover:bg-gray-700/50 transition-colors text-left"
-                    onClick={() => handleSectionClick('courses')}
-                    aria-label="Open Courses section"
-                >
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center">
-                            <FaBookOpen size={28} className="text-white" />
-                        </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Courses</h3>
-                    </div>
-                    <p className="text-gray-400">Check out courses I have completed</p>
-                </button>
 
                 {/* Skills */}
                 <button
@@ -436,11 +285,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
             case 'menu': return 'Notes';
             case 'education': return 'Education Notes';
             case 'experience': return 'Experience Notes';
-            case 'courses': return 'Courses Notes';
             case 'skills': return 'Skills Notes';
-            case 'roles': return 'Extracurricular Roles Notes';
-            case 'activities': return 'Extracurricular Activities Notes';
-            case 'competitions': return 'Competitions Notes';
             default: return 'Notes';
         }
     };
@@ -461,11 +306,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                     {activeSection === 'menu' && renderMenu()}
                     {activeSection === 'education' && renderEducation()}
                     {activeSection === 'experience' && renderExperience()}
-                    {activeSection === 'courses' && renderCourses()}
                     {activeSection === 'skills' && renderSkills()}
-                    {activeSection === 'roles' && renderExtraCurricularRoles()}
-                    {activeSection === 'activities' && renderExtraCurricularActivities()}
-                    {activeSection === 'competitions' && renderCompetitions()}
                 </div>
             </div>
         </DraggableWindow>

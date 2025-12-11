@@ -10,8 +10,6 @@
  * - education.ts: Education and courses
  * - experience.ts: Work experience
  * - skills.ts: Technical skills
- * - extracurricular.ts: Leadership roles and activities
- * - competitions.ts: Competitions and achievements
  * - projects.ts: Project imports
  * - apps.ts: Spotify and resume configuration
  * - site.ts: SEO and theme configuration
@@ -25,8 +23,6 @@ import { contact } from './contact';
 import { education, courses } from './education';
 import { experience } from './experience';
 import { skills } from './skills';
-import { extraCurricularRoles, extraCurricularActivities } from './extracurricular';
-import { competitions } from './competitions';
 import { projects } from './projects';
 import { spotify, resume } from './apps';
 import { seo, theme } from './site';
@@ -53,12 +49,9 @@ export const userConfig: UserConfig = {
   education,
   courses,
   skills,
-  extraCurricularRoles,
-  extraCurricularActivities,
-  competitions,
   experience,
   projects,
 } as const;
 
 // Export individual modules for granular imports if needed
-export { personal, social, contact, education, courses, experience, skills, extraCurricularRoles, extraCurricularActivities, competitions, projects, spotify, resume, seo, theme };
+export { personal, social, contact, education, courses, experience, skills, projects, spotify, resume, seo, theme };

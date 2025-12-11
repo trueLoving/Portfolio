@@ -28,9 +28,6 @@ export interface SpotlightProps {
         | 'experience'
         | 'courses'
         | 'skills'
-        | 'roles'
-        | 'activities'
-        | 'competitions'
     ) => void;
     openGitHub: () => void;
     openResume: () => void;

@@ -80,39 +80,6 @@ export interface Experience {
 }
 
 // ============================================
-// Extracurricular Types
-// ============================================
-
-export interface ExtraCurricularRole {
-  role: string;
-  institution: string;
-  location: string;
-  year: string;
-  images?: readonly Image[];
-}
-
-export interface ExtraCurricularActivity {
-  title: string;
-  description: string;
-  institution: string;
-  location: string;
-  year: string;
-  images?: readonly Image[];
-}
-
-// ============================================
-// Competition Types
-// ============================================
-
-export interface Competition {
-  title: string;
-  description: string;
-  achievement: string;
-  year: string;
-  images?: readonly Image[];
-}
-
-// ============================================
 // Contact & Social Types
 // ============================================
 
@@ -191,9 +158,6 @@ export interface UserConfig {
   education: readonly Education[];
   courses: readonly Course[];
   skills: readonly string[];
-  extraCurricularRoles: readonly ExtraCurricularRole[];
-  extraCurricularActivities: readonly ExtraCurricularActivity[];
-  competitions: readonly Competition[];
   experience: readonly Experience[];
   projects: readonly Project[];
 }

@@ -8,16 +8,16 @@ import type { Education, Course } from '../types';
 export const education: readonly Education[] = [
   {
     degree: 'Bachelor of Computer Science',
-    major: 'Biomedical Informatics',
-    institution: 'Nile University',
-    location: 'Giza, Egypt',
-    year: '2021-2025',
-    description: 'Relevant coursework: Data Structures, Algorithms, Database Management, Software Engineering, Biomedical Informatics, Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, Natural Language Processing, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems',
+    major: 'Computer Science',
+    institution: 'Hangzhou Normal University',
+    location: 'Hangzhou, China',
+    year: '2017-2021',
+    description: 'Relevant coursework: Data Structures, Data Structures and Algorithms, Operating Systems, Computer Networks, Software Engineering, Biomedical Informatics, Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, Natural Language Processing, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems',
     images: [
       {
-        url: 'https://www.nu.edu.eg/sites/default/files/2024-06/whatsapp_image_2024-06-25_at_1.33.17_pm.jpeg',
-        alt: 'Nile University',
-        description: 'Nile University Campus',
+        url: 'https://www.hznu.edu.cn/upload/resources/image/2021/08/10/7657092.jpg',
+        alt: 'Hangzhou Normal University',
+        description: 'Hangzhou Normal University Campus',
       },
     ],
   },
