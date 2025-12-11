@@ -13,6 +13,7 @@ import MissionControl from '../components/global/MissionControl';
 import ContactWidget from '../components/global/ContactWidget';
 import ShortcutHint from '../components/global/ShortcutHint';
 import WelcomeTour from '../components/global/WelcomeTour';
+import { I18nProvider } from '../i18n/context';
 
 interface BackgroundItem {
   type: 'image' | 'video';
@@ -151,41 +152,42 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const handleAppClose = (app: App) => dispatch({ type: 'CLOSE', app });
 
   return (
+    <I18nProvider>
     <div className='relative w-screen h-screen overflow-hidden'>
-      {currentBackground?.type === 'video' ? (
-        <video
-          key={currentBg}
-          ref={setVideoRef}
-          className='absolute inset-0 w-full h-full object-cover'
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload='auto'
-          onError={(e) => {
-            console.error('Video background failed to load:', currentBackground.src);
-            console.error('Video element error:', e);
-            // Fallback to first image background if video fails
-            const firstImageBg = Object.entries(backgroundMap).find(([_, bg]) => bg.type === 'image');
-            if (firstImageBg) {
-              setCurrentBg(firstImageBg[0]);
-            }
-          }}
-          onLoadStart={() => {
-            console.log('Video loading started:', currentBackground.src);
-          }}
-          onCanPlay={() => {
-            console.log('Video can play:', currentBackground.src);
-          }}
-        >
-          <source src={currentBackground.src} type='video/mp4' />
-        </video>
-      ) : (
-        <div
-          className='absolute inset-0 bg-cover bg-center'
-          style={{ backgroundImage: `url(${currentBackground?.src || ''})` }}
-        />
-      )}
+        {currentBackground?.type === 'video' ? (
+          <video
+            key={currentBg}
+            ref={setVideoRef}
+            className='absolute inset-0 w-full h-full object-cover'
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload='auto'
+            onError={(e) => {
+              console.error('Video background failed to load:', currentBackground.src);
+              console.error('Video element error:', e);
+              // Fallback to first image background if video fails
+              const firstImageBg = Object.entries(backgroundMap).find(([_, bg]) => bg.type === 'image');
+              if (firstImageBg) {
+                setCurrentBg(firstImageBg[0]);
+              }
+            }}
+            onLoadStart={() => {
+              console.log('Video loading started:', currentBackground.src);
+            }}
+            onCanPlay={() => {
+              console.log('Video can play:', currentBackground.src);
+            }}
+          >
+            <source src={currentBackground.src} type='video/mp4' />
+          </video>
+        ) : (
+      <div
+        className='absolute inset-0 bg-cover bg-center'
+            style={{ backgroundImage: `url(${currentBackground?.src || ''})` }}
+      />
+        )}
 
       <div className='relative z-10'>
         <MacToolbar 
@@ -282,5 +284,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
         onAppClose={(app) => handleAppClose(app)}
       />
     </div>
+    </I18nProvider>
   );
 }

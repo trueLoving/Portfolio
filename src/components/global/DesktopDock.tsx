@@ -3,8 +3,9 @@ import { BsGithub, BsFilePdf, BsStickyFill, BsLinkedin } from 'react-icons/bs';
 import { IoIosCall, IoIosMail } from 'react-icons/io';
 import { FaLink, FaEnvelope } from 'react-icons/fa';
 import ResumeViewer from './ResumeViewer';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import { RiTerminalFill } from 'react-icons/ri';
+import { useI18n } from '../../i18n/context';
 
 interface DesktopDockProps {
   onTerminalClick: () => void;
@@ -21,6 +22,8 @@ interface DesktopDockProps {
 }
 
 const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactClick, activeApps }: DesktopDockProps) => {
+  const { t } = useI18n();
+  const userConfig = useUserConfig();
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
   const [showResume, setShowResume] = useState(false);
   const [showLinksPopup, setShowLinksPopup] = useState(false);
@@ -101,15 +104,15 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
     >
       <div className="grid grid-cols-1 gap-y-2">
         {userConfig.social.linkedin && (
-          <a
-            href={userConfig.social.linkedin}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 text-gray-300 hover:text-white"
-          >
-            <BsLinkedin size={20} />
-            <span>LinkedIn</span>
-          </a>
+        <a
+          href={userConfig.social.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center gap-2 text-gray-300 hover:text-white"
+        >
+          <BsLinkedin size={20} />
+          <span>{t('toolbar.linkedin')}</span>
+        </a>
         )}
         <a
           href={userConfig.social.github}
@@ -118,35 +121,35 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
           className="flex items-center gap-2 text-gray-300 hover:text-white"
         >
           <BsGithub size={20} />
-          <span>GitHub</span>
+          <span>{t('toolbar.github')}</span>
         </a>
         <a
           href={`mailto:${userConfig.contact.email}`}
           className="flex items-center gap-2 text-gray-300 hover:text-white"
         >
           <IoIosMail size={20} />
-          <span>Email</span>
+          <span>{t('toolbar.email')}</span>
         </a>
         {userConfig.contact.phone && (
-          <a
-            href={`tel:${userConfig.contact.phone}`}
-            className="flex items-center gap-2 text-gray-300 hover:text-white"
-          >
-            <IoIosCall size={20} />
-            <span>Call</span>
-          </a>
+        <a
+          href={`tel:${userConfig.contact.phone}`}
+          className="flex items-center gap-2 text-gray-300 hover:text-white"
+        >
+          <IoIosCall size={20} />
+          <span>Call</span>
+        </a>
         )}
       </div>
     </div>
   );
 
   const icons = [
-    { id: 'github', label: 'My Projects', onClick: onGitHubClick, icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github },
-    { id: 'notes', label: 'Resume Notes', onClick: onNotesClick, icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes },
-    { id: 'resume', label: 'View Resume', onClick: handleResumeClick, icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume },
-    { id: 'email', label: 'Contact', onClick: onContactClick, icon: IoIosMail, color: 'from-blue-600 to-blue-400', active: false },
-    { id: 'links', label: 'Contact Links', onClick: handleLinksClick, icon: FaLink, color: 'from-purple-600 to-purple-400', active: false },
-    { id: 'terminal', label: 'Terminal', onClick: onTerminalClick, icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal },
+    { id: 'github', label: t('dock.github'), onClick: onGitHubClick, icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github },
+    { id: 'notes', label: t('dock.notes'), onClick: onNotesClick, icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes },
+    { id: 'resume', label: t('dock.resume'), onClick: handleResumeClick, icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume },
+    { id: 'email', label: t('dock.contact'), onClick: onContactClick, icon: IoIosMail, color: 'from-blue-600 to-blue-400', active: false },
+    { id: 'links', label: t('dock.links'), onClick: handleLinksClick, icon: FaLink, color: 'from-purple-600 to-purple-400', active: false },
+    { id: 'terminal', label: t('dock.terminal'), onClick: onTerminalClick, icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal },
   ];
 
   return (

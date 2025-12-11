@@ -1,78 +1,92 @@
 # macOS User-friendly Portfolio
 
-A modern, interactive portfolio built with Astro, React, and Tailwind CSS, featuring a macOS-inspired interface and an AI terminal.
+<div align="center">
 
-> **Note**: This project is based on [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio) with additional enhancements including dynamic video backgrounds and bilingual language support (English/Chinese).
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
+![Node](https://img.shields.io/badge/node-%3E%3D22.0.0-brightgreen.svg)
+![pnpm](https://img.shields.io/badge/pnpm-10.18.3-orange.svg)
+![Version](https://img.shields.io/badge/version-0.0.1-blue.svg)
 
-## 🚀 Features
+[中文文档](./README.zh-CN.md) | [English](#about)
 
-- Modern Stack: Astro 5, React, Tailwind CSS
-- macOS-style UI: Dock, toolbar, draggable windows, Notes app, GitHub project viewer
-- **Dynamic Video Backgrounds**: Support for video wallpapers in addition to static images, with smooth transitions and automatic playback
+</div>
+
+---
+
+## About
+
+A modern, interactive portfolio website with a macOS-inspired interface, featuring dynamic video backgrounds and bilingual language support.
+
+This project is based on [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio), built with Astro, React, and Tailwind CSS.
+
+### 🎯 Core Features
+
+- **macOS-style Interface**: Dock, toolbar, draggable windows, Notes app, GitHub project viewer
+- **Dynamic Video Backgrounds**: Support for MP4 video wallpapers with automatic playback, loop, and mute
 - **Bilingual Support**: Full English/Chinese language switching with i18n support
-- Spotlight: Global search with fuzzy matching (Fuse.js), grouped results, power commands, and deep-linking (Notes sections & Projects)
-- Mission Control: Grid of open windows for quick switching (Ctrl/Cmd+↑ or F3)
-- Dock polish: Activity badges and subtle magnification on hover
-- AI Terminal: Chat endpoint powered by Groq (GROQ_API_KEY)
-- Contact: In-app contact form modal that saves messages to Supabase Postgres
-- Admin Dashboard: Dedicated `/admin` route with username/password login to review messages
-- Shortcuts: Overlay via `?` and a subtle fixed shortcut hint on the desktop
-- Modular configuration: Edit content via files in `src/config/` (no code changes required)
-- Accessibility: Keyboard navigation and ARIA semantics across key components
-- SEO: `@astrolib/seo`, sitemap, Twitter cards, JSON-LD, canonical from `PUBLIC_SITE_URL`
-- Image performance: `astro:assets` for backgrounds, lazy/async loading for content images
-- TypeScript first: Strong shared types in `src/types`
-- Vercel-ready: Deploy easily with environment config
+- **Spotlight Search**: Global search with fuzzy matching (Fuse.js), grouped results, and deep-linking
+- **AI Terminal**: Chat endpoint powered by Groq
+- **Contact Form**: In-app contact form modal that saves messages to Supabase Postgres
+- **Admin Dashboard**: Dedicated `/admin` route with username/password login
 
-### ✨ New Features (Based on macos-terminal-portfolio)
+### ✨ Enhancements
 
-- **Dynamic Video Backgrounds**: 
-  - Support for MP4 video files as wallpapers
-  - Automatic playback with loop and mute
-  - Smooth transitions between backgrounds
-  - Fallback to static images if video fails to load
-  - Video files should be placed in `src/assets/video/`
+Based on the original project, this version adds the following features:
 
-- **Bilingual Language Support**:
-  - Full English/Chinese (Simplified) language switching
-  - Language preference saved in localStorage
-  - All UI elements and content support both languages
-  - Easy to extend to additional languages
+**1. Dynamic Video Background Support**
+- Support for MP4 video files as wallpapers
+- Automatic playback, loop, and mute
+- Smooth transitions between backgrounds
+- Fallback to static images if video fails to load
+- Video files should be placed in `public/background/video/`
+
+**2. Complete Internationalization**
+- English/Chinese (Simplified) language switching (default: English)
+- Language preference saved in localStorage
+- All UI elements and content support both languages
+- Configuration files organized by language: `src/config/en/` and `src/config/zh/`
+- Easy to extend to additional languages
+
+**3. Multi-language Configuration System**
+- Configuration files organized by language directory (`src/config/en/` and `src/config/zh/`)
+- Supports localization of personal info, education, experience, skills, etc.
+- Unified configuration loader and React hooks
 
 ## 🛠️ Tech Stack
 
 - [Astro](https://astro.build/) — Content-focused web framework
 - [React](https://reactjs.org/) — UI interactivity
 - [Tailwind CSS](https://tailwindcss.com/) — Utility-first styling
-- [TypeScript](https://www.typescriptlang.org/) — Types and DX
-- [Vercel](https://vercel.com/) — Hosting/analytics
-- [Supabase](https://supabase.com/) — Postgres + RLS for contact storage
+- [TypeScript](https://www.typescriptlang.org/) — Type safety
+- [Vercel](https://vercel.com/) — Hosting and analytics
+- [Supabase](https://supabase.com/) — Database and contact form storage
+- [Groq](https://groq.com/) — AI terminal chat service
 
-## 📦 Installation
+## 🚀 Quick Start
 
-1) Clone the repository
+### 1. Clone Repository
 
 ```bash
-git clone https://github.com/aabdoo23/portfolio
+git clone https://github.com/your-username/portfolio
 cd portfolio
 ```
 
-2) Install dependencies
+### 2. Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-3) Configure environment variables
+### 3. Configure Environment Variables
 
 Copy `.env.example` to `.env` and fill in:
 
-```
+```env
 # AI Terminal
 GROQ_API_KEY=your_groq_api_key_here
 
 # Site
-# PUBLIC_SITE_URL=https://your-domain.tld
+PUBLIC_SITE_URL=https://your-domain.tld
 
 # Supabase (server-only; do NOT expose in PUBLIC_ vars)
 SUPABASE_URL=https://YOUR-PROJECT.supabase.co
@@ -83,11 +97,11 @@ ADMIN_USERNAME=admin
 ADMIN_PASSWORD=change_me
 ```
 
-4) Create the database table (Supabase)
+### 4. Create Database Table
 
 Run this SQL in the Supabase SQL editor:
 
-```
+```sql
 create table if not exists public.contact_messages (
     id uuid primary key default gen_random_uuid(),
     created_at timestamptz not null default now(),
@@ -103,149 +117,186 @@ create table if not exists public.contact_messages (
 alter table public.contact_messages enable row level security;
 ```
 
-5) Add your content
+### 5. Configure Personal Information
 
-Configuration is modular under `src/config/`:
+Configuration files are located in `src/config/` directory, organized by language:
 
-- `personal.ts` — Name, role, website, brief focus
-- `social.ts` — GitHub, LinkedIn links
-- `contact.ts` — Email, phone, Calendly
-- `education.ts`, `experience.ts`, `skills.ts` — Main profile content
-- `extracurricular.ts`, `competitions.ts` — Optional extras
-- `projects.ts` — Portfolio projects (structure, screenshots, repo links)
-- `apps.ts` — Resume and Spotify playlist IDs/URLs
-- `site.ts` — SEO (title/description/keywords) and theme colors
+**English Configuration** (`src/config/en/`):
+- `personal.ts` — Personal information (name, role, location, website)
+- `education.ts` — Education background
+- `experience.ts` — Work experience
+- `skills.ts` — Skills list
+- `site.ts` — SEO and theme configuration
+- `social.ts` — Social media links
+- `contact.ts` — Contact information
+- `projects.ts` — Project configuration
+- `apps.ts` — Resume and Spotify configuration
 
-All types are defined in `src/types` and aggregated as `userConfig` in `src/config/index.ts`.
+**Chinese Configuration** (`src/config/zh/`):
+- Same structure as English configuration, with Chinese translations
 
-6) (Optional) Generate project JSON from GitHub
+### 6. Add Background Resources
 
-See `util/github_repo_parser.py`. To reduce rate limiting, pass a token in the script (personal access token):
+- **Static Images**: Place in `public/background/images/` directory
+- **Video Files**: Place in `public/background/video/` directory (MP4 format)
 
-```python
-def main():
-    parser = GitHubRepoParser('ghp_YOUR_TOKEN_HERE')
-```
+## 💻 Development
 
-## 🚀 Development
-
-To start the development server:
-
-```bash
-npm run dev
-```
-
-This will start the development server at `http://localhost:4321`.
-
-## 🏗️ Building for Production
-
-To build the project for production:
+### Start Development Server
 
 ```bash
-npm run build
+pnpm run dev
 ```
 
-To preview the production build:
+The development server will start at `http://localhost:4321`.
+
+### Build for Production
 
 ```bash
-npm run preview
+pnpm run build
 ```
 
-## Deploy to vercel:
+### Preview Production Build
+
+```bash
+pnpm run preview
+```
+
+## 🚀 Deployment
+
+### Deploy to Vercel
+
+#### Method 1: Using Vercel CLI (Recommended)
+
+1. **Build the project**
+```bash
+pnpm run build
+```
+
+2. **Deploy to production**
 ```bash
 npx vercel deploy --prod
 ```
-or 
+
+Or deploy to preview first:
 ```bash
 npx vercel deploy
 ```
-and select the image from the vercel dashboard.
+Then select the deployment from the Vercel dashboard.
 
-There is a bug with direct deployment from github, i can't seem to figure it out tbf, so for the time being use the above commands after running ```npm run build```.
+#### Method 2: Automatic Deployment via GitHub
 
-Tips:
-- In Vercel Project Settings → Environment Variables, set `PUBLIC_SITE_URL` (e.g., `https://your-domain.tld`) so canonical/OG links are correct.
-- Also set `GROQ_API_KEY` for the Terminal chat.
-- Add Supabase + Admin envs (server-only): `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `ADMIN_USERNAME`, `ADMIN_PASSWORD`.
+1. Push code to GitHub
+2. Connect the repository in Vercel
+3. Configure environment variables (see below)
+4. Vercel will deploy automatically
+
+> **Note**: If GitHub auto-deployment has issues, use Method 1 (CLI deployment).
+
+### Environment Variables
+
+Configure in Vercel Project Settings → Environment Variables:
+
+**Required Variables**:
+- `PUBLIC_SITE_URL` — Production URL (e.g., `https://your-domain.tld`)
+- `GROQ_API_KEY` — Groq API key (for AI Terminal)
+
+**Optional Variables** (for contact form and admin dashboard):
+- `SUPABASE_URL` — Supabase project URL
+- `SUPABASE_SERVICE_ROLE_KEY` — Supabase service role key
+- `ADMIN_USERNAME` — Admin dashboard username
+- `ADMIN_PASSWORD` — Admin dashboard password
+
+### Deployment Tips
+
+- Ensure all environment variables are properly configured
+- Check that `PUBLIC_SITE_URL` is correct, as this affects SEO and Open Graph links
+- If using a custom domain, configure DNS records in Vercel
 
 ## 📁 Project Structure
 
 ```
 ├── src/
 │   ├── components/      # React components
+│   │   └── global/      # Global components (Dock, Toolbar, Spotlight, etc.)
 │   ├── layouts/         # Astro/React layouts
 │   ├── pages/           # Astro pages (includes API routes)
-│   ├── styles/          # Global styles
-│   ├── config/          # Modular user/site config (see files listed above)
-│   ├── types/           # Shared TypeScript types
-│   └── assets/          # Images and static assets
-├── public/             # Public assets
-├── .astro/             # Astro build files
-├── util/               # Utility functions
-└── astro.config.mjs    # Astro configuration
+│   ├── config/          # Configuration files
+│   │   ├── en/          # English configuration
+│   │   ├── zh/          # Chinese configuration
+│   │   ├── loader.ts    # Configuration loader
+│   │   └── hooks.tsx    # React hooks
+│   ├── i18n/            # Internationalization
+│   │   ├── locales/     # Language files (en.json, zh-CN.json)
+│   │   └── context.tsx   # i18n Context
+│   ├── types/           # TypeScript type definitions
+│   └── styles/          # Global styles
+├── public/              # Public assets
+│   └── background/      # Background resources (images and videos)
+├── util/                # Utility scripts
+└── astro.config.mjs     # Astro configuration
 ```
 
-## 🔧 Configuration & Architecture
+## ⌨️ Keyboard Shortcuts
 
-- `astro.config.mjs`: Astro config; `site` can be set via `PUBLIC_SITE_URL`
-- `src/components/global/BaseHead.astro`: Central SEO (AstroSeo) + JSON-LD and OG defaults
-- `src/config/*`: All user content and site/theme config
-- `src/types`: Shared types for config and components
-- `src/pages/api/chat.ts`: Serverless API route using Groq (requires `GROQ_API_KEY`)
-- `src/pages/api/contact.ts`: Saves contact messages to Supabase (`contact_messages`)
-- `src/pages/admin.astro`: Admin dashboard route (React on Astro)
-- `src/pages/api/admin/login.ts`: Admin login endpoint (username/password from env)
-- `src/pages/api/admin/messages.ts`: Admin messages list (requires session token)
+- `Cmd/Ctrl + K` — Open Spotlight search
+- `?` — Show shortcuts overlay
+- `Ctrl/Cmd + ↑` or `F3` — Open Mission Control
+- `Cmd/Ctrl + C` — Open Contact form
 
-State management:
-- `AppLayout.tsx` uses a reducer to manage app windows (`terminal`, `notes`, `github`, `resume`, `spotify`) instead of multiple booleans.
+## 🔧 Configuration
 
-Shortcuts:
-- Cmd/Ctrl+K: Spotlight search
-- ?: Shortcuts overlay
-- Ctrl/Cmd+↑ or F3: Mission Control
-- Cmd/Ctrl+C: Open Contact form
+### Multi-language Configuration
 
-Accessibility:
-- Menubar, dialog, tree, and toolbar semantics; keyboard activation for dock/menu; labelled controls; `aria-live` for terminal/messages.
+Configuration files are organized by language in `src/config/en/` and `src/config/zh/`:
 
-SEO:
-- `@astrolib/seo` provides meta, Twitter cards, openGraph with a safe fallback image; JSON-LD for WebSite and Person.
+- **Localized Content**: `personal.ts`, `education.ts`, `experience.ts`, `skills.ts`, `site.ts`
+- **Non-localized Content**: `social.ts`, `contact.ts`, `projects.ts`, `apps.ts` (these files exist in both directories but have the same content)
 
-## 🚀 Deployment
+### Using Configuration
 
-The project is configured for deployment on Vercel.
+**In React Components**:
+```typescript
+import { useUserConfig } from '../../config';
 
-1. Push to GitHub and connect the repo in Vercel
-2. In Project Settings → Environment Variables set:
-    - `PUBLIC_SITE_URL` = your production URL (e.g., https://your-domain.tld)
-    - `GROQ_API_KEY` = your key
-    - `SUPABASE_URL` = your Supabase project URL
-    - `SUPABASE_SERVICE_ROLE_KEY` = service role key (server-only)
-    - `ADMIN_USERNAME`, `ADMIN_PASSWORD` = creds for `/admin`
-3. Vercel will deploy automatically. If auto-deploy fails, use the CLI commands above.
+function MyComponent() {
+  const userConfig = useUserConfig(); // Automatically loads config based on current language
+  // ...
+}
+```
 
-## 📝 License
+**In Astro Pages** (server-side):
+```typescript
+import { getUserConfig } from '../config/loader';
+
+const config = getUserConfig('en'); // or 'zh-CN'
+```
+
+## 📝 Features
+
+- ✅ macOS-style interface (Dock, toolbar, draggable windows)
+- ✅ Dynamic video background support
+- ✅ English/Chinese bilingual switching
+- ✅ Spotlight global search
+- ✅ Mission Control window management
+- ✅ AI Terminal chat
+- ✅ Contact form (Supabase storage)
+- ✅ Admin dashboard
+- ✅ Responsive design
+- ✅ SEO optimization
+- ✅ Accessibility support
+
+## 📜 Acknowledgments
+
+- **Original Project**: [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio)
+- **Original Author**: Johnny Culbreth (Austin, TX)
+- **Modified by**: aabdoo23 (Giza, Egypt)
+- **Enhanced by**: trueLoving - Added dynamic video backgrounds and bilingual language support
+
+## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## 🙏 Acknowledgments
+## 📞 Support
 
-- Inspired by macOS terminal interface
-- Built with modern web technologies
-- Thanks to all contributors and maintainers of the open-source tools used in this project
-
-## 📞 Contact
-
-For questions or support, please open an issue on GitHub.
-
-Admin & data notes:
-- The contact form stores submissions in Supabase; RLS is enabled and only the server API (service role) can read/write.
-- The Admin Dashboard lives at `/admin` and uses username/password from env. It fetches messages via a server API secured by a short-lived session token.
-
-## 📜 Credits
-
-- **Original Project**: [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio)
-- **Original Author**: Made with ❤️ in Austin, TX by Johnny Culbreth
-- **Modified by**: aabdoo23 (Giza, Egypt)
-- **Enhanced by**: trueLoving - Added dynamic video backgrounds and bilingual language support
+[中文文档](README.zh-CN.md) | [English](#about)

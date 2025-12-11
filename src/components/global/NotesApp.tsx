@@ -3,8 +3,9 @@ import {
     FaGraduationCap, FaBriefcase, FaChevronLeft,
     FaCode
 } from 'react-icons/fa';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import DraggableWindow from './DraggableWindow';
+import { useI18n } from '../../i18n/context';
 
 export type Section =
     | 'menu'
@@ -28,6 +29,8 @@ interface Image {
 }
 
 const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
+    const { t } = useI18n();
+    const userConfig = useUserConfig();
     const [activeSection, setActiveSection] = useState<Section>('menu');
     // Store image indices in an object: { 'itemId': index }
     const [activeImageIndices, setActiveImageIndices] = useState<ImageIndicesState>({});
@@ -78,7 +81,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
             className="flex items-center gap-2 text-gray-300 hover:text-gray-100 mb-4"
         >
             <FaChevronLeft />
-            <span>Back to Menu</span>
+            <span>{t('notes.backToMenu')}</span>
         </button>
     );
 
@@ -94,7 +97,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                 <div className="rounded-lg overflow-hidden mb-2">
                     <img
                         src={images[currentIndex].url}
-                        alt={images[currentIndex].alt || 'Screenshot'}
+                        alt={images[currentIndex].alt || t('notes.image.screenshot')}
                         decoding="async"
                         loading="lazy"
                         className="w-full h-48 object-contain bg-gray-900 rounded-lg"
@@ -109,7 +112,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                     <div className="flex justify-between mt-2">
                         <button
                             onClick={() => handlePrevImage(itemId, images)}
-                            aria-label="Previous image"
+                            aria-label={t('notes.image.previous')}
                             className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
                         >
                             ←
@@ -119,7 +122,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                         </span>
                         <button
                             onClick={() => handleNextImage(itemId, images)}
-                            aria-label="Next image"
+                            aria-label={t('notes.image.next')}
                             className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
                         >
                             →
@@ -133,7 +136,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
     const renderEducation = () => (
         <div className="space-y-6">
             {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Education</h2>
+            <h2 className="text-2xl font-bold text-gray-200 mb-6">{t('notes.education.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {education.map((item, index) => {
                     const itemId = `education-${index}`;
@@ -154,7 +157,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
     const renderExperience = () => (
         <div className="space-y-6">
             {renderBackButton()}
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">Professional Experience</h2>
+            <h2 className="text-2xl font-bold text-gray-200 mb-6">{t('notes.experience.title')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {experience.map((item, index) => {
                     const itemId = `experience-${index}`;
@@ -203,15 +206,15 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
         return (
             <div className="space-y-6">
                 {renderBackButton()}
-                <h2 className="text-2xl font-bold text-gray-200 mb-2">Skills</h2>
-                <p className="text-sm text-gray-400 mb-4">Intensity shows how often a skill appears across my projects.</p>
+                <h2 className="text-2xl font-bold text-gray-200 mb-2">{t('notes.skills.title')}</h2>
+                <p className="text-sm text-gray-400 mb-4">{t('notes.skills.intensityDescription')}</p>
                 <div className="bg-gray-800/50 p-6 rounded-xl shadow-lg">
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
                         {skills.map((skill, index) => (
                             <button
                                 key={index}
                                 className={`px-3 py-2 rounded text-sm text-gray-100 text-left transition-colors ${getIntensity(skill)} hover:bg-green-500/60`}
-                                title={`Used in ${freq[skill] || 0} project(s)`}
+                                title={t('notes.skills.usedInProjects').replace('{count}', `${freq[skill] || 0}`)}
                                 onClick={() => {/* future: filter projects by skill */}}
                             >
                                 <span className="font-medium">{skill}</span>
@@ -226,7 +229,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
 
     const renderMenu = () => (
         <div>
-            <h2 className="text-2xl font-bold text-gray-200 mb-6">My Notes</h2>
+            <h2 className="text-2xl font-bold text-gray-200 mb-6">{t('notes.title')}</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {/* Education */}
@@ -240,9 +243,9 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                         <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center">
                             <FaGraduationCap size={28} className="text-white" />
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Education</h3>
+                        <h3 className="text-xl font-semibold text-gray-200">{t('notes.sections.education')}</h3>
                     </div>
-                    <p className="text-gray-400">View my educational background and qualifications</p>
+                    <p className="text-gray-400">{t('notes.menu.educationDescription')}</p>
                 </button>
 
                 {/* Experience */}
@@ -256,9 +259,9 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                         <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center">
                             <FaBriefcase size={28} className="text-white" />
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Professional Experience</h3>
+                        <h3 className="text-xl font-semibold text-gray-200">{t('notes.sections.experience')}</h3>
                     </div>
-                    <p className="text-gray-400">Explore my professional work experience</p>
+                    <p className="text-gray-400">{t('notes.menu.experienceDescription')}</p>
                 </button>
 
                 {/* Skills */}
@@ -272,9 +275,9 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
                         <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center">
                             <FaCode size={28} className="text-white" />
                         </div>
-                        <h3 className="text-xl font-semibold text-gray-200">Skills</h3>
+                        <h3 className="text-xl font-semibold text-gray-200">{t('notes.sections.skills')}</h3>
                     </div>
-                    <p className="text-gray-400">See my technical skills and expertise</p>
+                    <p className="text-gray-400">{t('notes.menu.skillsDescription')}</p>
                 </button>
             </div>
         </div>
@@ -282,11 +285,11 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
 
     const getWindowTitle = () => {
         switch (activeSection) {
-            case 'menu': return 'Notes';
-            case 'education': return 'Education Notes';
-            case 'experience': return 'Experience Notes';
-            case 'skills': return 'Skills Notes';
-            default: return 'Notes';
+            case 'menu': return t('notes.title');
+            case 'education': return `${t('notes.sections.education')} - ${t('notes.title')}`;
+            case 'experience': return `${t('notes.sections.experience')} - ${t('notes.title')}`;
+            case 'skills': return `${t('notes.sections.skills')} - ${t('notes.title')}`;
+            default: return t('notes.title');
         }
     };
 

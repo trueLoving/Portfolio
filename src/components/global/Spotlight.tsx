@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Fuse from 'fuse.js';
 import type { FuseResult } from 'fuse.js';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import { FaGithub, FaLinkedin, FaRegFileAlt } from 'react-icons/fa';
 import { IoTerminalOutline, IoBookOutline, IoDocumentTextOutline, IoSearch } from 'react-icons/io5';
+import { useI18n } from '../../i18n/context';
 
 type SpotlightItem = {
   id: string;
@@ -39,6 +40,8 @@ export interface SpotlightProps {
 }
 
 export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) {
+  const { t } = useI18n();
+  const userConfig = useUserConfig();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [activeIndex, setActiveIndex] = useState(0);
@@ -52,9 +55,9 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
   const copyToClipboard = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      showToast(`${label} copied`);
+      showToast(`${label} ${t('common.copied')}`);
     } catch (e) {
-      showToast('Copy failed');
+      showToast(t('common.copyFailed'));
     }
   };
 
@@ -63,7 +66,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       id: `project:${p.id}`,
       title: p.title,
       subtitle: p.description,
-      category: 'Projects',
+      category: t('spotlight.categories.projects'),
       keywords: [p.repoUrl, p.liveUrl ?? '', ...p.techStack],
       icon: <FaGithub className="text-gray-300" />,
       action: () => actions.openProjectById(p.id)
@@ -73,7 +76,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       id: `experience:${idx}`,
       title: e.title,
       subtitle: `${e.company} • ${e.period}`,
-      category: 'Experience',
+      category: t('spotlight.categories.experience'),
       keywords: [e.company, e.location, ...(e.technologies ?? [])],
       icon: <IoBookOutline className="text-gray-300" />,
       action: () => actions.openNotesSection('experience')
@@ -83,7 +86,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       id: `education:${idx}`,
       title: ed.degree,
       subtitle: `${ed.institution} • ${ed.year}`,
-      category: 'Education',
+      category: t('spotlight.categories.education'),
       keywords: [ed.institution, ed.location ?? '', ed.major ?? ''],
       icon: <IoBookOutline className="text-gray-300" />,
       action: () => actions.openNotesSection('education')
@@ -92,7 +95,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
     const skillItems: SpotlightItem[] = userConfig.skills.map((s, idx) => ({
       id: `skill:${idx}`,
       title: s,
-      category: 'Skills',
+      category: t('spotlight.categories.skills'),
       icon: <IoSearch className="text-gray-300" />,
       action: () => actions.openNotesSection('skills')
     }));
@@ -100,57 +103,57 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
     const quickActions: SpotlightItem[] = [
       {
         id: 'action:contact',
-        title: 'Open Contact Form',
-        subtitle: 'Send a message directly',
-        category: 'Actions',
+        title: t('spotlight.actions.openContactForm'),
+        subtitle: t('spotlight.actions.openContactFormSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <IoDocumentTextOutline className="text-gray-300" />,
         action: actions.openContact,
       },
       {
         id: 'action:terminal',
-        title: 'Open Terminal',
-        subtitle: 'Ask questions or run commands',
-        category: 'Actions',
+        title: t('spotlight.actions.openTerminal'),
+        subtitle: t('spotlight.actions.openTerminalSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <IoTerminalOutline className="text-gray-300" />,
         action: actions.openTerminal,
       },
       {
         id: 'action:notes-experience',
-        title: 'Open Notes: Experience',
-        subtitle: 'Jump to professional experience',
-        category: 'Actions',
+        title: t('spotlight.actions.openNotesExperience'),
+        subtitle: t('spotlight.actions.openNotesExperienceSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <IoBookOutline className="text-gray-300" />,
         action: () => actions.openNotesSection('experience'),
       },
       {
         id: 'action:notes-education',
-        title: 'Open Notes: Education',
-        subtitle: 'Jump to education',
-        category: 'Actions',
+        title: t('spotlight.actions.openNotesEducation'),
+        subtitle: t('spotlight.actions.openNotesEducationSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <IoBookOutline className="text-gray-300" />,
         action: () => actions.openNotesSection('education'),
       },
       {
         id: 'action:notes',
-        title: 'Open Notes',
-        subtitle: 'Education, Experience, Skills',
-        category: 'Actions',
+        title: t('spotlight.actions.openNotes'),
+        subtitle: t('spotlight.actions.openNotesSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <IoBookOutline className="text-gray-300" />,
         action: actions.openNotes,
       },
       {
         id: 'action:close-all',
-        title: 'Close all windows',
-        subtitle: 'Hide Notes, GitHub, Resume, Terminal',
-        category: 'Actions',
+        title: t('spotlight.actions.closeAllWindows'),
+        subtitle: t('spotlight.actions.closeAllWindowsSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <FaRegFileAlt className="text-gray-300" />,
         action: actions.closeAllWindows,
       },
       {
         id: 'action:shuffle-bg',
-        title: 'Shuffle background',
-        subtitle: 'Switch wallpaper',
-        category: 'Actions',
+        title: t('spotlight.actions.shuffleBackground'),
+        subtitle: t('spotlight.actions.shuffleBackgroundSubtitle'),
+        category: t('spotlight.categories.actions'),
         icon: <FaRegFileAlt className="text-gray-300" />,
         action: actions.shuffleBackground,
       },
@@ -164,14 +167,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.contact.phone
         ? [
-            {
-              id: 'action:copy-phone',
-              title: 'Copy phone to clipboard',
-              subtitle: userConfig.contact.phone,
-              category: 'Actions',
-              icon: <IoDocumentTextOutline className="text-gray-300" />,
+      {
+        id: 'action:copy-phone',
+        title: 'Copy phone to clipboard',
+        subtitle: userConfig.contact.phone,
+        category: 'Actions',
+        icon: <IoDocumentTextOutline className="text-gray-300" />,
               action: () => copyToClipboard(userConfig.contact.phone!, 'Phone'),
-            },
+      },
           ]
         : []),
       {
@@ -192,14 +195,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.contact.calendly
         ? [
-            {
-              id: 'action:calendly',
-              title: 'Open Calendly',
-              subtitle: userConfig.contact.calendly,
-              category: 'Actions',
-              icon: <IoDocumentTextOutline className="text-gray-300" />,
+      {
+        id: 'action:calendly',
+        title: 'Open Calendly',
+        subtitle: userConfig.contact.calendly,
+        category: 'Actions',
+        icon: <IoDocumentTextOutline className="text-gray-300" />,
               action: () => window.open(userConfig.contact.calendly!, '_blank'),
-            },
+      },
           ]
         : []),
       {
@@ -236,14 +239,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.social.linkedin
         ? [
-            {
-              id: 'link:linkedin',
-              title: 'Open LinkedIn',
-              subtitle: userConfig.social.linkedin,
-              category: 'Links',
-              icon: <FaLinkedin className="text-gray-300" />,
+      {
+        id: 'link:linkedin',
+        title: 'Open LinkedIn',
+        subtitle: userConfig.social.linkedin,
+        category: 'Links',
+        icon: <FaLinkedin className="text-gray-300" />,
               action: () => window.open(userConfig.social.linkedin!, '_blank'),
-            },
+      },
           ]
         : []),
       {
@@ -263,7 +266,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       ...educationItems,
       ...skillItems,
     ];
-  }, [actions]);
+  }, [actions, t]);
 
   const fuse = useMemo(() => {
     return new Fuse(items, {
@@ -305,7 +308,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
 
   // Group results by category with fixed order
   const grouped = useMemo(() => {
-    const order = ['Actions', 'Projects', 'Experience', 'Education', 'Skills', 'Links'];
+    const order = [
+      t('spotlight.categories.actions'),
+      t('spotlight.categories.projects'),
+      t('spotlight.categories.experience'),
+      t('spotlight.categories.education'),
+      t('spotlight.categories.skills'),
+      'Links',
+    ];
     const map = new Map<string, SpotlightItem[]>();
     for (const item of results) {
       const arr = map.get(item.category) ?? [];
@@ -315,7 +325,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
     return order
       .filter((cat) => map.has(cat))
       .map((cat) => ({ category: cat, items: map.get(cat)!, count: map.get(cat)!.length }));
-  }, [results]);
+  }, [results, t]);
 
   // Show more per group state
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
@@ -397,7 +407,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
               setQuery(e.target.value);
               setActiveIndex(0);
             }}
-            placeholder="Search projects, experience, skills, or actions…"
+            placeholder={t('spotlight.placeholder')}
             className="flex-1 bg-transparent outline-none text-sm md:text-base text-white placeholder-gray-400"
             aria-label="Search input"
           />
@@ -405,7 +415,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
         </div>
         <ul role="listbox" className="max-h-[60vh] overflow-y-auto py-1">
           {results.length === 0 && (
-            <li className="px-4 py-3 text-gray-400 text-sm">No results</li>
+            <li className="px-4 py-3 text-gray-400 text-sm">{t('spotlight.noResults')}</li>
           )}
           {grouped.map(group => (
             <React.Fragment key={`group-${group.category}`}>

@@ -1,0 +1,153 @@
+{
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "copied": "copied",
+    "copyFailed": "Copy failed"
+  },
+  "toolbar": {
+    "file": "File",
+    "view": "View",
+    "window": "Window",
+    "go": "Go",
+    "edit": "Edit",
+    "help": "Help",
+    "resumePdf": "Resume (PDF)",
+    "projectsGithub": "Projects (GitHub)",
+    "adminDashboard": "Admin Dashboard",
+    "spotlightSearch": "Spotlight Search…",
+    "missionControl": "Mission Control",
+    "shortcutsOverlay": "Shortcuts Overlay",
+    "resetTutorial": "Reset Tutorial",
+    "contact": "Contact…",
+    "closeAllWindows": "Close All Windows",
+    "shuffleBackground": "Shuffle Background",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "email": "Email",
+    "copyEmail": "Copy Email",
+    "copyPhone": "Copy Phone",
+    "keyboardShortcuts": "Keyboard Shortcuts",
+    "emailCopied": "Email copied to clipboard!",
+    "phoneCopied": "Phone number copied to clipboard!",
+    "viewGitHub": "View GitHub",
+    "openInVSCode": "Open in VSCode",
+    "search": "Search (Ctrl/Cmd+K)"
+  },
+  "spotlight": {
+    "placeholder": "Search apps, files, and more...",
+    "noResults": "No results found",
+    "categories": {
+      "projects": "Projects",
+      "experience": "Experience",
+      "education": "Education",
+      "skills": "Skills",
+      "actions": "Actions"
+    },
+    "actions": {
+      "openContactForm": "Open Contact Form",
+      "openContactFormSubtitle": "Send a message directly",
+      "openTerminal": "Open Terminal",
+      "openTerminalSubtitle": "Ask questions or run commands",
+      "openNotesExperience": "Open Notes: Experience",
+      "openNotesExperienceSubtitle": "Jump to professional experience",
+      "openNotesEducation": "Open Notes: Education",
+      "openNotesEducationSubtitle": "Jump to education",
+      "openNotes": "Open Notes",
+      "openNotesSubtitle": "Education, Experience, Skills",
+      "closeAllWindows": "Close all windows",
+      "closeAllWindowsSubtitle": "Hide Notes, GitHub, Resume, Terminal",
+      "shuffleBackground": "Shuffle Background",
+      "shuffleBackgroundSubtitle": "Change desktop wallpaper"
+    }
+  },
+  "notes": {
+    "title": "Notes",
+    "backToMenu": "Back to Menu",
+    "sections": {
+      "education": "Education",
+      "experience": "Professional Experience",
+      "skills": "Skills"
+    },
+    "education": {
+      "title": "Education",
+      "degree": "Degree",
+      "institution": "Institution",
+      "year": "Year",
+      "location": "Location",
+      "major": "Major",
+      "description": "Description"
+    },
+    "experience": {
+      "title": "Professional Experience",
+      "company": "Company",
+      "position": "Position",
+      "period": "Period",
+      "location": "Location",
+      "description": "Description",
+      "technologies": "Technologies"
+    },
+    "skills": {
+      "title": "Skills",
+      "intensityDescription": "Intensity shows how often a skill appears across my projects.",
+      "usedInProjects": "Used in {count} project(s)"
+    },
+    "menu": {
+      "educationDescription": "View my educational background and qualifications",
+      "experienceDescription": "Explore my professional work experience",
+      "skillsDescription": "See my technical skills and expertise"
+    },
+    "image": {
+      "screenshot": "Screenshot",
+      "previous": "Previous image",
+      "next": "Next image"
+    }
+  },
+  "dock": {
+    "terminal": "Terminal",
+    "notes": "Notes",
+    "github": "GitHub",
+    "resume": "Resume",
+    "contact": "Contact",
+    "links": "Links"
+  },
+  "contact": {
+    "title": "Contact me",
+    "subtitle": "Have a question or opportunity? Send me a message below.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Thanks! Your message has been sent. I'll get back to you at",
+    "error": "Something went wrong. Please try again.",
+    "validation": {
+      "required": "Please fill in your name, email, and message.",
+      "emailInvalid": "Please enter a valid email address."
+    }
+  },
+  "terminal": {
+    "title": "Terminal",
+    "placeholder": "Type a message...",
+    "send": "Send",
+    "thinking": "Thinking...",
+    "error": "Failed to send message. Please try again."
+  },
+  "language": {
+    "switch": "Switch Language",
+    "english": "English",
+    "chinese": "中文"
+  }
+}
+

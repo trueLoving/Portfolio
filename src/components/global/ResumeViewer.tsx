@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import DraggableWindow from './DraggableWindow';
 
 interface ResumeViewerProps {
@@ -8,6 +8,7 @@ interface ResumeViewerProps {
 }
 
 export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
+  const userConfig = useUserConfig();
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {

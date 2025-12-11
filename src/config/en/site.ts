@@ -2,7 +2,7 @@
  * SEO and theme configuration
  */
 
-import type { SEOConfig, ThemeConfig } from '../types';
+import type { SEOConfig, ThemeConfig } from '../../types';
 
 export const seo: SEOConfig = {
   title: 'trueLoving - FrontEnd & Full-Stack Developer | Rust • Web3 • AI',

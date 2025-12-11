@@ -2,7 +2,7 @@
  * Application configuration (Spotify, Resume, etc.)
  */
 
-import type { SpotifyConfig, ResumeConfig } from '../types';
+import type { SpotifyConfig, ResumeConfig } from '../../types/index';
 
 export const spotify: SpotifyConfig = {
   playlistId: '5WsS94KKm5wDhgEpg8VcgM',

@@ -3,7 +3,7 @@
  * Update with your contact details
  */
 
-import type { ContactInfo } from '../types';
+import type { ContactInfo } from '../../types';
 
 export const contact: ContactInfo = {
   email: 'starsky.zhanglinjie@gmail.com',

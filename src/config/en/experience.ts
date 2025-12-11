@@ -3,7 +3,7 @@
  * Add your work experience here
  */
 
-import type { Experience } from '../types';
+import type { Experience } from '../../types';
 
 export const experience: readonly Experience[] = [
     {

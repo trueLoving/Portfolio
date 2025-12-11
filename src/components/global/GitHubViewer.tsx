@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaFolder, FaFile, FaChevronLeft, FaLink } from 'react-icons/fa';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import DraggableWindow from './DraggableWindow';
 
 type FileNode = {
@@ -23,6 +23,7 @@ interface GitHubViewerProps {
 }
 
 const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps) => {
+  const userConfig = useUserConfig();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [showStructure, setShowStructure] = useState(false);

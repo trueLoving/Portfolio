@@ -3,7 +3,7 @@
  * Update this file with your personal details
  */
 
-import type { PersonalInfo } from '../types';
+import type { PersonalInfo } from '../../types';
 
 export const personal: PersonalInfo = {
   name: 'trueLoving',

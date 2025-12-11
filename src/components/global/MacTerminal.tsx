@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import DraggableWindow from './DraggableWindow';
 
 type Message = {
@@ -26,6 +26,7 @@ const PLACEHOLDER_MESSAGES = [
 ];
 
 export default function MacTerminal({ isOpen, onClose }: MacTerminalProps) {
+  const userConfig = useUserConfig();
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
     month: 'long',

@@ -3,7 +3,7 @@
  * Add your educational background and courses here
  */
 
-import type { Education, Course } from '../types';
+import type { Education, Course } from '../../types';
 
 export const education: readonly Education[] = [
   {

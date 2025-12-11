@@ -10,9 +10,13 @@ import {
   IoMail,
   IoCall,
   IoHelpCircle,
+  IoLanguage,
+  IoChevronDown,
 } from 'react-icons/io5';
 import { VscVscode } from 'react-icons/vsc';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
+import { useI18n } from '../../i18n/context';
+import type { Locale } from '../../i18n/types';
 
 type MenuItem = {
   label: string;
@@ -42,10 +46,14 @@ export default function MacToolbar({
   onShuffleBackground,
   onOpenAdmin,
 }: MacToolbarProps) {
+  const { locale, t, setLocale: setI18nLocale } = useI18n();
+  const userConfig = useUserConfig();
   const [currentDateTime, setCurrentDateTime] = useState(new Date());
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showSignature, setShowSignature] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -60,6 +68,9 @@ export default function MacToolbar({
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setActiveMenu(null);
       }
+      if (languageMenuRef.current && !languageMenuRef.current.contains(event.target as Node)) {
+        setShowLanguageMenu(false);
+      }
     }
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -67,10 +78,11 @@ export default function MacToolbar({
   }, []);
 
   const formatMacDate = (date: Date) => {
-    const weekday = date.toLocaleString('en-US', { weekday: 'short' });
-    const month = date.toLocaleString('en-US', { month: 'short' });
+    const localeStr = locale === 'zh-CN' ? 'zh-CN' : 'en-US';
+    const weekday = date.toLocaleString(localeStr, { weekday: 'short' });
+    const month = date.toLocaleString(localeStr, { month: 'short' });
     const day = date.getDate();
-    const hour = date.toLocaleString('en-US', {
+    const hour = date.toLocaleString(localeStr, {
       hour: 'numeric',
       hour12: true,
     });
@@ -108,109 +120,114 @@ export default function MacToolbar({
     }
   };
 
+  const handleLanguageSwitch = (newLocale: Locale) => {
+    setI18nLocale(newLocale);
+    setShowLanguageMenu(false);
+  };
+
   const menus: Record<string, MenuItem[]> = {
-    File: [
+    [t('toolbar.file')]: [
       {
-        label: 'Resume (PDF)',
+        label: t('toolbar.resumePdf'),
         icon: <IoDocumentText size={16} />,
         action: () => window.open(userConfig.resume.url, '_blank'),
       },
       {
-        label: 'Projects (GitHub)',
+        label: t('toolbar.projectsGithub'),
         icon: <IoCodeSlash size={16} />,
         action: () => window.open(userConfig.social.github, '_blank'),
       },
       {
-        label: 'Admin Dashboard',
+        label: t('toolbar.adminDashboard'),
         icon: <FaWindowRestore size={16} />,
         action: () => onOpenAdmin ? onOpenAdmin() : (window.location.href = '/admin'),
       },
     ],
-    View: [
+    [t('toolbar.view')]: [
       {
-        label: 'Spotlight Search…',
+        label: t('toolbar.spotlightSearch'),
         icon: <IoSearchSharp size={16} />,
         action: () => onOpenSpotlight?.(),
       },
       {
-        label: 'Mission Control',
+        label: t('toolbar.missionControl'),
         icon: <FaWindowRestore size={16} />,
         action: () => onOpenMissionControl?.(),
       },
       {
-        label: 'Shortcuts Overlay',
+        label: t('toolbar.shortcutsOverlay'),
         icon: <IoHelpCircle size={16} />,
         action: () => onToggleShortcuts?.(),
       },
       {
-        label: 'Reset Tutorial',
+        label: t('toolbar.resetTutorial'),
         icon: <IoHelpCircle size={16} />,
         action: () => onShowTutorial?.(),
       },
     ],
-    Window: [
+    [t('toolbar.window')]: [
       {
-        label: 'Contact…',
+        label: t('toolbar.contact'),
         icon: <IoMail size={16} />,
         action: () => onOpenContact?.(),
       },
       {
-        label: 'Close All Windows',
+        label: t('toolbar.closeAllWindows'),
         icon: <IoDocumentText size={16} />,
         action: () => onCloseAllWindows?.(),
       },
       {
-        label: 'Shuffle Background',
+        label: t('toolbar.shuffleBackground'),
         icon: <IoDocumentText size={16} />,
         action: () => onShuffleBackground?.(),
       },
     ],
-    Go: [
+    [t('toolbar.go')]: [
       {
-        label: 'GitHub',
+        label: t('toolbar.github'),
         icon: <FaGithub size={16} />,
         action: () => window.open(userConfig.social.github, '_blank'),
       },
       ...(userConfig.social.linkedin
         ? [
             {
-              label: 'LinkedIn',
+              label: t('toolbar.linkedin'),
               icon: <FaLinkedin size={16} />,
               action: () => window.open(userConfig.social.linkedin!, '_blank'),
             },
           ]
         : []),
       {
-        label: 'Email',
+        label: t('toolbar.email'),
         icon: <FaEnvelope size={16} />,
         action: () => window.open(`mailto:${userConfig.contact.email}`),
       },
     ],
-    Edit: [
+    [t('toolbar.edit')]: [
       {
-        label: 'Copy Email',
+        label: t('toolbar.copyEmail'),
         icon: <IoMail size={16} />,
         action: () => {
           navigator.clipboard.writeText(userConfig.contact.email);
-          alert('Email copied to clipboard!');
+          alert(t('toolbar.emailCopied'));
         },
       },
       ...(userConfig.contact.phone
         ? [
             {
-              label: 'Copy Phone',
+              label: t('toolbar.copyPhone'),
               icon: <IoCall size={16} />,
               action: () => {
                 navigator.clipboard.writeText(userConfig.contact.phone!);
-                alert('Phone number copied to clipboard!');
+                alert(t('toolbar.phoneCopied'));
               },
             },
           ]
         : []),
     ],
-    Help: [
+    [t('toolbar.help')]: [
       {
-        label: 'Keyboard Shortcuts',
+        label: t('toolbar.keyboardShortcuts'),
         icon: <IoHelpCircle size={16} />,
         action: () => onToggleShortcuts?.(),
       },
@@ -318,7 +335,7 @@ export default function MacToolbar({
                         onClick={(e) => e.stopPropagation()}
                       >
                         <FaGithub size={12} />
-                        View GitHub
+                        {t('toolbar.viewGitHub')}
                       </a>
                     </div>
                   </div>
@@ -351,17 +368,49 @@ export default function MacToolbar({
             size={16}
             className='cursor-pointer hover:opacity-80 transition-opacity'
             onClick={handleVSCodeClick}
-            title='Open in VSCode'
+            title={t('toolbar.openInVSCode')}
           />
           <MdWifi size={16} />
           <IoSearchSharp
             size={16}
             className='cursor-pointer hover:opacity-80 transition-opacity'
             onClick={() => onOpenSpotlight?.()}
-            title='Search (Ctrl/Cmd+K)'
+            title={t('toolbar.search')}
             role='button'
             aria-label='Open search'
           />
+          <div className="relative" ref={languageMenuRef}>
+            <button
+              onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+              className="flex items-center gap-1 cursor-pointer hover:opacity-80 transition-opacity"
+              title={t('language.switch')}
+              aria-label={t('language.switch')}
+            >
+              <IoLanguage size={16} />
+              <span className="text-xs">{locale === 'zh-CN' ? '中文' : 'EN'}</span>
+              <IoChevronDown size={12} className={showLanguageMenu ? 'rotate-180' : ''} />
+            </button>
+            {showLanguageMenu && (
+              <div className="absolute top-full right-0 mt-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[120px]" role="menu">
+                <button
+                  onClick={() => handleLanguageSwitch('en')}
+                  role="menuitem"
+                  className={`w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700/50 flex items-center gap-2 ${locale === 'en' ? 'bg-gray-700/50' : ''}`}
+                >
+                  {t('language.english')}
+                  {locale === 'en' && <span className="ml-auto">✓</span>}
+                </button>
+                <button
+                  onClick={() => handleLanguageSwitch('zh-CN')}
+                  role="menuitem"
+                  className={`w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700/50 flex items-center gap-2 ${locale === 'zh-CN' ? 'bg-gray-700/50' : ''}`}
+                >
+                  {t('language.chinese')}
+                  {locale === 'zh-CN' && <span className="ml-auto">✓</span>}
+                </button>
+              </div>
+            )}
+          </div>
           <span className='cursor-default'>
             {formatMacDate(currentDateTime)}
           </span>

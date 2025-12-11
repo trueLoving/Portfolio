@@ -1,6 +1,6 @@
 import { BsGithub, BsSpotify, BsLinkedin } from 'react-icons/bs';
 import { IoIosMail, IoIosCall } from 'react-icons/io';
-import { userConfig } from '../../config/index';
+import { useUserConfig } from '../../config';
 import { BsStickyFill } from 'react-icons/bs';
 import { RiTerminalFill } from 'react-icons/ri';
 import { BsFilePdf } from 'react-icons/bs';
@@ -13,6 +13,8 @@ interface MobileDockProps {
 }
 
 export default function MobileDock({ onGitHubClick, onNotesClick, onResumeClick, onTerminalClick }: MobileDockProps) {
+  const userConfig = useUserConfig();
+
   const handleEmailClick = () => {
     window.location.href = `mailto:${userConfig.contact.email}`;
   };
@@ -66,11 +68,11 @@ export default function MobileDock({ onGitHubClick, onNotesClick, onResumeClick,
       {/* Bottom row: contact shortcuts */}
       <div className='mx-4 mb-4 p-3 bg-gradient-to-t from-gray-700 to-gray-800 backdrop-blur-xl rounded-3xl space-x-4 flex justify-around items-center max-w-[400px] mx-auto' role="toolbar" aria-label="Contact shortcuts">
         {userConfig.contact.phone && (
-          <a href={`tel:${userConfig.contact.phone}`} className='flex flex-col items-center' aria-label={`Call ${userConfig.contact.phone}`}>
-            <div className='w-18 h-18 bg-gradient-to-t from-green-600 to-green-400 rounded-2xl flex items-center justify-center'>
-              <IoIosCall size={55} className='text-white' />
-            </div>
-          </a>
+        <a href={`tel:${userConfig.contact.phone}`} className='flex flex-col items-center' aria-label={`Call ${userConfig.contact.phone}`}>
+          <div className='w-18 h-18 bg-gradient-to-t from-green-600 to-green-400 rounded-2xl flex items-center justify-center'>
+            <IoIosCall size={55} className='text-white' />
+          </div>
+        </a>
         )}
 
         <button
@@ -84,11 +86,11 @@ export default function MobileDock({ onGitHubClick, onNotesClick, onResumeClick,
         </button>
 
         {userConfig.social.linkedin && (
-          <a href={userConfig.social.linkedin} className='flex flex-col items-center' aria-label='Open LinkedIn profile' target="_blank" rel="noreferrer noopener">
-            <div className='w-18 h-18 bg-[#0a66c2] rounded-2xl flex items-center justify-center'>
-              <BsLinkedin size={50} className='text-white' />
-            </div>
-          </a>
+        <a href={userConfig.social.linkedin} className='flex flex-col items-center' aria-label='Open LinkedIn profile' target="_blank" rel="noreferrer noopener">
+          <div className='w-18 h-18 bg-[#0a66c2] rounded-2xl flex items-center justify-center'>
+            <BsLinkedin size={50} className='text-white' />
+          </div>
+        </a>
         )}
 
         <button
