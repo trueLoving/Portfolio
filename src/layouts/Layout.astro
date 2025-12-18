@@ -2,14 +2,19 @@
 import BaseHead from '../components/global/BaseHead.astro';
 import Analytics from '@vercel/analytics/astro'
 import  SpeedInsights  from "@vercel/speed-insights/astro"
+import { inferServerLocale } from '../i18n/server';
+
+const url = new URL(Astro.request.url);
+const lang = (Astro.props.lang ?? inferServerLocale({ request: Astro.request, url })) as string;
 ---
 
 <html
-  lang='en'
+  lang={lang}
   class='scroll-smooth selection:bg-gray-900 selection:text-white overflow-x-hidden'
 >
   <head>
     <BaseHead
+      locale={lang}
       title={Astro.props.title}
       description={Astro.props.description}
       canonical={Astro.props.canonical}

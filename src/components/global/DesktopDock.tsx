@@ -3,7 +3,7 @@ import { BsGithub, BsFilePdf, BsStickyFill, BsLinkedin } from 'react-icons/bs';
 import { IoIosCall, IoIosMail } from 'react-icons/io';
 import { FaLink, FaEnvelope } from 'react-icons/fa';
 import ResumeViewer from './ResumeViewer';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import { RiTerminalFill } from 'react-icons/ri';
 import { useI18n } from '../../i18n/context';
 

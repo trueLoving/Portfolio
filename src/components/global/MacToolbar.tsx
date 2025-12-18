@@ -14,7 +14,7 @@ import {
   IoChevronDown,
 } from 'react-icons/io5';
 import { VscVscode } from 'react-icons/vsc';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import { useI18n } from '../../i18n/context';
 import type { Locale } from '../../i18n/types';
 

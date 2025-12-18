@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Fuse from 'fuse.js';
 import type { FuseResult } from 'fuse.js';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import { FaGithub, FaLinkedin, FaRegFileAlt } from 'react-icons/fa';
 import { IoTerminalOutline, IoBookOutline, IoDocumentTextOutline, IoSearch } from 'react-icons/io5';
 import { useI18n } from '../../i18n/context';

@@ -49,6 +49,14 @@
 - 支持个人信息、教育背景、工作经历、技能等内容的本地化
 - 统一的配置加载器和 React hooks
 
+**4. 服务端语言推断（SEO 跟随语言）**
+- 服务端按优先级推断语言：Query（`?lang=` / `?locale=`）→ Cookie（`locale=`）→ `Accept-Language`
+- SEO/OG 元信息由服务端 `getUserConfig(locale)` 生成，随语言切换
+
+**5. 简历 PDF 本地化**
+- 英文：`/resume/resume-en.pdf`
+- 中文：`/resume/resume-zh.pdf`
+
 ## 🛠️ 技术栈
 
 - [Astro](https://astro.build/) — 内容优先的 Web 框架
@@ -76,7 +84,7 @@ pnpm install
 
 ### 3. 配置环境变量
 
-复制 `.env.example` 到 `.env` 并填写：
+复制 `.env.example` 到 `.env` 并填写（详细注释见 `.env.example`）：
 
 ```env
 # AI Terminal
@@ -136,6 +144,7 @@ alter table public.contact_messages enable row level security;
 
 - **静态图片**：放置在 `public/background/images/` 目录
 - **视频文件**：放置在 `public/background/video/` 目录（MP4 格式）
+- **背景配置**：在 `src/config/background.ts` 统一管理（页面不再硬编码）
 
 ## 💻 开发
 
@@ -248,13 +257,14 @@ npx vercel deploy
 配置文件按语言组织在 `src/config/en/` 和 `src/config/zh/` 目录下：
 
 - **本地化内容**：`personal.ts`、`education.ts`、`experience.ts`、`skills.ts`、`site.ts`
-- **非本地化内容**：`social.ts`、`contact.ts`、`projects.ts`、`apps.ts`（这些文件在 `en/` 目录下，`zh/` 目录下也有副本但内容相同）
+- **本地化内容补充**：`apps.ts`（简历配置随语言切换）
+- **非本地化内容**：`social.ts`、`contact.ts`、`projects.ts`、`spotify`（统一从 `src/config/en/` 加载）
 
 ### 使用配置
 
 **在 React 组件中**：
 ```typescript
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 
 function MyComponent() {
   const userConfig = useUserConfig(); // 自动根据当前语言加载配置
@@ -262,11 +272,14 @@ function MyComponent() {
 }
 ```
 
-**在 Astro 页面中**（服务端）：
+**在 Astro 页面中**（服务端，按语言加载配置）：
 ```typescript
 import { getUserConfig } from '../config/loader';
+import { inferServerLocale } from '../i18n/server';
 
-const config = getUserConfig('en'); // 或 'zh-CN'
+const url = new URL(Astro.request.url);
+const locale = inferServerLocale({ request: Astro.request, url });
+const config = getUserConfig(locale); // 'en' | 'zh-CN'
 ```
 
 ## 📝 功能特性

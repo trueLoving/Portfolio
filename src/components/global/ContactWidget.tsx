@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import { useI18n } from '../../i18n/context';
 
 interface ContactWidgetProps {

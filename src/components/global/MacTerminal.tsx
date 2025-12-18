@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import DraggableWindow from './DraggableWindow';
 
 type Message = {

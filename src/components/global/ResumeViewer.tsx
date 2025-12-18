@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import { useUserConfig } from '../../config';
+import { useEffect } from 'react';
+import { useUserConfig } from '../../config/hooks';
 import { useI18n } from '../../i18n/context';
 import DraggableWindow from './DraggableWindow';
 
@@ -11,7 +11,6 @@ interface ResumeViewerProps {
 export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
   const userConfig = useUserConfig();
   const { locale } = useI18n();
-  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (isOpen) {
