@@ -3,7 +3,7 @@ import {
     FaGraduationCap, FaBriefcase, FaChevronLeft,
     FaCode
 } from 'react-icons/fa';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 import DraggableWindow from './DraggableWindow';
 import { useI18n } from '../../i18n/context';
 

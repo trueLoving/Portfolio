@@ -2,12 +2,7 @@
  * Application configuration (Spotify, Resume, etc.)
  */
 
-import type { SpotifyConfig, ResumeConfig } from '../../types/index';
-
-export const spotify: SpotifyConfig = {
-  playlistId: '5WsS94KKm5wDhgEpg8VcgM',
-  playlistName: 'Coding-Time',
-};
+import type { ResumeConfig } from '../../types/index';
 
 export const resume: ResumeConfig = {
   url: '/resume/resume-zh.pdf',

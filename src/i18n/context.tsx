@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getLocale, setLocale, getTranslations, type Locale, type Translations } from './index';
+import { getLocale, setLocale, getTranslations } from './index';
+import type { Locale, Translations } from './types';
 import { updateHtmlLang } from './updateLang';
 
 interface I18nContextType {

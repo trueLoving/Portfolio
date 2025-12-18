@@ -2,8 +2,12 @@
 import '../../styles/global.css';
 // @ts-ignore - package exports named AstroSeo but types may not resolve correctly in some setups
 import { AstroSeo } from '@astrolib/seo';
-import { userConfig } from '../../config/index';
+import { getUserConfig } from '../../config/loader';
+import type { Locale } from '../../i18n/types';
 import { backgroundConfig } from '../../config/background';
+
+const locale = (Astro.props.locale as Locale | undefined) ?? 'en';
+const userConfig = getUserConfig(locale);
 
 // Build safe defaults for SEO
 const siteOrigin = Astro.site ? new URL('/', Astro.site).origin : undefined;

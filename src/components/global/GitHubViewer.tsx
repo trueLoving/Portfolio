@@ -1,20 +1,8 @@
 import { useEffect, useState } from 'react';
 import { FaGithub, FaExternalLinkAlt, FaFolder, FaFile, FaChevronLeft, FaLink } from 'react-icons/fa';
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
+import type { Project, FileNode, ProjectStructure } from '../../types';
 import DraggableWindow from './DraggableWindow';
-
-type FileNode = {
-  name: string;
-  type: 'file' | 'directory';
-  children?: readonly FileNode[];
-};
-
-type ProjectStructure = {
-  root: string;
-  children: readonly FileNode[];
-};
-
-type Project = typeof userConfig.projects[0];
 
 interface GitHubViewerProps {
   isOpen: boolean;
@@ -68,7 +56,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps)
         </div>
         {node.type === 'directory' && isExpanded && node.children && (
           <div className="ml-4" role="group">
-            {node.children.map((child) => renderFileTree(child, currentPath))}
+            {node.children.map((child: FileNode) => renderFileTree(child, currentPath))}
           </div>
         )}
       </div>
@@ -84,7 +72,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps)
           <span className="text-gray-200 font-bold">{projectStructure.root}</span>
         </div>
         <div className="ml-4">
-          {projectStructure.children.map((child) => renderFileTree(child, projectStructure.root))}
+          {projectStructure.children.map((child: FileNode) => renderFileTree(child, projectStructure.root))}
         </div>
       </div>
     );
@@ -324,7 +312,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps)
             )}
             <p className="text-gray-300 mb-3">{quickLook!.description}</p>
             <div className="flex flex-wrap gap-2 mb-4">
-              {quickLook!.techStack.map((tech) => (
+              {quickLook!.techStack.map((tech: string) => (
                 <span key={tech} className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">{tech}</span>
               ))}
             </div>

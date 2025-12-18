@@ -164,12 +164,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
                 setCurrentBg(firstImageBg[0]);
               }
             }}
-            onLoadStart={() => {
-              console.log('Video loading started:', currentBackground.src);
-            }}
-            onCanPlay={() => {
-              console.log('Video can play:', currentBackground.src);
-            }}
           >
             <source src={currentBackground.src} type='video/mp4' />
           </video>

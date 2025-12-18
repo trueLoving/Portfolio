@@ -52,6 +52,14 @@ Based on the original project, this version adds the following features:
 - Supports localization of personal info, education, experience, skills, etc.
 - Unified configuration loader and React hooks
 
+**4. Server-side Locale Inference (SEO follows language)**
+- Server infers locale via: query (`?lang=` / `?locale=`) → cookie (`locale=`) → `Accept-Language`
+- SEO/OG meta tags are generated from `getUserConfig(locale)` on the server
+
+**5. Localized Resume PDFs**
+- English: `/resume/resume-en.pdf`
+- Chinese: `/resume/resume-zh.pdf`
+
 ## 🛠️ Tech Stack
 
 - [Astro](https://astro.build/) — Content-focused web framework
@@ -79,7 +87,7 @@ pnpm install
 
 ### 3. Configure Environment Variables
 
-Copy `.env.example` to `.env` and fill in:
+Copy `.env.example` to `.env` and fill in (see `.env.example` for detailed comments):
 
 ```env
 # AI Terminal
@@ -139,6 +147,7 @@ Configuration files are located in `src/config/` directory, organized by languag
 
 - **Static Images**: Place in `public/background/images/` directory
 - **Video Files**: Place in `public/background/video/` directory (MP4 format)
+- **Background config**: Manage available backgrounds in `src/config/background.ts` (no hardcoding in pages)
 
 ## 💻 Development
 
@@ -250,14 +259,14 @@ Configure in Vercel Project Settings → Environment Variables:
 
 Configuration files are organized by language in `src/config/en/` and `src/config/zh/`:
 
-- **Localized Content**: `personal.ts`, `education.ts`, `experience.ts`, `skills.ts`, `site.ts`
-- **Non-localized Content**: `social.ts`, `contact.ts`, `projects.ts`, `apps.ts` (these files exist in both directories but have the same content)
+- **Localized Content**: `personal.ts`, `education.ts`, `experience.ts`, `skills.ts`, `site.ts`, `apps.ts` (resume)
+- **Non-localized Content**: `social.ts`, `contact.ts`, `projects.ts`, `spotify` (loaded from `src/config/en/` only)
 
 ### Using Configuration
 
 **In React Components**:
 ```typescript
-import { useUserConfig } from '../../config';
+import { useUserConfig } from '../../config/hooks';
 
 function MyComponent() {
   const userConfig = useUserConfig(); // Automatically loads config based on current language
@@ -265,11 +274,14 @@ function MyComponent() {
 }
 ```
 
-**In Astro Pages** (server-side):
+**In Astro Pages** (server-side, locale-aware):
 ```typescript
 import { getUserConfig } from '../config/loader';
+import { inferServerLocale } from '../i18n/server';
 
-const config = getUserConfig('en'); // or 'zh-CN'
+const url = new URL(Astro.request.url);
+const locale = inferServerLocale({ request: Astro.request, url });
+const config = getUserConfig(locale); // 'en' | 'zh-CN'
 ```
 
 ## 📝 Features
