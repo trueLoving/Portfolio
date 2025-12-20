@@ -345,11 +345,19 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
 
   useEffect(() => {
     if (isOpen) {
+      // Auto-focus input when opening
       setTimeout(() => inputRef.current?.focus(), 0);
       const onKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           e.preventDefault();
-          close();
+          // macOS-like behavior: first Esc clears input, second Esc closes
+          if (query.trim()) {
+            setQuery('');
+            setActiveIndex(0);
+            inputRef.current?.focus();
+          } else {
+            close();
+          }
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
           setActiveIndex((i) => Math.min(i + 1, results.length - 1));
@@ -387,7 +395,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       document.addEventListener('keydown', onKeyDown);
       return () => document.removeEventListener('keydown', onKeyDown);
     }
-  }, [isOpen, results, activeIndex, close]);
+  }, [isOpen, results, activeIndex, close, query]);
 
   if (!isOpen) return null;
 

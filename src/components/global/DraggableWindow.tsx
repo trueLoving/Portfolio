@@ -14,6 +14,7 @@ interface DraggableWindowProps {
   initialPosition?: { x: number; y: number };
   initialSize?: { width: number; height: number };
   className?: string;
+  onFocus?: () => void;
 }
 
 export default function DraggableWindow({
@@ -23,6 +24,7 @@ export default function DraggableWindow({
   initialPosition = { x: 0, y: 0 },
   initialSize = { width: 400, height: 300 },
   className = '',
+  onFocus,
 }: DraggableWindowProps) {
   const [position, setPosition] = useState(initialPosition);
   const [size, setSize] = useState(initialSize);
@@ -33,6 +35,7 @@ export default function DraggableWindow({
   const [zIndex, setZIndex] = useState(globalZIndex);
   const [isMobile, setIsMobile] = useState(false);
   const windowRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -45,10 +48,54 @@ export default function DraggableWindow({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  // Focus the window when it mounts for better keyboard accessibility
+  // Focus trap and restore focus on mount/unmount
   useEffect(() => {
+    // Store the element that had focus before opening
+    previousActiveElement.current = document.activeElement as HTMLElement;
+    
+    // Focus the window when it mounts
     windowRef.current?.focus();
-  }, []);
+    
+    // Focus trap: keep focus within the window
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === 'Tab') {
+        const focusableElements = windowRef.current?.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        if (!focusableElements || focusableElements.length === 0) return;
+        
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+        
+        if (e.shiftKey) {
+          // Shift + Tab
+          if (document.activeElement === firstElement || document.activeElement === windowRef.current) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    };
+    
+    document.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      // Restore focus to the previous element when closing
+      if (previousActiveElement.current) {
+        previousActiveElement.current.focus();
+      }
+    };
+  }, [onClose]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === 'Escape') {
@@ -59,6 +106,8 @@ export default function DraggableWindow({
   const bringToFront = () => {
     globalZIndex += 1;
     setZIndex(globalZIndex);
+    // Notify parent that this window is now focused
+    onFocus?.();
   };
 
   const handleMouseDown = (e: React.MouseEvent) => {

@@ -55,6 +55,8 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [notesSection, setNotesSection] = useState<NotesSection | undefined>(undefined);
   const [selectedProjectId, setSelectedProjectId] = useState<string | undefined>(undefined);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
+  const [focusedApp, setFocusedApp] = useState<'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null>(null);
+  const [hasUnread, setHasUnread] = useState<{ contact?: boolean }>({});
 
   const activeApps = state.windows;
   const currentBackground = backgroundMap[currentBg] || Object.values(backgroundMap)[0];
@@ -139,8 +141,31 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
 
   // Replaced legacy tutorial with WelcomeTour overlay
 
-  const handleAppOpen = (app: App) => dispatch({ type: 'OPEN', app });
-  const handleAppClose = (app: App) => dispatch({ type: 'CLOSE', app });
+  const handleAppOpen = (app: App) => {
+    dispatch({ type: 'OPEN', app });
+    // Track focused app when opening
+    setFocusedApp(app);
+  };
+  const handleAppClose = (app: App) => {
+    dispatch({ type: 'CLOSE', app });
+    // Clear focused app if it was the one being closed
+    if (focusedApp === app) {
+      setFocusedApp(null);
+    }
+  };
+  
+  // Track contact widget open/close for focus
+  const handleContactOpen = () => {
+    setIsContactOpen(true);
+    setFocusedApp('contact');
+    setHasUnread(prev => ({ ...prev, contact: false })); // Clear unread when opening
+  };
+  const handleContactClose = () => {
+    setIsContactOpen(false);
+    if (focusedApp === 'contact') {
+      setFocusedApp(null);
+    }
+  };
 
   return (
     <I18nProvider>
@@ -179,7 +204,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
           onShowTutorial={resetTutorial}
           onOpenSpotlight={() => setIsSpotlightOpen(true)}
           onOpenMissionControl={() => setIsMissionControlOpen(true)}
-          onOpenContact={() => setIsContactOpen(true)}
+          onOpenContact={handleContactOpen}
           onToggleShortcuts={() => setShowShortcuts((s) => !s)}
           onCloseAllWindows={closeAllWindows}
           onShuffleBackground={shuffleBackground}
@@ -214,29 +239,31 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
         onGitHubClick={() => {
           handleAppOpen('github');
         }}
-        onContactClick={() => setIsContactOpen(true)}
+        onContactClick={handleContactOpen}
         activeApps={activeApps}
+        focusedApp={focusedApp}
+        hasUnread={hasUnread}
       />
 
       <NotesApp isOpen={state.windows.notes} onClose={() => {
         handleAppClose('notes');
-      }} section={notesSection} />
+      }} section={notesSection} onFocus={() => setFocusedApp('notes')} />
       <GitHubViewer isOpen={state.windows.github} onClose={() => {
         handleAppClose('github');
-      }} selectedProjectId={selectedProjectId} />
+      }} selectedProjectId={selectedProjectId} onFocus={() => setFocusedApp('github')} />
       <ResumeViewer isOpen={state.windows.resume} onClose={() => {
         handleAppClose('resume');
-      }} />
+      }} onFocus={() => setFocusedApp('resume')} />
       <MacTerminal isOpen={state.windows.terminal} onClose={() => {
         handleAppClose('terminal');
-      }} />
+      }} onFocus={() => setFocusedApp('terminal')} />
       <Spotlight
         isOpen={isSpotlightOpen}
         onClose={() => setIsSpotlightOpen(false)}
         actions={{
           openTerminal: () => handleAppOpen('terminal'),
           openNotes: () => handleAppOpen('notes'),
-          openContact: () => setIsContactOpen(true),
+          openContact: handleContactOpen,
           openNotesSection: (s) => openNotesSection(s as NotesSection),
           openGitHub: () => handleAppOpen('github'),
           openResume: () => handleAppOpen('resume'),
@@ -254,13 +281,13 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
           openMissionControl: () => setIsMissionControlOpen(true),
           openNotes: () => handleAppOpen('notes'),
           openGitHub: () => handleAppOpen('github'),
-          openContact: () => setIsContactOpen(true),
+          openContact: handleContactOpen,
           closeAll: closeAllWindows,
         }}
       />
       <ShortcutsOverlay open={showShortcuts} onClose={() => setShowShortcuts(false)} />
       <ShortcutHint />
-      <ContactWidget open={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <ContactWidget open={isContactOpen} onClose={handleContactClose} />
       <MissionControl
         isOpen={isMissionControlOpen}
         onClose={() => setIsMissionControlOpen(false)}

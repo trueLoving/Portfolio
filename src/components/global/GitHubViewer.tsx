@@ -8,9 +8,10 @@ interface GitHubViewerProps {
   isOpen: boolean;
   onClose: () => void;
   selectedProjectId?: string;
+  onFocus?: () => void;
 }
 
-const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps) => {
+const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubViewerProps) => {
   const userConfig = useUserConfig();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
@@ -131,6 +132,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId }: GitHubViewerProps)
         }}
         className="w-[93vw] md:max-w-4xl max-h-[90vh] flex flex-col"
         initialSize={{ width: 800, height: 600 }}
+        onFocus={onFocus}
       >
       <div className="flex flex-col flex-grow min-h-0 h-full">
         <div className="overflow-y-auto flex-grow min-h-0 p-4 md:p-6">
