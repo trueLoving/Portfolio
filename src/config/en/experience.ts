@@ -28,7 +28,7 @@ export const experience: readonly Experience[] = [
         ],
         images: [
             {
-                url: '/experiences/Remote.png',
+                url: '/experiences/Remote.webp',
                 alt: 'Remote',
                 description: 'Remote',
             },
@@ -53,7 +53,7 @@ export const experience: readonly Experience[] = [
         ],
         images: [
             {
-                url: '/experiences/Hundsun.png',
+                url: '/experiences/Hundsun.webp',
                 alt: 'Hundsun Technologies Inc',
                 description: 'Hundsun Technologies Inc',
             },

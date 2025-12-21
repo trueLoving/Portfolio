@@ -18,6 +18,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
   const [showStructure, setShowStructure] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quickLook, setQuickLook] = useState<Project | null>(null);
+  const [imageLoadStates, setImageLoadStates] = useState<Record<string, boolean>>({});
 
   const toggleNode = (path: string) => {
     const newExpandedNodes = new Set(expandedNodes);
@@ -115,9 +116,11 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
         setSelectedProject(proj);
         setShowStructure(true);
         setActiveImageIndex(0);
+        // Reset image load states when switching projects
+        setImageLoadStates({});
       }
     }
-  }, [selectedProjectId, isOpen]);
+  }, [selectedProjectId, isOpen, userConfig.projects]);
 
   if (!isOpen) return null;
 
@@ -152,14 +155,22 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                     }}
                   >
                     {project.images && project.images.length > 0 && (
-                      <div className="relative w-full h-48 mb-3 overflow-hidden rounded-lg">
+                      <div className="relative w-full h-48 mb-3 overflow-hidden rounded-lg bg-gray-700/50">
+                        {!imageLoadStates[`${project.id}-0`] && (
+                          <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
+                        )}
                         <img 
                           src={project.images[0].url} 
                           alt={project.images[0].alt} 
-                          className="w-full h-full object-cover"
+                          className={`w-full h-full object-cover transition-opacity duration-300 ${
+                            imageLoadStates[`${project.id}-0`] ? 'opacity-100' : 'opacity-0'
+                          }`}
+                          loading="lazy"
+                          decoding="async"
+                          onLoad={() => setImageLoadStates(prev => ({ ...prev, [`${project.id}-0`]: true }))}
                         />
                         <button
-                          className="absolute bottom-2 right-2 text-xs bg-white/10 text-white border border-white/20 rounded px-2 py-1 hover:bg-white/20"
+                          className="absolute bottom-2 right-2 text-xs bg-white/10 text-white border border-white/20 rounded px-2 py-1 hover:bg-white/20 z-10"
                           onClick={(e) => { e.stopPropagation(); setQuickLook(project); }}
                         >
                           Quick Look
@@ -229,11 +240,22 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                   <div className="bg-gray-800/50 rounded-lg p-4">
                     <h3 className="text-xl font-semibold mb-4 text-gray-200">Screenshots</h3>
                     <div className="relative">
-                      <div className="rounded-lg overflow-hidden mb-2">
+                      <div className="rounded-lg overflow-hidden mb-2 bg-gray-700/50 relative">
+                        {!imageLoadStates[`${selectedProject.id}-detail-${activeImageIndex}`] && (
+                          <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
+                        )}
                         <img 
                           src={selectedProject.images[activeImageIndex].url} 
                           alt={selectedProject.images[activeImageIndex].alt}
-                          className="w-full object-cover" 
+                          className={`w-full max-h-[500px] object-contain transition-opacity duration-300 ${
+                            imageLoadStates[`${selectedProject.id}-detail-${activeImageIndex}`] ? 'opacity-100' : 'opacity-0'
+                          }`}
+                          loading="lazy"
+                          decoding="async"
+                          onLoad={() => setImageLoadStates(prev => ({ 
+                            ...prev, 
+                            [`${selectedProject.id}-detail-${activeImageIndex}`]: true 
+                          }))}
                         />
                       </div>
                       
@@ -308,8 +330,23 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
               <button className="text-gray-400 hover:text-gray-200" onClick={() => setQuickLook(null)}>✕</button>
             </div>
             {quickLook!.images && quickLook!.images.length > 0 && (
-              <div className="rounded-lg overflow-hidden mb-3">
-                <img src={quickLook!.images[0].url} alt={quickLook!.images[0].alt} className="w-full object-cover" />
+              <div className="rounded-lg overflow-hidden mb-3 bg-gray-700/50 relative">
+                {!imageLoadStates[`quicklook-${quickLook!.id}`] && (
+                  <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
+                )}
+                <img 
+                  src={quickLook!.images[0].url} 
+                  alt={quickLook!.images[0].alt} 
+                  className={`w-full max-h-[400px] object-contain transition-opacity duration-300 ${
+                    imageLoadStates[`quicklook-${quickLook!.id}`] ? 'opacity-100' : 'opacity-0'
+                  }`}
+                  loading="lazy"
+                  decoding="async"
+                  onLoad={() => setImageLoadStates(prev => ({ 
+                    ...prev, 
+                    [`quicklook-${quickLook!.id}`]: true 
+                  }))}
+                />
               </div>
             )}
             <p className="text-gray-300 mb-3">{quickLook!.description}</p>

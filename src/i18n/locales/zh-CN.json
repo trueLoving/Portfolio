@@ -43,7 +43,11 @@
     "phoneCopied": "电话号码已复制到剪贴板！",
     "viewGitHub": "查看 GitHub",
     "openInVSCode": "在 VSCode 中打开",
-    "search": "搜索 (Ctrl/Cmd+K)"
+    "search": "搜索 (Ctrl/Cmd+K)",
+    "reduceMotion": "减少动态效果",
+    "enableAnimations": "启用动画效果",
+    "showShortcutHints": "显示快捷键提示",
+    "hideShortcutHints": "隐藏快捷键提示"
   },
   "spotlight": {
     "placeholder": "搜索应用、文件等...",

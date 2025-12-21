@@ -1,10 +1,53 @@
-import React from 'react';
-import { IoSearch, IoMail, IoDocumentTextOutline } from 'react-icons/io5';
+import React, { useState, useEffect } from 'react';
+import { IoSearch, IoMail, IoDocumentTextOutline, IoClose } from 'react-icons/io5';
 import { FaRegKeyboard } from 'react-icons/fa';
 import { useI18n } from '../../i18n/context';
 
-export default function ShortcutHint() {
+interface ShortcutHintProps {
+  show?: boolean;
+  onToggle?: (show: boolean) => void;
+}
+
+export default function ShortcutHint({ show: controlledShow, onToggle }: ShortcutHintProps) {
   const { t } = useI18n();
+  const [internalShow, setInternalShow] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem('showShortcutHint');
+    if (saved !== null) return saved === 'true';
+    // Default: show on desktop, hide on mobile
+    return window.innerWidth >= 768;
+  });
+
+  const show = controlledShow !== undefined ? controlledShow : internalShow;
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const checkMobile = () => {
+      if (controlledShow === undefined) {
+        const isMobile = window.innerWidth < 768;
+        if (isMobile && internalShow) {
+          setInternalShow(false);
+          localStorage.setItem('showShortcutHint', 'false');
+        }
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, [controlledShow, internalShow]);
+
+  const handleToggle = () => {
+    const newShow = !show;
+    if (controlledShow === undefined) {
+      setInternalShow(newShow);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('showShortcutHint', newShow.toString());
+      }
+    }
+    onToggle?.(newShow);
+  };
+
+  if (!show) return null;
 
   const shortcuts = [
     { key: '(CTRL/⌘)+K', label: t('shortcutHint.search'), icon: <IoSearch size={14} /> },
@@ -15,8 +58,16 @@ export default function ShortcutHint() {
   ];
   
   return (
-    <div className="fixed top-8 left-4 z-[1] animate-fade-in">
-      <div className="bg-gray-900/90 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 shadow-xl">
+    <div className="fixed top-8 left-4 z-[1] animate-fade-in hidden md:block">
+      <div className="bg-gray-900/90 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 shadow-xl relative group">
+        <button
+          onClick={handleToggle}
+          className="absolute -top-2 -right-2 w-5 h-5 bg-gray-800 hover:bg-gray-700 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+          aria-label="Hide shortcut hints"
+          title="Hide shortcut hints"
+        >
+          <IoClose size={12} className="text-gray-300" />
+        </button>
         <div className="flex items-center gap-3 text-sm text-gray-300">
           {shortcuts.map((shortcut, idx) => (
             <React.Fragment key={shortcut.key}>

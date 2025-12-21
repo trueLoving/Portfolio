@@ -43,7 +43,11 @@
     "phoneCopied": "Phone number copied to clipboard!",
     "viewGitHub": "View GitHub",
     "openInVSCode": "Open in VSCode",
-    "search": "Search (Ctrl/Cmd+K)"
+    "search": "Search (Ctrl/Cmd+K)",
+    "reduceMotion": "Reduce Motion",
+    "enableAnimations": "Enable Animations",
+    "showShortcutHints": "Show Shortcut Hints",
+    "hideShortcutHints": "Hide Shortcut Hints"
   },
   "spotlight": {
     "placeholder": "Search apps, files, and more...",

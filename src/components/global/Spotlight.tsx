@@ -356,7 +356,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
             setActiveIndex(0);
             inputRef.current?.focus();
           } else {
-            close();
+          close();
           }
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();

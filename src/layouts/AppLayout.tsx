@@ -13,8 +13,9 @@ import MissionControl from '../components/global/MissionControl';
 import ContactWidget from '../components/global/ContactWidget';
 import ShortcutHint from '../components/global/ShortcutHint';
 import WelcomeTour from '../components/global/WelcomeTour';
-import { I18nProvider } from '../i18n/context';
+import { I18nProvider, useI18n } from '../i18n/context';
 import type { BackgroundItem, AppLayoutProps } from '../types';
+import type { Locale } from '../i18n/types';
 
 type TutorialStep = {
   title: string;
@@ -57,13 +58,66 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
   const [focusedApp, setFocusedApp] = useState<'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null>(null);
   const [hasUnread, setHasUnread] = useState<{ contact?: boolean }>({});
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState<string | null>(null);
+  const [showToast, setShowToast] = useState<string | null>(null);
+  const [showShortcutHint, setShowShortcutHint] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    const saved = localStorage.getItem('showShortcutHint');
+    if (saved !== null) return saved === 'true';
+    // Default: show on desktop, hide on mobile
+    return window.innerWidth >= 768;
+  });
+  const [reducedMotion, setReducedMotion] = useState(() => {
+    // Check if we're in browser environment
+    if (typeof window === 'undefined') return false;
+    // Check localStorage first, then system preference
+    const saved = localStorage.getItem('reducedMotion');
+    if (saved !== null) return saved === 'true';
+    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  });
 
   const activeApps = state.windows;
   const currentBackground = backgroundMap[currentBg] || Object.values(backgroundMap)[0];
 
+  // Show toast notification
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => setShowToast(null), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
+  // Apply reduced motion class to body
+  useEffect(() => {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (reducedMotion) {
+      document.documentElement.classList.add('reduced-motion');
+    } else {
+      document.documentElement.classList.remove('reduced-motion');
+    }
+    localStorage.setItem('reducedMotion', reducedMotion.toString());
+  }, [reducedMotion]);
+
+  // Listen to system preference changes
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      // Only auto-update if user hasn't manually set preference
+      if (localStorage.getItem('reducedMotion') === null) {
+        setReducedMotion(e.matches);
+      }
+    };
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   // Ensure video plays when mounted or background changes
   useEffect(() => {
     if (videoRef && currentBackground?.type === 'video') {
+      setVideoLoaded(false);
+      setVideoError(null);
       videoRef.play().catch((error) => {
         console.warn('Video autoplay failed:', error);
       });
@@ -171,27 +225,39 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
     <I18nProvider>
     <div className='relative w-screen h-screen overflow-hidden'>
         {currentBackground?.type === 'video' ? (
-          <video
-            key={currentBg}
-            ref={setVideoRef}
-            className='absolute inset-0 w-full h-full object-cover'
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload='auto'
-            onError={(e) => {
-              console.error('Video background failed to load:', currentBackground.src);
-              console.error('Video element error:', e);
-              // Fallback to first image background if video fails
-              const firstImageBg = Object.entries(backgroundMap).find(([_, bg]) => bg.type === 'image');
-              if (firstImageBg) {
-                setCurrentBg(firstImageBg[0]);
-              }
-            }}
-          >
-            <source src={currentBackground.src} type='video/mp4' />
-          </video>
+          <>
+            <video
+              key={currentBg}
+              ref={setVideoRef}
+              className={`absolute inset-0 w-full h-full object-cover ${
+                reducedMotion ? '' : 'transition-opacity duration-1000'
+              } ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload='auto'
+              poster={currentBackground.src.replace('.mp4', '.webp')}
+              onLoadedData={() => {
+                setVideoLoaded(true);
+                setVideoError(null);
+              }}
+              onError={(e) => {
+                console.error('Video background failed to load:', currentBackground.src);
+                console.error('Video element error:', e);
+                setVideoError('视频加载失败');
+                setShowToast('背景视频加载失败，已切换到图片背景');
+                // Fallback to first image background if video fails
+                const firstImageBg = Object.entries(backgroundMap).find(([_, bg]) => bg.type === 'image');
+                if (firstImageBg) {
+                  setCurrentBg(firstImageBg[0]);
+                }
+              }}
+            >
+              <source src={currentBackground.src} type='video/mp4' />
+            </video>
+            {/* Poster is handled by video element's poster attribute */}
+          </>
         ) : (
       <div
         className='absolute inset-0 bg-cover bg-center'
@@ -209,6 +275,23 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
           onCloseAllWindows={closeAllWindows}
           onShuffleBackground={shuffleBackground}
           onOpenAdmin={() => { window.location.href = '/admin'; }}
+          reducedMotion={reducedMotion}
+          onToggleReducedMotion={() => setReducedMotion(!reducedMotion)}
+          showShortcutHint={showShortcutHint}
+          onToggleShortcutHint={() => {
+            const newShow = !showShortcutHint;
+            setShowShortcutHint(newShow);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('showShortcutHint', newShow.toString());
+            }
+          }}
+          onLanguageSwitch={(locale: Locale) => {
+            const langName = locale === 'zh-CN' ? '中文' : 'English';
+            const message = locale === 'zh-CN' 
+              ? `语言已切换为 ${langName}。UI、内容和简历已更新。`
+              : `Language switched to ${langName}. UI, content, and resume have been updated.`;
+            setShowToast(message);
+          }}
         />
       </div>
 
@@ -286,7 +369,12 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
         }}
       />
       <ShortcutsOverlay open={showShortcuts} onClose={() => setShowShortcuts(false)} />
-      <ShortcutHint />
+      <ShortcutHint show={showShortcutHint} onToggle={(show) => {
+        setShowShortcutHint(show);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('showShortcutHint', show.toString());
+        }
+      }} />
       <ContactWidget open={isContactOpen} onClose={handleContactClose} />
       <MissionControl
         isOpen={isMissionControlOpen}
@@ -295,6 +383,12 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
         onAppClick={(app) => handleAppOpen(app)}
         onAppClose={(app) => handleAppClose(app)}
       />
+      {/* Toast notification */}
+      {showToast && (
+        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[100] bg-gray-900/95 text-white px-4 py-3 rounded-lg shadow-xl border border-white/10 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4">
+          <p className="text-sm">{showToast}</p>
+        </div>
+      )}
     </div>
     </I18nProvider>
   );
