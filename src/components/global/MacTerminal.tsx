@@ -15,6 +15,7 @@ type ChatHistory = {
 interface MacTerminalProps {
   isOpen: boolean;
   onClose: () => void;
+  onFocus?: () => void;
 }
 
 // Customize these placeholder messages for the input field
@@ -25,7 +26,7 @@ const PLACEHOLDER_MESSAGES = [
   'What projects have you worked on?',
 ];
 
-export default function MacTerminal({ isOpen, onClose }: MacTerminalProps) {
+export default function MacTerminal({ isOpen, onClose, onFocus }: MacTerminalProps) {
   const userConfig = useUserConfig();
   const currentDate = new Date();
   const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -217,6 +218,7 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
       }}
       initialSize={{ width: 700, height: 500 }}
       className="bg-black/90 backdrop-blur-sm"
+      onFocus={onFocus}
     >
       <div className='p-1 text-gray-200 font-mono text-sm h-full flex flex-col overflow-hidden'>
         <div className='flex-1 overflow-y-auto rounded-lg p-1' aria-live="polite" aria-atomic="false">

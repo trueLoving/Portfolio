@@ -19,9 +19,13 @@ interface DesktopDockProps {
     resume: boolean;
     spotify: boolean;
   };
+  focusedApp?: 'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null;
+  hasUnread?: {
+    contact?: boolean;
+  };
 }
 
-const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactClick, activeApps }: DesktopDockProps) => {
+const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactClick, activeApps, focusedApp, hasUnread }: DesktopDockProps) => {
   const { t } = useI18n();
   const userConfig = useUserConfig();
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
@@ -144,12 +148,12 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
   );
 
   const icons = [
-    { id: 'github', label: t('dock.github'), onClick: onGitHubClick, icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github },
-    { id: 'notes', label: t('dock.notes'), onClick: onNotesClick, icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes },
-    { id: 'resume', label: t('dock.resume'), onClick: handleResumeClick, icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume },
-    { id: 'email', label: t('dock.contact'), onClick: onContactClick, icon: IoIosMail, color: 'from-blue-600 to-blue-400', active: false },
-    { id: 'links', label: t('dock.links'), onClick: handleLinksClick, icon: FaLink, color: 'from-purple-600 to-purple-400', active: false },
-    { id: 'terminal', label: t('dock.terminal'), onClick: onTerminalClick, icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal },
+    { id: 'github', label: t('dock.github'), onClick: onGitHubClick, icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github, isFocused: focusedApp === 'github' },
+    { id: 'notes', label: t('dock.notes'), onClick: onNotesClick, icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes, isFocused: focusedApp === 'notes' },
+    { id: 'resume', label: t('dock.resume'), onClick: handleResumeClick, icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume, isFocused: focusedApp === 'resume' },
+    { id: 'email', label: t('dock.contact'), onClick: onContactClick, icon: IoIosMail, color: 'from-blue-600 to-blue-400', active: false, isFocused: focusedApp === 'contact', hasUnread: hasUnread?.contact },
+    { id: 'links', label: t('dock.links'), onClick: handleLinksClick, icon: FaLink, color: 'from-purple-600 to-purple-400', active: false, isFocused: false },
+    { id: 'terminal', label: t('dock.terminal'), onClick: onTerminalClick, icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal, isFocused: focusedApp === 'terminal' },
   ];
 
   return (
@@ -173,9 +177,20 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
                   className="relative group"
                   style={{ transform: `scale(${scale})`, transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
                 >
-                  <div className={`relative w-12 h-12 bg-gradient-to-t ${item.color} rounded-xl flex items-center justify-center shadow-lg active:scale-95 ${item.active ? 'ring-2 ring-white/50' : ''}`}>
+                  <div className={`relative w-12 h-12 bg-gradient-to-t ${item.color} rounded-xl flex items-center justify-center shadow-lg active:scale-95 ${
+                    item.isFocused ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-600/50' : 
+                    item.active ? 'ring-2 ring-white/50' : ''
+                  }`}>
                     <Icon size={item.id === 'email' ? 40 : item.id === 'links' ? 30 : 35} className='text-white' />
-                    {item.active && <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rounded-full" aria-hidden="true" />}
+                    {/* Active indicator: small dot at bottom */}
+                    {item.active && !item.isFocused && (
+                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rounded-full" aria-hidden="true" />
+                    )}
+                    {/* Focused indicator: brighter ring (already handled by ring-2 ring-blue-400 above) */}
+                    {/* Unread badge: small red dot at top-right */}
+                    {item.hasUnread && (
+                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-gray-600/50" aria-label="Unread" />
+                    )}
                   </div>
                   {hoveredIcon === item.id && <Tooltip text={item.label} />}
                   {item.id === 'links' && showLinksPopup && <LinksPopup />}

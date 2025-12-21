@@ -34,6 +34,11 @@ interface MacToolbarProps {
   onCloseAllWindows?: () => void;
   onShuffleBackground?: () => void;
   onOpenAdmin?: () => void;
+  reducedMotion?: boolean;
+  onToggleReducedMotion?: () => void;
+  onLanguageSwitch?: (locale: Locale) => void;
+  showShortcutHint?: boolean;
+  onToggleShortcutHint?: () => void;
 }
 
 export default function MacToolbar({
@@ -45,6 +50,11 @@ export default function MacToolbar({
   onCloseAllWindows,
   onShuffleBackground,
   onOpenAdmin,
+  reducedMotion = false,
+  onToggleReducedMotion,
+  onLanguageSwitch,
+  showShortcutHint = true,
+  onToggleShortcutHint,
 }: MacToolbarProps) {
   const { locale, t, setLocale: setI18nLocale } = useI18n();
   const userConfig = useUserConfig();
@@ -123,6 +133,8 @@ export default function MacToolbar({
   const handleLanguageSwitch = (newLocale: Locale) => {
     setI18nLocale(newLocale);
     setShowLanguageMenu(false);
+    // Notify parent to show toast
+    onLanguageSwitch?.(newLocale);
   };
 
   const menus: Record<string, MenuItem[]> = {
@@ -164,6 +176,16 @@ export default function MacToolbar({
         icon: <IoHelpCircle size={16} />,
         action: () => onShowTutorial?.(),
       },
+      ...(onToggleReducedMotion ? [{
+        label: reducedMotion ? t('toolbar.enableAnimations') : t('toolbar.reduceMotion'),
+        icon: <IoHelpCircle size={16} />,
+        action: () => onToggleReducedMotion?.(),
+      }] : []),
+      ...(onToggleShortcutHint ? [{
+        label: showShortcutHint ? t('toolbar.hideShortcutHints') : t('toolbar.showShortcutHints'),
+        icon: <IoHelpCircle size={16} />,
+        action: () => onToggleShortcutHint?.(),
+      }] : []),
     ],
     [t('toolbar.window')]: [
       {
@@ -313,7 +335,7 @@ export default function MacToolbar({
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
                     <img 
-                      src="/me.png" 
+                      src="/me.webp" 
                       alt={`${userConfig.name}'s Avatar`}
                       className="relative w-24 h-24 rounded-full object-cover ring-4 ring-white/50 shadow-lg transition-transform duration-300 group-hover:scale-105"
                     />

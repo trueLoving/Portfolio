@@ -17,6 +17,7 @@ interface NotesAppProps {
     isOpen: boolean;
     onClose: () => void;
     section?: Section; // external control of active section
+    onFocus?: () => void;
 }
 
 // Type for storing image indices per item
@@ -28,7 +29,7 @@ interface Image {
     description?: string;
 }
 
-const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
+const NotesApp = ({ isOpen, onClose, section, onFocus }: NotesAppProps) => {
     const { t } = useI18n();
     const userConfig = useUserConfig();
     const [activeSection, setActiveSection] = useState<Section>('menu');
@@ -303,6 +304,7 @@ const NotesApp = ({ isOpen, onClose, section }: NotesAppProps) => {
             }}
             className="w-[93vw] md:max-w-4xl max-h-[90vh] flex flex-col"
             initialSize={{ width: 700, height: 600 }}
+            onFocus={onFocus}
         >
             <div className="flex flex-col flex-grow min-h-0 h-full">
                 <div className="overflow-y-auto flex-grow min-h-0 p-4 md:p-6">

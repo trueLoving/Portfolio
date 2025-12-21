@@ -3450,15 +3450,15 @@
     },
     "images": [
         {
-            "url": "/projects/pixuli/web.png",
+            "url": "/projects/pixuli/web.webp",
             "alt": "pixuli-web"
         },
         {
-            "url": "/projects/pixuli/desktop.png",
+            "url": "/projects/pixuli/desktop.webp",
             "alt": "pixuli-desktop"
         },
         {
-            "url": "/projects/pixuli/mobile.png",
+            "url": "/projects/pixuli/mobile.webp",
             "alt": "pixuli-mobile"
         }
     ]

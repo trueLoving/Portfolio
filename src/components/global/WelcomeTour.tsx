@@ -79,10 +79,12 @@ export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps
   ], [actions, onClose]);
 
   const [index, setIndex] = useState(0);
+  const [showSkipMenu, setShowSkipMenu] = useState(false);
 
   useEffect(() => {
     if (!open) return;
     setIndex(0);
+    setShowSkipMenu(false);
   }, [open]);
 
   useEffect(() => {
@@ -140,7 +142,43 @@ export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps
               ))}
             </div>
             <div className="flex items-center gap-2">
-              <button onClick={onClose} className="text-sm text-gray-400 hover:text-white">Skip</button>
+              <div className="relative">
+                <button 
+                  onClick={() => setShowSkipMenu(!showSkipMenu)}
+                  className="text-sm text-gray-400 hover:text-white flex items-center gap-1"
+                >
+                  Skip
+                  <span className="text-xs">▼</span>
+                </button>
+                {showSkipMenu && (
+                  <div
+                    className="absolute bottom-full left-0 mb-2 bg-gray-800/95 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[200px] z-50"
+                    onMouseLeave={() => setShowSkipMenu(false)}
+                  >
+                    <button
+                      onClick={() => {
+                        setShowSkipMenu(false);
+                        onClose();
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700/50"
+                    >
+                      Skip this time
+                    </button>
+                    <button
+                      onClick={() => {
+                        if (typeof window !== 'undefined') {
+                          localStorage.setItem('hasCompletedTutorial', 'true');
+                        }
+                        setShowSkipMenu(false);
+                        onClose();
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-gray-200 hover:bg-gray-700/50 border-t border-white/10"
+                    >
+                      Skip and don't show again
+                    </button>
+                  </div>
+                )}
+              </div>
               <button
                 onClick={handlePrimary}
                 className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-sm"

@@ -6,9 +6,10 @@ import DraggableWindow from './DraggableWindow';
 interface ResumeViewerProps {
   isOpen: boolean;
   onClose: () => void;
+  onFocus?: () => void;
 }
 
-export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
+export default function ResumeViewer({ isOpen, onClose, onFocus }: ResumeViewerProps) {
   const userConfig = useUserConfig();
   const { locale } = useI18n();
 
@@ -35,6 +36,7 @@ export default function ResumeViewer({ isOpen, onClose }: ResumeViewerProps) {
       }}
       className="w-[90%] h-[90%] max-w-5xl"
       initialSize={{ width: 800, height: 600 }}
+      onFocus={onFocus}
     >
       <div className="h-full bg-white">
         <figure className="h-full">
