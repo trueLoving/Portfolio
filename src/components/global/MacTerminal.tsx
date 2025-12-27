@@ -45,6 +45,7 @@ export default function MacTerminal({ isOpen, onClose, onFocus }: MacTerminalPro
   const [currentPlaceholderIndex, setCurrentPlaceholderIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
@@ -147,6 +148,40 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatHistory.messages]);
 
+  // Auto-focus input when terminal opens
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      // Use multiple strategies to ensure input gets focus
+      const focusInput = () => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          // Force focus using multiple methods
+          inputRef.current.click();
+          inputRef.current.focus();
+        }
+      };
+      
+      // Try immediately
+      focusInput();
+      
+      // Try after a short delay
+      const timer1 = setTimeout(focusInput, 50);
+      
+      // Try after window is fully rendered
+      const timer2 = setTimeout(focusInput, 200);
+      
+      // Try after next animation frame
+      requestAnimationFrame(() => {
+        setTimeout(focusInput, 100);
+      });
+      
+      return () => {
+        clearTimeout(timer1);
+        clearTimeout(timer2);
+      };
+    }
+  }, [isOpen]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChatHistory((prev) => ({ ...prev, input: e.target.value }));
   };
@@ -203,6 +238,48 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
       }));
     } finally {
       setIsTyping(false);
+      // Re-focus input after response
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  };
+
+  // Handle clicks on window content to focus input
+  const handleContentClick = (e: React.MouseEvent) => {
+    // Only focus input if clicking on non-interactive areas
+    const target = e.target as HTMLElement;
+    const isInteractive = target.closest('input, textarea, button, [role="button"], a, select, form');
+    const isHeader = target.closest('.window-header');
+    const isResizeHandle = target.closest('.resize-handle');
+    
+    // Don't focus if clicking on interactive elements, header, or resize handle
+    if (!isInteractive && !isHeader && !isResizeHandle) {
+      // Use a longer timeout to ensure this runs after DraggableWindow's onMouseDown
+      setTimeout(() => {
+        if (inputRef.current && document.activeElement !== inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 10);
+    }
+  };
+
+  // Also handle mousedown to catch focus earlier
+  const handleContentMouseDown = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    const isInteractive = target.closest('input, textarea, button, [role="button"], a, select, form');
+    const isHeader = target.closest('.window-header');
+    const isResizeHandle = target.closest('.resize-handle');
+    
+    if (!isInteractive && !isHeader && !isResizeHandle) {
+      // Prevent window container from getting focus
+      e.stopPropagation();
+      // Focus input immediately
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 0);
     }
   };
 
@@ -220,7 +297,11 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
       className="bg-black/90 backdrop-blur-sm"
       onFocus={onFocus}
     >
-      <div className='p-1 text-gray-200 font-mono text-sm h-full flex flex-col overflow-hidden'>
+      <div 
+        className='p-1 text-gray-200 font-mono text-sm h-full flex flex-col overflow-hidden'
+        onClick={handleContentClick}
+        onMouseDown={handleContentMouseDown}
+      >
         <div className='flex-1 overflow-y-auto rounded-lg p-1' aria-live="polite" aria-atomic="false">
           {chatHistory.messages.map((msg, index) => (
             <div key={index} className='mb-2'>
@@ -250,6 +331,7 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
           <div className='flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2'>
             <span className='whitespace-nowrap text-green-400 font-bold'>{userConfig.website} root %</span>
             <input
+              ref={inputRef}
               type='text'
               value={chatHistory.input}
               onChange={handleInputChange}
@@ -258,6 +340,7 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
               aria-label="Terminal input"
               name="terminal-input"
               autoComplete="off"
+              disabled={isTyping}
             />
           </div>
         </form>

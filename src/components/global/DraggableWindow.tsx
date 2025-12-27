@@ -53,8 +53,8 @@ export default function DraggableWindow({
     // Store the element that had focus before opening
     previousActiveElement.current = document.activeElement as HTMLElement;
     
-    // Focus the window when it mounts
-    windowRef.current?.focus();
+    // Don't auto-focus the window container - let child components handle their own focus
+    // This allows components like MacTerminal to focus their input fields
     
     // Focus trap: keep focus within the window
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -62,6 +62,11 @@ export default function DraggableWindow({
         e.preventDefault();
         onClose();
       } else if (e.key === 'Tab') {
+        // Only handle Tab if focus is within the window
+        if (!windowRef.current?.contains(document.activeElement)) {
+          return;
+        }
+        
         const focusableElements = windowRef.current?.querySelectorAll(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
         );
@@ -78,7 +83,7 @@ export default function DraggableWindow({
           }
         } else {
           // Tab
-          if (document.activeElement === lastElement) {
+          if (document.activeElement === lastElement || document.activeElement === windowRef.current) {
             e.preventDefault();
             firstElement.focus();
           }
@@ -114,9 +119,18 @@ export default function DraggableWindow({
     if (isMobile) return;
     
     if (e.target instanceof HTMLElement) {
-      bringToFront();
+      // Check if clicking on interactive elements (input, button, etc.)
+      const isInteractive = e.target.closest('input, textarea, button, [role="button"], a, select, [contenteditable="true"]');
+      const isHeader = e.target.closest('.window-header');
+      const isResizeHandle = e.target.closest('.resize-handle');
+      
+      // Only bring to front if clicking on header, resize handle, or non-interactive areas
+      // Don't steal focus from input fields
+      if (isHeader || isResizeHandle || !isInteractive) {
+        bringToFront();
+      }
 
-      if (e.target.closest('.window-header')) {
+      if (isHeader) {
         setIsDragging(true);
         const rect = windowRef.current?.getBoundingClientRect();
         if (rect) {
@@ -126,7 +140,7 @@ export default function DraggableWindow({
           });
         }
         e.preventDefault();
-      } else if (e.target.closest('.resize-handle')) {
+      } else if (isResizeHandle) {
         setIsResizing(true);
         setResizeDirection(e.target.getAttribute('data-direction') as 'bottom' | 'right' | 'bottom-right' | 'left' | 'bottom-left');
         e.preventDefault();
@@ -216,7 +230,7 @@ export default function DraggableWindow({
       role="dialog"
       aria-modal="true"
       aria-labelledby="window-title"
-      tabIndex={0}
+      tabIndex={-1}
       className={`${
         isMobile 
           ? 'fixed inset-0 m-4 rounded-xl' 
