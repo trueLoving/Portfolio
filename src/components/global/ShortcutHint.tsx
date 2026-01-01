@@ -10,13 +10,26 @@ interface ShortcutHintProps {
 
 export default function ShortcutHint({ show: controlledShow, onToggle }: ShortcutHintProps) {
   const { t } = useI18n();
-  const [internalShow, setInternalShow] = useState(() => {
-    if (typeof window === 'undefined') return true;
-    const saved = localStorage.getItem('showShortcutHint');
-    if (saved !== null) return saved === 'true';
-    // Default: show on desktop, hide on mobile
-    return window.innerWidth >= 768;
-  });
+  // 服务器端和客户端都初始化为 false，避免 hydration mismatch
+  // 客户端挂载后再根据实际条件更新
+  const [internalShow, setInternalShow] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  // 客户端挂载后设置实际值
+  useEffect(() => {
+    setIsClient(true);
+    if (controlledShow === undefined) {
+      const saved = localStorage.getItem('showShortcutHint');
+      if (saved !== null) {
+        setInternalShow(saved === 'true');
+      } else {
+        // Default: show on desktop, hide on mobile
+        const isDesktop = window.innerWidth >= 768;
+        setInternalShow(isDesktop);
+        localStorage.setItem('showShortcutHint', isDesktop.toString());
+      }
+    }
+  }, [controlledShow]);
 
   const show = controlledShow !== undefined ? controlledShow : internalShow;
 
@@ -58,7 +71,7 @@ export default function ShortcutHint({ show: controlledShow, onToggle }: Shortcu
   ];
   
   return (
-    <div className="fixed top-8 left-4 z-[1] animate-fade-in hidden md:block">
+    <div className="fixed top-8 left-4 z-[1] animate-fade-in hidden md:block" suppressHydrationWarning>
       <div className="bg-gray-900/90 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 shadow-xl relative group">
         <button
           onClick={handleToggle}

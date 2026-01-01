@@ -28,13 +28,19 @@ const PLACEHOLDER_MESSAGES = [
 
 export default function MacTerminal({ isOpen, onClose, onFocus }: MacTerminalProps) {
   const userConfig = useUserConfig();
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString('en-US', {
+  // 初始化为 null，客户端挂载后再设置，避免 hydration mismatch
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
+  
+  useEffect(() => {
+    setCurrentDate(new Date());
+  }, []);
+  
+  const formattedDate = currentDate ? currentDate.toLocaleDateString('en-US', {
     month: 'long',
     day: 'numeric',
     year: 'numeric',
-  });
-  const computedAge = currentDate.getFullYear() - userConfig.yearOfBirth;
+  }) : '';
+  const computedAge = currentDate ? currentDate.getFullYear() - userConfig.yearOfBirth : 0;
 
   const [chatHistory, setChatHistory] = useState<ChatHistory>({
     messages: [],

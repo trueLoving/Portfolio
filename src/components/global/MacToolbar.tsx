@@ -58,14 +58,18 @@ export default function MacToolbar({
 }: MacToolbarProps) {
   const { locale, t, setLocale: setI18nLocale } = useI18n();
   const userConfig = useUserConfig();
-  const [currentDateTime, setCurrentDateTime] = useState(new Date());
+  // 初始化为 null，避免服务器端和客户端时间不一致导致的 hydration 错误
+  // 客户端挂载后再设置实际时间
+  const [currentDateTime, setCurrentDateTime] = useState<Date | null>(null);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [showSignature, setShowSignature] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const languageMenuRef = useRef<HTMLDivElement>(null);
 
+  // 客户端挂载后设置时间，避免 hydration mismatch
   useEffect(() => {
+    setCurrentDateTime(new Date());
     const timer = setInterval(() => {
       setCurrentDateTime(new Date());
     }, 60000);
@@ -291,8 +295,8 @@ export default function MacToolbar({
   return (
     <>
       <div className='sticky top-0 z-50 md:hidden bg-transparent text-white h-12 px-8 flex items-center justify-between text-base font-medium'>
-        <span className='font-semibold'>
-          {formatIPhoneTime(currentDateTime)}
+        <span className='font-semibold' suppressHydrationWarning>
+          {currentDateTime ? formatIPhoneTime(currentDateTime) : '--:--'}
         </span>
         <div className='flex items-center gap-1.5'>
           <IoCellular size={20} />
@@ -428,8 +432,8 @@ export default function MacToolbar({
               </div>
             )}
           </div>
-          <span className='cursor-default'>
-            {formatMacDate(currentDateTime)}
+          <span className='cursor-default' suppressHydrationWarning>
+            {currentDateTime ? formatMacDate(currentDateTime) : '-- -- -- --:-- --'}
           </span>
         </div>
       </div>

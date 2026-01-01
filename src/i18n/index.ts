@@ -11,6 +11,19 @@ export const defaultLocale: Locale = 'en';
 
 export const getLocale = (): Locale => {
   if (typeof window === 'undefined') return defaultLocale;
+  
+  // 优先使用服务端传入的语言，确保服务端和客户端初始语言一致
+  const serverLocale = (window as any).__SERVER_LOCALE__;
+  if (serverLocale && (serverLocale === 'en' || serverLocale === 'zh-CN')) {
+    // 如果服务端语言与 localStorage 不一致，同步到 localStorage
+    const stored = localStorage.getItem('locale') as Locale | null;
+    if (stored !== serverLocale) {
+      localStorage.setItem('locale', serverLocale);
+    }
+    return serverLocale;
+  }
+  
+  // 如果没有服务端语言，从 localStorage 读取
   const stored = localStorage.getItem('locale') as Locale | null;
   if (stored && (stored === 'en' || stored === 'zh-CN')) {
     return stored;

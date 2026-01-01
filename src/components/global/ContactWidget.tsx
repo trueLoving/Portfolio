@@ -17,8 +17,15 @@ export default function ContactWidget({ open, onClose }: ContactWidgetProps) {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const mountedAt = useMemo(() => Date.now(), []);
+  // 初始化为 null，客户端挂载后再设置，避免 hydration mismatch
+  const [mountedAt, setMountedAt] = useState<number | null>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  
+  useEffect(() => {
+    if (open && mountedAt === null) {
+      setMountedAt(Date.now());
+    }
+  }, [open, mountedAt]);
 
   useEffect(() => {
     if (!open) return;
@@ -42,7 +49,7 @@ export default function ContactWidget({ open, onClose }: ContactWidgetProps) {
 
   if (!open) return null;
 
-  const timeOnPageSec = Math.round((Date.now() - mountedAt) / 1000);
+  const timeOnPageSec = mountedAt ? Math.round((Date.now() - mountedAt) / 1000) : 0;
 
   const disabled = loading || success;
 

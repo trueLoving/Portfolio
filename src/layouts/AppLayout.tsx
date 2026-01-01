@@ -61,21 +61,37 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState<string | null>(null);
   const [showToast, setShowToast] = useState<string | null>(null);
-  const [showShortcutHint, setShowShortcutHint] = useState(() => {
-    if (typeof window === 'undefined') return true;
+  // 服务器端和客户端都初始化为 false，避免 hydration mismatch
+  // 客户端挂载后再根据实际条件更新
+  const [showShortcutHint, setShowShortcutHint] = useState(false);
+  
+  // 客户端挂载后设置实际值
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('showShortcutHint');
-    if (saved !== null) return saved === 'true';
-    // Default: show on desktop, hide on mobile
-    return window.innerWidth >= 768;
-  });
-  const [reducedMotion, setReducedMotion] = useState(() => {
-    // Check if we're in browser environment
-    if (typeof window === 'undefined') return false;
-    // Check localStorage first, then system preference
+    if (saved !== null) {
+      setShowShortcutHint(saved === 'true');
+    } else {
+      // Default: show on desktop, hide on mobile
+      const isDesktop = window.innerWidth >= 768;
+      setShowShortcutHint(isDesktop);
+      localStorage.setItem('showShortcutHint', isDesktop.toString());
+    }
+  }, []);
+  // 服务器端和客户端都初始化为 false，避免 hydration 不匹配
+  // 客户端 hydration 后，useEffect 会同步 localStorage 和系统偏好
+  const [reducedMotion, setReducedMotion] = useState(false);
+  
+  // 客户端挂载后，从 localStorage 或系统偏好读取 reducedMotion 设置
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
     const saved = localStorage.getItem('reducedMotion');
-    if (saved !== null) return saved === 'true';
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  });
+    if (saved !== null) {
+      setReducedMotion(saved === 'true');
+    } else {
+      setReducedMotion(window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    }
+  }, []);
 
   const activeApps = state.windows;
   const currentBackground = backgroundMap[currentBg] || Object.values(backgroundMap)[0];
@@ -124,7 +140,10 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
     }
   }, [videoRef, currentBg, currentBackground]);
 
+  // 只在客户端执行，避免服务器端和客户端使用不同的随机值
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
     const lastBg = localStorage.getItem('lastBackground');
     const hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial') === 'true';
 
@@ -142,7 +161,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
     }
 
     localStorage.setItem('lastBackground', currentBg);
-  }, [initialBg, backgroundMap]);
+  }, [initialBg, backgroundMap, currentBg]);
 
   // Spotlight keyboard shortcut (Cmd/Ctrl + K), help overlay (?), and Mission Control (Ctrl/Cmd+Up or F3)
   useEffect(() => {
@@ -197,8 +216,10 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
 
   const handleAppOpen = (app: App) => {
     dispatch({ type: 'OPEN', app });
-    // Track focused app when opening
-    setFocusedApp(app);
+    // Track focused app when opening (only for apps that can be focused)
+    if (app !== 'spotify') {
+      setFocusedApp(app);
+    }
   };
   const handleAppClose = (app: App) => {
     dispatch({ type: 'CLOSE', app });
@@ -232,6 +253,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
               className={`absolute inset-0 w-full h-full object-cover ${
                 reducedMotion ? '' : 'transition-opacity duration-1000'
               } ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+              suppressHydrationWarning
               autoPlay
               loop
               muted

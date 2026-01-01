@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getLocale, setLocale, getTranslations } from './index';
+import { getLocale, setLocale, getTranslations, defaultLocale } from './index';
 import type { Locale, Translations } from './types';
 import { updateHtmlLang } from './updateLang';
 
@@ -8,6 +8,7 @@ interface I18nContextType {
   translations: Translations;
   setLocale: (locale: Locale) => void;
   t: (key: string) => string;
+  isReady: boolean;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
@@ -17,13 +18,32 @@ interface I18nProviderProps {
 }
 
 export function I18nProvider({ children }: I18nProviderProps) {
-  const [locale, setLocaleState] = useState<Locale>(() => getLocale());
-  const [translations, setTranslations] = useState<Translations>(() => getTranslations(locale));
+  // 服务器端和客户端都初始化为默认语言，确保初始渲染一致
+  // 客户端挂载后再更新为用户的实际语言偏好
+  const [locale, setLocaleState] = useState<Locale>(defaultLocale);
+  const [translations, setTranslations] = useState<Translations>(() => 
+    getTranslations(defaultLocale)
+  );
+  const [isClient, setIsClient] = useState(false);
 
+  // 客户端挂载后设置用户的实际语言，避免 hydration mismatch
   useEffect(() => {
-    setTranslations(getTranslations(locale));
-    updateHtmlLang(locale);
-  }, [locale]);
+    setIsClient(true);
+    const userLocale = getLocale();
+    if (userLocale !== defaultLocale) {
+      setLocaleState(userLocale);
+      setTranslations(getTranslations(userLocale));
+      updateHtmlLang(userLocale);
+    }
+  }, []);
+
+  // 当语言改变时更新翻译和 HTML lang 属性
+  useEffect(() => {
+    if (isClient) {
+      setTranslations(getTranslations(locale));
+      updateHtmlLang(locale);
+    }
+  }, [locale, isClient]);
 
   const handleSetLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
@@ -51,6 +71,7 @@ export function I18nProvider({ children }: I18nProviderProps) {
         translations,
         setLocale: handleSetLocale,
         t,
+        isReady: isClient,
       }}
     >
       {children}

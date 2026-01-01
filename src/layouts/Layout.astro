@@ -13,6 +13,10 @@ const lang = (Astro.props.lang ?? inferServerLocale({ request: Astro.request, ur
   class='scroll-smooth selection:bg-gray-900 selection:text-white overflow-x-hidden'
 >
   <head>
+    <!-- 优先执行：传递服务端推断的语言给客户端，避免 hydration mismatch -->
+    <script define:vars={{ serverLocale: lang }} is:inline>
+      window.__SERVER_LOCALE__ = serverLocale;
+    </script>
     <BaseHead
       locale={lang}
       title={Astro.props.title}
