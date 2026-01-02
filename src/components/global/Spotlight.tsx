@@ -23,13 +23,7 @@ export interface SpotlightProps {
     openTerminal: () => void;
     openNotes: () => void;
     openContact: () => void;
-    openNotesSection: (
-      section:
-        | 'education'
-        | 'experience'
-        | 'courses'
-        | 'skills'
-    ) => void;
+    openNotesSection: (section: 'education' | 'experience' | 'courses' | 'skills') => void;
     openGitHub: () => void;
     openResume: () => void;
     showTutorial: () => void;
@@ -56,20 +50,20 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
     try {
       await navigator.clipboard.writeText(text);
       showToast(`${label} ${t('common.copied')}`);
-    } catch (e) {
+    } catch (_e) {
       showToast(t('common.copyFailed'));
     }
   };
 
   const items = useMemo<SpotlightItem[]>(() => {
-    const projectItems: SpotlightItem[] = userConfig.projects.map((p) => ({
+    const projectItems: SpotlightItem[] = userConfig.projects.map(p => ({
       id: `project:${p.id}`,
       title: p.title,
       subtitle: p.description,
       category: t('spotlight.categories.projects'),
       keywords: [p.repoUrl, p.liveUrl ?? '', ...p.techStack],
       icon: <FaGithub className="text-gray-300" />,
-      action: () => actions.openProjectById(p.id)
+      action: () => actions.openProjectById(p.id),
     }));
 
     const expItems: SpotlightItem[] = userConfig.experience.map((e, idx) => ({
@@ -79,7 +73,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       category: t('spotlight.categories.experience'),
       keywords: [e.company, e.location, ...(e.technologies ?? [])],
       icon: <IoBookOutline className="text-gray-300" />,
-      action: () => actions.openNotesSection('experience')
+      action: () => actions.openNotesSection('experience'),
     }));
 
     const educationItems: SpotlightItem[] = userConfig.education.map((ed, idx) => ({
@@ -89,7 +83,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       category: t('spotlight.categories.education'),
       keywords: [ed.institution, ed.location ?? '', ed.major ?? ''],
       icon: <IoBookOutline className="text-gray-300" />,
-      action: () => actions.openNotesSection('education')
+      action: () => actions.openNotesSection('education'),
     }));
 
     const skillItems: SpotlightItem[] = userConfig.skills.map((s, idx) => ({
@@ -97,7 +91,7 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       title: s,
       category: t('spotlight.categories.skills'),
       icon: <IoSearch className="text-gray-300" />,
-      action: () => actions.openNotesSection('skills')
+      action: () => actions.openNotesSection('skills'),
     }));
 
     const quickActions: SpotlightItem[] = [
@@ -167,14 +161,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.contact.phone
         ? [
-      {
-        id: 'action:copy-phone',
-        title: 'Copy phone to clipboard',
-        subtitle: userConfig.contact.phone,
-        category: 'Actions',
-        icon: <IoDocumentTextOutline className="text-gray-300" />,
+            {
+              id: 'action:copy-phone',
+              title: 'Copy phone to clipboard',
+              subtitle: userConfig.contact.phone,
+              category: 'Actions',
+              icon: <IoDocumentTextOutline className="text-gray-300" />,
               action: () => copyToClipboard(userConfig.contact.phone!, 'Phone'),
-      },
+            },
           ]
         : []),
       {
@@ -195,14 +189,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.contact.calendly
         ? [
-      {
-        id: 'action:calendly',
-        title: 'Open Calendly',
-        subtitle: userConfig.contact.calendly,
-        category: 'Actions',
-        icon: <IoDocumentTextOutline className="text-gray-300" />,
+            {
+              id: 'action:calendly',
+              title: 'Open Calendly',
+              subtitle: userConfig.contact.calendly,
+              category: 'Actions',
+              icon: <IoDocumentTextOutline className="text-gray-300" />,
               action: () => window.open(userConfig.contact.calendly!, '_blank'),
-      },
+            },
           ]
         : []),
       {
@@ -239,14 +233,14 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
       ...(userConfig.social.linkedin
         ? [
-      {
-        id: 'link:linkedin',
-        title: 'Open LinkedIn',
-        subtitle: userConfig.social.linkedin,
-        category: 'Links',
-        icon: <FaLinkedin className="text-gray-300" />,
+            {
+              id: 'link:linkedin',
+              title: 'Open LinkedIn',
+              subtitle: userConfig.social.linkedin,
+              category: 'Links',
+              icon: <FaLinkedin className="text-gray-300" />,
               action: () => window.open(userConfig.social.linkedin!, '_blank'),
-      },
+            },
           ]
         : []),
       {
@@ -259,14 +253,9 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       },
     ];
 
-    return [
-      ...quickActions,
-      ...projectItems,
-      ...expItems,
-      ...educationItems,
-      ...skillItems,
-    ];
-  }, [actions, t]);
+    return [...quickActions, ...projectItems, ...expItems, ...educationItems, ...skillItems];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [actions, t, userConfig]);
 
   const fuse = useMemo(() => {
     return new Fuse(items, {
@@ -323,8 +312,8 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
       map.set(item.category, arr);
     }
     return order
-      .filter((cat) => map.has(cat))
-      .map((cat) => ({ category: cat, items: map.get(cat)!, count: map.get(cat)!.length }));
+      .filter(cat => map.has(cat))
+      .map(cat => ({ category: cat, items: map.get(cat)!, count: map.get(cat)!.length }));
   }, [results, t]);
 
   // Show more per group state
@@ -332,7 +321,8 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
   const toggleGroup = (cat: string) => {
     setExpandedGroups(prev => {
       const next = new Set(prev);
-      if (next.has(cat)) next.delete(cat); else next.add(cat);
+      if (next.has(cat)) next.delete(cat);
+      else next.add(cat);
       return next;
     });
   };
@@ -356,16 +346,30 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
             setActiveIndex(0);
             inputRef.current?.focus();
           } else {
-          close();
+            close();
           }
         } else if (e.key === 'ArrowDown') {
           e.preventDefault();
-          setActiveIndex((i) => Math.min(i + 1, results.length - 1));
+          setActiveIndex(i => Math.min(i + 1, results.length - 1));
         } else if (e.key === 'ArrowUp') {
           e.preventDefault();
-          setActiveIndex((i) => Math.max(i - 1, 0));
+          setActiveIndex(i => Math.max(i - 1, 0));
         } else if (e.key === 'Enter') {
           e.preventDefault();
+          // Check for Shift+Enter first (project live URL)
+          if (e.shiftKey) {
+            const item = results[activeIndex];
+            if (item && item.id.startsWith('project:')) {
+              const projId = item.id.split(':')[1];
+              const proj = userConfig.projects.find(p => p.id === projId);
+              if (proj?.liveUrl) {
+                window.open(proj.liveUrl, '_blank');
+                close();
+                return;
+              }
+            }
+          }
+          // Regular Enter key
           const item = results[activeIndex];
           if (item) {
             item.action();
@@ -379,17 +383,6 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
           e.preventDefault();
           actions.closeAllWindows();
           close();
-        } else if (e.shiftKey && e.key === 'Enter') {
-          // If a project is active and has live URL, open it directly
-          const item = results[activeIndex];
-          if (item && item.id.startsWith('project:')) {
-            const projId = item.id.split(':')[1];
-            const proj = userConfig.projects.find(p => p.id === projId);
-            if (proj?.liveUrl) {
-              window.open(proj.liveUrl, '_blank');
-              close();
-            }
-          }
         }
       };
       document.addEventListener('keydown', onKeyDown);
@@ -400,18 +393,20 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[60]" role="dialog" aria-modal="true" aria-label="Spotlight search">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={close}
-      />
+    <div
+      className="fixed inset-0 z-[60]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Spotlight search"
+    >
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={close} />
       <div className="relative mx-auto mt-20 w-[92%] max-w-2xl rounded-xl border border-white/10 bg-gray-900/95 shadow-2xl">
         <div className="flex items-center gap-3 px-4 py-3 border-b border-white/10">
           <IoSearch className="text-gray-400" size={18} />
           <input
             ref={inputRef}
             value={query}
-            onChange={(e) => {
+            onChange={e => {
               setQuery(e.target.value);
               setActiveIndex(0);
             }}
@@ -419,7 +414,9 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
             className="flex-1 bg-transparent outline-none text-sm md:text-base text-white placeholder-gray-400"
             aria-label="Search input"
           />
-          <span className="hidden md:inline text-[10px] text-gray-400 border border-white/10 rounded px-1.5 py-0.5">Esc</span>
+          <span className="hidden md:inline text-[10px] text-gray-400 border border-white/10 rounded px-1.5 py-0.5">
+            Esc
+          </span>
         </div>
         <ul role="listbox" className="max-h-[60vh] overflow-y-auto py-1">
           {results.length === 0 && (
@@ -431,51 +428,64 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
                 <span>{group.category}</span>
                 <span className="opacity-70">{group.count}</span>
               </li>
-              {(expandedGroups.has(group.category) ? group.items : group.items.slice(0, 5)).map((item: SpotlightItem) => {
-                const idx = results.findIndex((r) => r.id === item.id);
-                return (
-                  <li key={item.id}>
-                    <button
-                      role="option"
-                      aria-selected={activeIndex === idx}
-                      onMouseEnter={() => setActiveIndex(idx)}
-                      onClick={() => {
-                        item.action();
-                        close();
-                      }}
-                      className={`${activeIndex === idx ? 'bg-white/10' : ''} w-full px-4 py-2.5 flex items-start gap-3 text-left`}
-                    >
-                      <div className="mt-0.5">{item.icon}</div>
-                      <div className="flex-1">
-                        <div className="text-sm text-white">{item.title}</div>
-                        <div className="text-xs text-gray-400">{item.subtitle ?? item.category}</div>
-                      </div>
-                      {item.id.startsWith('project:') && (() => {
-                        const projId = item.id.split(':')[1];
-                        const proj = userConfig.projects.find(p => p.id === projId);
-                        return proj?.liveUrl ? (
-                          <button
-                            onClick={(e) => { e.stopPropagation(); window.open(proj.liveUrl!, '_blank'); close(); }}
-                            className="text-[10px] text-green-400 hover:text-green-300 border border-green-400/30 rounded px-1.5 py-0.5"
-                            title="Open Live"
-                          >
-                            Live
-                          </button>
-                        ) : (
-                          <span className="text-[10px] text-gray-500 border border-white/10 rounded px-1 py-0.5">{item.category}</span>
-                        );
-                      })()}
-                    </button>
-                  </li>
-                );
-              })}
+              {(expandedGroups.has(group.category) ? group.items : group.items.slice(0, 5)).map(
+                (item: SpotlightItem) => {
+                  const idx = results.findIndex(r => r.id === item.id);
+                  return (
+                    <li key={item.id}>
+                      <button
+                        role="option"
+                        aria-selected={activeIndex === idx}
+                        onMouseEnter={() => setActiveIndex(idx)}
+                        onClick={() => {
+                          item.action();
+                          close();
+                        }}
+                        className={`${activeIndex === idx ? 'bg-white/10' : ''} w-full px-4 py-2.5 flex items-start gap-3 text-left`}
+                      >
+                        <div className="mt-0.5">{item.icon}</div>
+                        <div className="flex-1">
+                          <div className="text-sm text-white">{item.title}</div>
+                          <div className="text-xs text-gray-400">
+                            {item.subtitle ?? item.category}
+                          </div>
+                        </div>
+                        {item.id.startsWith('project:') &&
+                          (() => {
+                            const projId = item.id.split(':')[1];
+                            const proj = userConfig.projects.find(p => p.id === projId);
+                            return proj?.liveUrl ? (
+                              <button
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  window.open(proj.liveUrl!, '_blank');
+                                  close();
+                                }}
+                                className="text-[10px] text-green-400 hover:text-green-300 border border-green-400/30 rounded px-1.5 py-0.5"
+                                title="Open Live"
+                              >
+                                Live
+                              </button>
+                            ) : (
+                              <span className="text-[10px] text-gray-500 border border-white/10 rounded px-1 py-0.5">
+                                {item.category}
+                              </span>
+                            );
+                          })()}
+                      </button>
+                    </li>
+                  );
+                }
+              )}
               {group.items.length > 5 && (
                 <li className="px-4 py-2">
                   <button
                     className="text-xs text-blue-400 hover:text-blue-300"
                     onClick={() => toggleGroup(group.category)}
                   >
-                    {expandedGroups.has(group.category) ? 'Show less' : `Show ${group.items.length - 5} more`}
+                    {expandedGroups.has(group.category)
+                      ? 'Show less'
+                      : `Show ${group.items.length - 5} more`}
                   </button>
                 </li>
               )}

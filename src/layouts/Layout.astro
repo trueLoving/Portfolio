@@ -1,7 +1,7 @@
 ---
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 import BaseHead from '../components/global/BaseHead.astro';
-import Analytics from '@vercel/analytics/astro'
-import  SpeedInsights  from "@vercel/speed-insights/astro"
 import { inferServerLocale } from '../i18n/server';
 
 const url = new URL(Astro.request.url);
@@ -10,7 +10,7 @@ const lang = (Astro.props.lang ?? inferServerLocale({ request: Astro.request, ur
 
 <html
   lang={lang}
-  class='scroll-smooth selection:bg-gray-900 selection:text-white overflow-x-hidden'
+  class="scroll-smooth selection:bg-gray-900 selection:text-white overflow-x-hidden"
 >
   <head>
     <!-- 优先执行：传递服务端推断的语言给客户端，避免 hydration mismatch -->
@@ -28,7 +28,7 @@ const lang = (Astro.props.lang ?? inferServerLocale({ request: Astro.request, ur
     <SpeedInsights />
   </head>
 
-  <body class='overflow-x-hidden bg-gray-900'>
+  <body class="overflow-x-hidden bg-gray-900">
     <slot />
   </body>
 </html>

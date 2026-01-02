@@ -103,10 +103,7 @@ export default function MacToolbar({
     const minute = date.getMinutes().toString().padStart(2, '0');
     const period = date.getHours() >= 12 ? 'PM' : 'AM';
 
-    return `${weekday} ${month} ${day} ${hour.replace(
-      /\s?[AP]M/,
-      ''
-    )}:${minute} ${period}`;
+    return `${weekday} ${month} ${day} ${hour.replace(/\s?[AP]M/, '')}:${minute} ${period}`;
   };
 
   const formatIPhoneTime = (date: Date) => {
@@ -156,7 +153,13 @@ export default function MacToolbar({
       {
         label: t('toolbar.adminDashboard'),
         icon: <FaWindowRestore size={16} />,
-        action: () => onOpenAdmin ? onOpenAdmin() : (window.location.href = '/admin'),
+        action: () => {
+          if (onOpenAdmin) {
+            onOpenAdmin();
+          } else {
+            window.location.assign('/admin');
+          }
+        },
       },
     ],
     [t('toolbar.view')]: [
@@ -180,16 +183,26 @@ export default function MacToolbar({
         icon: <IoHelpCircle size={16} />,
         action: () => onShowTutorial?.(),
       },
-      ...(onToggleReducedMotion ? [{
-        label: reducedMotion ? t('toolbar.enableAnimations') : t('toolbar.reduceMotion'),
-        icon: <IoHelpCircle size={16} />,
-        action: () => onToggleReducedMotion?.(),
-      }] : []),
-      ...(onToggleShortcutHint ? [{
-        label: showShortcutHint ? t('toolbar.hideShortcutHints') : t('toolbar.showShortcutHints'),
-        icon: <IoHelpCircle size={16} />,
-        action: () => onToggleShortcutHint?.(),
-      }] : []),
+      ...(onToggleReducedMotion
+        ? [
+            {
+              label: reducedMotion ? t('toolbar.enableAnimations') : t('toolbar.reduceMotion'),
+              icon: <IoHelpCircle size={16} />,
+              action: () => onToggleReducedMotion?.(),
+            },
+          ]
+        : []),
+      ...(onToggleShortcutHint
+        ? [
+            {
+              label: showShortcutHint
+                ? t('toolbar.hideShortcutHints')
+                : t('toolbar.showShortcutHints'),
+              icon: <IoHelpCircle size={16} />,
+              action: () => onToggleShortcutHint?.(),
+            },
+          ]
+        : []),
     ],
     [t('toolbar.window')]: [
       {
@@ -261,7 +274,10 @@ export default function MacToolbar({
   };
 
   const renderMenu = (menuItems: MenuItem[]) => (
-    <div className="absolute top-full left-0 mt-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[200px]" role="menu">
+    <div
+      className="absolute top-full left-0 mt-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[200px]"
+      role="menu"
+    >
       {menuItems.map((item, index) => (
         <div key={index}>
           <button
@@ -273,7 +289,10 @@ export default function MacToolbar({
             {item.label}
           </button>
           {item.submenu && (
-            <div className="absolute left-full top-0 ml-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[200px]" role="menu">
+            <div
+              className="absolute left-full top-0 ml-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[200px]"
+              role="menu"
+            >
               {item.submenu.map((subItem, subIndex) => (
                 <button
                   key={subIndex}
@@ -294,30 +313,34 @@ export default function MacToolbar({
 
   return (
     <>
-      <div className='sticky top-0 z-50 md:hidden bg-transparent text-white h-12 px-8 flex items-center justify-between text-base font-medium'>
-        <span className='font-semibold' suppressHydrationWarning>
+      <div className="sticky top-0 z-50 md:hidden bg-transparent text-white h-12 px-8 flex items-center justify-between text-base font-medium">
+        <span className="font-semibold" suppressHydrationWarning>
           {currentDateTime ? formatIPhoneTime(currentDateTime) : '--:--'}
         </span>
-        <div className='flex items-center gap-1.5'>
+        <div className="flex items-center gap-1.5">
           <IoCellular size={20} />
           <MdWifi size={20} />
           <IoBatteryHalfOutline size={24} />
         </div>
       </div>
 
-      <div className='sticky top-0 z-50 hidden md:flex bg-black/20 backdrop-blur-md text-white h-6 px-4 items-center justify-between text-sm' role="menubar" aria-label="Application menu bar">
-        <div className='flex items-center space-x-4' ref={menuRef}>
+      <div
+        className="sticky top-0 z-50 hidden md:flex bg-black/20 backdrop-blur-md text-white h-6 px-4 items-center justify-between text-sm"
+        role="menubar"
+        aria-label="Application menu bar"
+      >
+        <div className="flex items-center space-x-4" ref={menuRef}>
           <FaApple size={16} />
           <div className="relative">
-            <span 
-              className='font-semibold hover:text-gray-300 transition-colors cursor-pointer'
+            <span
+              className="font-semibold hover:text-gray-300 transition-colors cursor-pointer"
               onMouseEnter={() => setShowSignature(true)}
               onMouseLeave={() => setShowSignature(false)}
             >
               {userConfig.name}
             </span>
             {showSignature && (
-              <div 
+              <div
                 className="absolute top-full left-0 mt-2 bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-md rounded-2xl p-6 shadow-2xl z-[100] border border-white/20 min-w-[200px]"
                 style={{
                   animation: 'fadeInUp 0.3s ease-out',
@@ -338,8 +361,8 @@ export default function MacToolbar({
                 <div className="flex flex-col items-center space-y-3">
                   <div className="relative group">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-full blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                    <img 
-                      src="/me.webp" 
+                    <img
+                      src="/me.webp"
                       alt={`${userConfig.name}'s Avatar`}
                       className="relative w-24 h-24 rounded-full object-cover ring-4 ring-white/50 shadow-lg transition-transform duration-300 group-hover:scale-105"
                     />
@@ -348,12 +371,12 @@ export default function MacToolbar({
                     <h3 className="font-semibold text-gray-900 text-sm">{userConfig.name}</h3>
                     <p className="text-xs text-gray-600 mt-1 line-clamp-2">{userConfig.role}</p>
                     <div className="mt-3 pt-3 border-t border-gray-200/50">
-                      <a 
+                      <a
                         href={userConfig.social.github}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1.5 text-xs text-blue-600 hover:text-blue-700 transition-colors font-medium"
-                        onClick={(e) => e.stopPropagation()}
+                        onClick={e => e.stopPropagation()}
                       >
                         <FaGithub size={12} />
                         {t('toolbar.viewGitHub')}
@@ -366,8 +389,8 @@ export default function MacToolbar({
           </div>
           {Object.entries(menus).map(([menu, items]) => (
             <div key={menu} className="relative">
-              <button 
-                className='cursor-pointer hover:text-gray-300 transition-colors'
+              <button
+                className="cursor-pointer hover:text-gray-300 transition-colors"
                 onClick={() => handleMenuClick(menu)}
                 aria-haspopup="menu"
                 aria-expanded={activeMenu === menu}
@@ -376,29 +399,25 @@ export default function MacToolbar({
               >
                 {menu}
               </button>
-              {activeMenu === menu && (
-                <div id={`menu-${menu}`}>
-                  {renderMenu(items)}
-                </div>
-              )}
+              {activeMenu === menu && <div id={`menu-${menu}`}>{renderMenu(items)}</div>}
             </div>
           ))}
         </div>
-        <div className='flex items-center space-x-4'>
+        <div className="flex items-center space-x-4">
           <VscVscode
             size={16}
-            className='cursor-pointer hover:opacity-80 transition-opacity'
+            className="cursor-pointer hover:opacity-80 transition-opacity"
             onClick={handleVSCodeClick}
             title={t('toolbar.openInVSCode')}
           />
           <MdWifi size={16} />
           <IoSearchSharp
             size={16}
-            className='cursor-pointer hover:opacity-80 transition-opacity'
+            className="cursor-pointer hover:opacity-80 transition-opacity"
             onClick={() => onOpenSpotlight?.()}
             title={t('toolbar.search')}
-            role='button'
-            aria-label='Open search'
+            role="button"
+            aria-label="Open search"
           />
           <div className="relative" ref={languageMenuRef}>
             <button
@@ -412,7 +431,10 @@ export default function MacToolbar({
               <IoChevronDown size={12} className={showLanguageMenu ? 'rotate-180' : ''} />
             </button>
             {showLanguageMenu && (
-              <div className="absolute top-full right-0 mt-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[120px]" role="menu">
+              <div
+                className="absolute top-full right-0 mt-1 bg-gray-800/90 backdrop-blur-sm rounded-lg shadow-xl py-1 min-w-[120px]"
+                role="menu"
+              >
                 <button
                   onClick={() => handleLanguageSwitch('en')}
                   role="menuitem"
@@ -432,7 +454,7 @@ export default function MacToolbar({
               </div>
             )}
           </div>
-          <span className='cursor-default' suppressHydrationWarning>
+          <span className="cursor-default" suppressHydrationWarning>
             {currentDateTime ? formatMacDate(currentDateTime) : '-- -- -- --:-- --'}
           </span>
         </div>

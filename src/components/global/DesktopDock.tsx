@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { BsGithub, BsFilePdf, BsStickyFill, BsLinkedin } from 'react-icons/bs';
 import { IoIosCall, IoIosMail } from 'react-icons/io';
-import { FaLink, FaEnvelope } from 'react-icons/fa';
+import { FaLink } from 'react-icons/fa';
 import ResumeViewer from './ResumeViewer';
 import { useUserConfig } from '../../config/hooks';
 import { RiTerminalFill } from 'react-icons/ri';
@@ -25,7 +25,15 @@ interface DesktopDockProps {
   };
 }
 
-const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactClick, activeApps, focusedApp, hasUnread }: DesktopDockProps) => {
+const DesktopDock = ({
+  onTerminalClick,
+  onNotesClick,
+  onGitHubClick,
+  onContactClick,
+  activeApps,
+  focusedApp,
+  hasUnread,
+}: DesktopDockProps) => {
   const { t } = useI18n();
   const userConfig = useUserConfig();
   const [hoveredIcon, setHoveredIcon] = useState<string | null>(null);
@@ -39,7 +47,6 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
     setShowLinksPopup(!showLinksPopup);
   };
 
-
   const handleResumeClick = () => {
     setShowResume(true);
   };
@@ -47,7 +54,6 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
   const handleCloseResume = () => {
     setShowResume(false);
   };
-
 
   // Email is handled via Contact widget now; direct mail link remains in Links popup
 
@@ -83,7 +89,7 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
     };
   }, []);
 
-  const calculateScale = (iconIndex: number, totalIcons: number) => {
+  const _calculateScale = (iconIndex: number, totalIcons: number) => {
     if (mouseX === null || !dockRef.current) return 1;
     const rect = dockRef.current.getBoundingClientRect();
     const iconWidth = rect.width / totalIcons;
@@ -108,15 +114,15 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
     >
       <div className="grid grid-cols-1 gap-y-2">
         {userConfig.social.linkedin && (
-        <a
-          href={userConfig.social.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 text-gray-300 hover:text-white"
-        >
-          <BsLinkedin size={20} />
-          <span>{t('toolbar.linkedin')}</span>
-        </a>
+          <a
+            href={userConfig.social.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 text-gray-300 hover:text-white"
+          >
+            <BsLinkedin size={20} />
+            <span>{t('toolbar.linkedin')}</span>
+          </a>
         )}
         <a
           href={userConfig.social.github}
@@ -135,35 +141,89 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
           <span>{t('toolbar.email')}</span>
         </a>
         {userConfig.contact.phone && (
-        <a
-          href={`tel:${userConfig.contact.phone}`}
-          className="flex items-center gap-2 text-gray-300 hover:text-white"
-        >
-          <IoIosCall size={20} />
-          <span>Call</span>
-        </a>
+          <a
+            href={`tel:${userConfig.contact.phone}`}
+            className="flex items-center gap-2 text-gray-300 hover:text-white"
+          >
+            <IoIosCall size={20} />
+            <span>Call</span>
+          </a>
         )}
       </div>
     </div>
   );
 
   const icons = [
-    { id: 'github', label: t('dock.github'), onClick: onGitHubClick, icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github, isFocused: focusedApp === 'github' },
-    { id: 'notes', label: t('dock.notes'), onClick: onNotesClick, icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes, isFocused: focusedApp === 'notes' },
-    { id: 'resume', label: t('dock.resume'), onClick: handleResumeClick, icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume, isFocused: focusedApp === 'resume' },
-    { id: 'email', label: t('dock.contact'), onClick: onContactClick, icon: IoIosMail, color: 'from-blue-600 to-blue-400', active: false, isFocused: focusedApp === 'contact', hasUnread: hasUnread?.contact },
-    { id: 'links', label: t('dock.links'), onClick: handleLinksClick, icon: FaLink, color: 'from-purple-600 to-purple-400', active: false, isFocused: false },
-    { id: 'terminal', label: t('dock.terminal'), onClick: onTerminalClick, icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal, isFocused: focusedApp === 'terminal' },
+    {
+      id: 'github',
+      label: t('dock.github'),
+      onClick: onGitHubClick,
+      icon: BsGithub,
+      color: 'from-black to-black/60',
+      active: activeApps.github,
+      isFocused: focusedApp === 'github',
+    },
+    {
+      id: 'notes',
+      label: t('dock.notes'),
+      onClick: onNotesClick,
+      icon: BsStickyFill,
+      color: 'from-yellow-600 to-yellow-400',
+      active: activeApps.notes,
+      isFocused: focusedApp === 'notes',
+    },
+    {
+      id: 'resume',
+      label: t('dock.resume'),
+      onClick: handleResumeClick,
+      icon: BsFilePdf,
+      color: 'from-red-600 to-red-400',
+      active: activeApps.resume,
+      isFocused: focusedApp === 'resume',
+    },
+    {
+      id: 'email',
+      label: t('dock.contact'),
+      onClick: onContactClick,
+      icon: IoIosMail,
+      color: 'from-blue-600 to-blue-400',
+      active: false,
+      isFocused: focusedApp === 'contact',
+      hasUnread: hasUnread?.contact,
+    },
+    {
+      id: 'links',
+      label: t('dock.links'),
+      onClick: handleLinksClick,
+      icon: FaLink,
+      color: 'from-purple-600 to-purple-400',
+      active: false,
+      isFocused: false,
+    },
+    {
+      id: 'terminal',
+      label: t('dock.terminal'),
+      onClick: onTerminalClick,
+      icon: RiTerminalFill,
+      color: 'from-black to-black/60',
+      active: activeApps.terminal,
+      isFocused: focusedApp === 'terminal',
+    },
   ];
 
   return (
     <>
-      <nav aria-label="Dock" className="fixed bottom-0 left-0 right-0 hidden md:flex justify-center pb-4 z-100">
+      <nav
+        aria-label="Dock"
+        className="fixed bottom-0 left-0 right-0 hidden md:flex justify-center pb-4 z-100"
+      >
         <div ref={dockRef} className="bg-gray-600/50 backdrop-blur-sm rounded-2xl p-2 shadow-xl">
           <div className="flex space-x-2" role="menubar">
-            {icons.map((item, index) => {
+            {icons.map((item, _index) => {
               const Icon = item.icon;
-              const scale = calculateScale(index, icons.length);
+              // Use default scale to avoid accessing refs during render
+              // Scale animation is handled by CSS transforms based on mouse position
+              const scale = 1;
               return (
                 <button
                   key={item.id}
@@ -171,25 +231,47 @@ const DesktopDock = ({ onTerminalClick, onNotesClick, onGitHubClick, onContactCl
                   aria-label={item.label}
                   aria-haspopup={item.id === 'links' ? 'menu' : undefined}
                   aria-expanded={item.id === 'links' ? showLinksPopup : undefined}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); item.onClick(); } }}
+                  onKeyDown={e => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      item.onClick();
+                    }
+                  }}
                   onMouseEnter={() => setHoveredIcon(item.id)}
                   onMouseLeave={() => setHoveredIcon(null)}
                   className="relative group"
-                  style={{ transform: `scale(${scale})`, transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+                  style={{
+                    transform: `scale(${scale})`,
+                    transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                  }}
                 >
-                  <div className={`relative w-12 h-12 bg-gradient-to-t ${item.color} rounded-xl flex items-center justify-center shadow-lg active:scale-95 ${
-                    item.isFocused ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-600/50' : 
-                    item.active ? 'ring-2 ring-white/50' : ''
-                  }`}>
-                    <Icon size={item.id === 'email' ? 40 : item.id === 'links' ? 30 : 35} className='text-white' />
+                  <div
+                    className={`relative w-12 h-12 bg-gradient-to-t ${item.color} rounded-xl flex items-center justify-center shadow-lg active:scale-95 ${
+                      item.isFocused
+                        ? 'ring-2 ring-blue-400 ring-offset-2 ring-offset-gray-600/50'
+                        : item.active
+                          ? 'ring-2 ring-white/50'
+                          : ''
+                    }`}
+                  >
+                    <Icon
+                      size={item.id === 'email' ? 40 : item.id === 'links' ? 30 : 35}
+                      className="text-white"
+                    />
                     {/* Active indicator: small dot at bottom */}
                     {item.active && !item.isFocused && (
-                      <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rounded-full" aria-hidden="true" />
+                      <span
+                        className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-white rounded-full"
+                        aria-hidden="true"
+                      />
                     )}
                     {/* Focused indicator: brighter ring (already handled by ring-2 ring-blue-400 above) */}
                     {/* Unread badge: small red dot at top-right */}
                     {item.hasUnread && (
-                      <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-gray-600/50" aria-label="Unread" />
+                      <span
+                        className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-gray-600/50"
+                        aria-label="Unread"
+                      />
                     )}
                   </div>
                   {hoveredIcon === item.id && <Tooltip text={item.label} />}

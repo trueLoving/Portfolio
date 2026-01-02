@@ -25,7 +25,11 @@ export const POST: APIRoute = async ({ request }) => {
   // Fast-fail if not configured
   if (!import.meta.env.GROQ_API_KEY) {
     console.error('[Chat API] Missing GROQ_API_KEY');
-    return err('CONFIG_ERROR', 'Chat service is not configured. Please contact the site administrator.', 503);
+    return err(
+      'CONFIG_ERROR',
+      'Chat service is not configured. Please contact the site administrator.',
+      503
+    );
   }
 
   // Parse body
@@ -56,15 +60,17 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     return json({ message: content }, 200);
-  } catch (error) {
-    const message = error instanceof Error ? error.message : 'Unknown error';
+  } catch (_error) {
+    const message = _error instanceof Error ? _error.message : 'Unknown error';
 
     // Groq-specific error
-    if (error instanceof Groq.APIError) {
+    if (_error instanceof Groq.APIError) {
       return err(
         'AI_SERVICE_ERROR',
-        import.meta.env.DEV ? `AI service error: ${message}` : 'The AI service is temporarily unavailable',
-        (error as any).status || 500
+        import.meta.env.DEV
+          ? `AI service error: ${message}`
+          : 'The AI service is temporarily unavailable',
+        (_error as any).status || 500
       );
     }
 

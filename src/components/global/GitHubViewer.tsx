@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FaGithub, FaExternalLinkAlt, FaFolder, FaFile, FaChevronLeft, FaLink } from 'react-icons/fa';
+import {
+  FaGithub,
+  FaExternalLinkAlt,
+  FaFolder,
+  FaFile,
+  FaChevronLeft,
+  FaLink,
+} from 'react-icons/fa';
 import { useUserConfig } from '../../config/hooks';
 import type { Project, FileNode, ProjectStructure } from '../../types';
 import DraggableWindow from './DraggableWindow';
@@ -41,7 +48,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
           role="treeitem"
           aria-expanded={node.type === 'directory' ? isExpanded : undefined}
           tabIndex={0}
-          onKeyDown={(e) => {
+          onKeyDown={e => {
             if ((e.key === 'Enter' || e.key === ' ') && node.type === 'directory') {
               e.preventDefault();
               toggleNode(currentPath);
@@ -74,7 +81,9 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
           <span className="text-gray-200 font-bold">{projectStructure.root}</span>
         </div>
         <div className="ml-4">
-          {projectStructure.children.map((child: FileNode) => renderFileTree(child, projectStructure.root))}
+          {projectStructure.children.map((child: FileNode) =>
+            renderFileTree(child, projectStructure.root)
+          )}
         </div>
       </div>
     );
@@ -93,7 +102,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
 
   const handleNextImage = () => {
     if (selectedProject) {
-      setActiveImageIndex((prevIndex) => 
+      setActiveImageIndex(prevIndex =>
         prevIndex + 1 >= selectedProject.images.length ? 0 : prevIndex + 1
       );
     }
@@ -101,7 +110,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
 
   const handlePrevImage = () => {
     if (selectedProject) {
-      setActiveImageIndex((prevIndex) => 
+      setActiveImageIndex(prevIndex =>
         prevIndex - 1 < 0 ? selectedProject.images.length - 1 : prevIndex - 1
       );
     }
@@ -129,264 +138,305 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
       <DraggableWindow
         title={showStructure ? selectedProject?.title || 'GitHub Projects' : 'GitHub Projects'}
         onClose={onClose}
-        initialPosition={{ 
-          x: Math.floor(window.innerWidth * 0.2), 
-          y: Math.floor(window.innerHeight * 0.2) 
+        initialPosition={{
+          x: Math.floor(window.innerWidth * 0.2),
+          y: Math.floor(window.innerHeight * 0.2),
         }}
         className="w-[93vw] md:max-w-4xl max-h-[90vh] flex flex-col"
         initialSize={{ width: 800, height: 600 }}
         onFocus={onFocus}
       >
-      <div className="flex flex-col flex-grow min-h-0 h-full">
-        <div className="overflow-y-auto flex-grow min-h-0 p-4 md:p-6">
-          {!showStructure ? (
-            <>
-              <h2 className="text-2xl font-bold mb-4 text-gray-200">My Projects</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {userConfig.projects.map((project) => (
-                  <div
-                    key={project.id}
-                    className="bg-gray-800/50 p-4 rounded-lg cursor-pointer transition-colors hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-white/30"
-                    onClick={() => handleProjectClick(project)}
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter') { e.preventDefault(); handleProjectClick(project); }
-                      if (e.key === ' ') { e.preventDefault(); setQuickLook(project); }
-                    }}
-                  >
-                    {project.images && project.images.length > 0 && (
-                      <div className="relative w-full h-48 mb-3 overflow-hidden rounded-lg bg-gray-700/50">
-                        {!imageLoadStates[`${project.id}-0`] && (
-                          <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
-                        )}
-                        <img 
-                          src={project.images[0].url} 
-                          alt={project.images[0].alt} 
-                          className={`w-full h-full object-cover transition-opacity duration-300 ${
-                            imageLoadStates[`${project.id}-0`] ? 'opacity-100' : 'opacity-0'
-                          }`}
-                          loading="lazy"
-                          decoding="async"
-                          onLoad={() => setImageLoadStates(prev => ({ ...prev, [`${project.id}-0`]: true }))}
-                        />
-                        <button
-                          className="absolute bottom-2 right-2 text-xs bg-white/10 text-white border border-white/20 rounded px-2 py-1 hover:bg-white/20 z-10"
-                          onClick={(e) => { e.stopPropagation(); setQuickLook(project); }}
-                        >
-                          Quick Look
-                        </button>
-                      </div>
-                    )}
-                    <h3 className="text-xl font-semibold mb-2 text-gray-200">{project.title}</h3>
-                    <p className="text-gray-400 mb-2">{project.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      {project.techStack.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300"
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="flex gap-4">
-                      <a
-                        href={project.repoUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300"
-                        onClick={(e) => e.stopPropagation()}
-                      >
-                        <FaGithub />
-                        <span>Repository</span>
-                      </a>
-                      {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <FaExternalLinkAlt />
-                          <span>Live Demo</span>
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          ) : (
-            <div>
-              <button
-                onClick={handleBackClick}
-                aria-label="Back to Projects"
-                className="flex items-center gap-2 text-gray-300 hover:text-gray-100 mb-4"
-              >
-                <FaChevronLeft />
-                <span>Back to Projects</span>
-              </button>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-800/50 rounded-lg p-4">
-                  <h3 className="text-xl font-semibold mb-4 text-gray-200">Project Structure</h3>
-                  <div className="font-mono text-sm">
-                    {selectedProject && renderProjectStructure(selectedProject.structure as unknown as ProjectStructure)}
-                  </div>
-                </div>
-                
-                {selectedProject && selectedProject.images && selectedProject.images.length > 0 && (
-                  <div className="bg-gray-800/50 rounded-lg p-4">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-200">Screenshots</h3>
-                    <div className="relative">
-                      <div className="rounded-lg overflow-hidden mb-2 bg-gray-700/50 relative">
-                        {!imageLoadStates[`${selectedProject.id}-detail-${activeImageIndex}`] && (
-                          <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
-                        )}
-                        <img 
-                          src={selectedProject.images[activeImageIndex].url} 
-                          alt={selectedProject.images[activeImageIndex].alt}
-                          className={`w-full max-h-[500px] object-contain transition-opacity duration-300 ${
-                            imageLoadStates[`${selectedProject.id}-detail-${activeImageIndex}`] ? 'opacity-100' : 'opacity-0'
-                          }`}
-                          loading="lazy"
-                          decoding="async"
-                          onLoad={() => setImageLoadStates(prev => ({ 
-                            ...prev, 
-                            [`${selectedProject.id}-detail-${activeImageIndex}`]: true 
-                          }))}
-                        />
-                      </div>
-                      
-                      <div className="text-sm text-gray-300 mb-3">
-                        {selectedProject.images[activeImageIndex].description}
-                      </div>
-                      
-                      {selectedProject.images.length > 1 && (
-                        <div className="flex justify-between mt-2">
-                          <button 
-                            onClick={handlePrevImage}
-                            aria-label="Previous screenshot"
-                            className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
+        <div className="flex flex-col flex-grow min-h-0 h-full">
+          <div className="overflow-y-auto flex-grow min-h-0 p-4 md:p-6">
+            {!showStructure ? (
+              <>
+                <h2 className="text-2xl font-bold mb-4 text-gray-200">My Projects</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {userConfig.projects.map(project => (
+                    <div
+                      key={project.id}
+                      className="bg-gray-800/50 p-4 rounded-lg cursor-pointer transition-colors hover:bg-gray-700/50 focus:outline-none focus:ring-2 focus:ring-white/30"
+                      onClick={() => handleProjectClick(project)}
+                      tabIndex={0}
+                      onKeyDown={e => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleProjectClick(project);
+                        }
+                        if (e.key === ' ') {
+                          e.preventDefault();
+                          setQuickLook(project);
+                        }
+                      }}
+                    >
+                      {project.images && project.images.length > 0 && (
+                        <div className="relative w-full h-48 mb-3 overflow-hidden rounded-lg bg-gray-700/50">
+                          {!imageLoadStates[`${project.id}-0`] && (
+                            <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
+                          )}
+                          <img
+                            src={project.images[0].url}
+                            alt={project.images[0].alt}
+                            className={`w-full h-full object-cover transition-opacity duration-300 ${
+                              imageLoadStates[`${project.id}-0`] ? 'opacity-100' : 'opacity-0'
+                            }`}
+                            loading="lazy"
+                            decoding="async"
+                            onLoad={() =>
+                              setImageLoadStates(prev => ({ ...prev, [`${project.id}-0`]: true }))
+                            }
+                          />
+                          <button
+                            className="absolute bottom-2 right-2 text-xs bg-white/10 text-white border border-white/20 rounded px-2 py-1 hover:bg-white/20 z-10"
+                            onClick={e => {
+                              e.stopPropagation();
+                              setQuickLook(project);
+                            }}
                           >
-                            ←
-                          </button>
-                          <span className="text-gray-400">
-                            {activeImageIndex + 1} / {selectedProject.images.length}
-                          </span>
-                          <button 
-                            onClick={handleNextImage}
-                            aria-label="Next screenshot"
-                            className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
-                          >
-                            →
+                            Quick Look
                           </button>
                         </div>
                       )}
-                    </div>
-                    {selectedProject.repoUrl && (
-                      <div className="mt-4">
+                      <h3 className="text-xl font-semibold mb-2 text-gray-200">{project.title}</h3>
+                      <p className="text-gray-400 mb-2">{project.description}</p>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {project.techStack.map(tech => (
+                          <span
+                            key={tech}
+                            className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex gap-4">
                         <a
-                          href={selectedProject.repoUrl}
+                          href={project.repoUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
+                          className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300"
+                          onClick={e => e.stopPropagation()}
                         >
                           <FaGithub />
-                          <span>Visit GitHub Repository</span>
+                          <span>Repository</span>
                         </a>
+                        {project.liveUrl && (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300"
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <FaExternalLinkAlt />
+                            <span>Live Demo</span>
+                          </a>
+                        )}
                       </div>
-                    )}
-                    {selectedProject.liveUrl && (
-                      <div className="mt-4">
-                        <a
-                          href={selectedProject.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
-                        >
-                          <FaLink />
-                          <span>Visit Live Site</span>
-                        </a>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    </DraggableWindow>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div>
+                <button
+                  onClick={handleBackClick}
+                  aria-label="Back to Projects"
+                  className="flex items-center gap-2 text-gray-300 hover:text-gray-100 mb-4"
+                >
+                  <FaChevronLeft />
+                  <span>Back to Projects</span>
+                </button>
 
-    {quickLook && (
-      <div className="fixed inset-0 z-[70]" role="dialog" aria-modal="true" aria-label="Quick Look">
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setQuickLook(null)} />
-        <div className="relative mx-auto mt-16 w-[92%] max-w-3xl rounded-xl border border-white/10 bg-gray-900/95 shadow-2xl">
-          <div className="p-4 md:p-6">
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="text-xl font-semibold text-white">{quickLook!.title}</h3>
-              <button className="text-gray-400 hover:text-gray-200" onClick={() => setQuickLook(null)}>✕</button>
-            </div>
-            {quickLook!.images && quickLook!.images.length > 0 && (
-              <div className="rounded-lg overflow-hidden mb-3 bg-gray-700/50 relative">
-                {!imageLoadStates[`quicklook-${quickLook!.id}`] && (
-                  <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
-                )}
-                <img 
-                  src={quickLook!.images[0].url} 
-                  alt={quickLook!.images[0].alt} 
-                  className={`w-full max-h-[400px] object-contain transition-opacity duration-300 ${
-                    imageLoadStates[`quicklook-${quickLook!.id}`] ? 'opacity-100' : 'opacity-0'
-                  }`}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={() => setImageLoadStates(prev => ({ 
-                    ...prev, 
-                    [`quicklook-${quickLook!.id}`]: true 
-                  }))}
-                />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-gray-800/50 rounded-lg p-4">
+                    <h3 className="text-xl font-semibold mb-4 text-gray-200">Project Structure</h3>
+                    <div className="font-mono text-sm">
+                      {selectedProject &&
+                        renderProjectStructure(
+                          selectedProject.structure as unknown as ProjectStructure
+                        )}
+                    </div>
+                  </div>
+
+                  {selectedProject &&
+                    selectedProject.images &&
+                    selectedProject.images.length > 0 && (
+                      <div className="bg-gray-800/50 rounded-lg p-4">
+                        <h3 className="text-xl font-semibold mb-4 text-gray-200">Screenshots</h3>
+                        <div className="relative">
+                          <div className="rounded-lg overflow-hidden mb-2 bg-gray-700/50 relative">
+                            {!imageLoadStates[
+                              `${selectedProject.id}-detail-${activeImageIndex}`
+                            ] && <div className="absolute inset-0 animate-pulse bg-gray-700/50" />}
+                            <img
+                              src={selectedProject.images[activeImageIndex].url}
+                              alt={selectedProject.images[activeImageIndex].alt}
+                              className={`w-full max-h-[500px] object-contain transition-opacity duration-300 ${
+                                imageLoadStates[`${selectedProject.id}-detail-${activeImageIndex}`]
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              }`}
+                              loading="lazy"
+                              decoding="async"
+                              onLoad={() =>
+                                setImageLoadStates(prev => ({
+                                  ...prev,
+                                  [`${selectedProject.id}-detail-${activeImageIndex}`]: true,
+                                }))
+                              }
+                            />
+                          </div>
+
+                          <div className="text-sm text-gray-300 mb-3">
+                            {selectedProject.images[activeImageIndex].description}
+                          </div>
+
+                          {selectedProject.images.length > 1 && (
+                            <div className="flex justify-between mt-2">
+                              <button
+                                onClick={handlePrevImage}
+                                aria-label="Previous screenshot"
+                                className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
+                              >
+                                ←
+                              </button>
+                              <span className="text-gray-400">
+                                {activeImageIndex + 1} / {selectedProject.images.length}
+                              </span>
+                              <button
+                                onClick={handleNextImage}
+                                aria-label="Next screenshot"
+                                className="bg-gray-700 hover:bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
+                              >
+                                →
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                        {selectedProject.repoUrl && (
+                          <div className="mt-4">
+                            <a
+                              href={selectedProject.repoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
+                            >
+                              <FaGithub />
+                              <span>Visit GitHub Repository</span>
+                            </a>
+                          </div>
+                        )}
+                        {selectedProject.liveUrl && (
+                          <div className="mt-4">
+                            <a
+                              href={selectedProject.liveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
+                            >
+                              <FaLink />
+                              <span>Visit Live Site</span>
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                </div>
               </div>
             )}
-            <p className="text-gray-300 mb-3">{quickLook!.description}</p>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {quickLook!.techStack.map((tech: string) => (
-                <span key={tech} className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">{tech}</span>
-              ))}
-            </div>
-            <div className="flex gap-3">
-              <button
-                className="text-sm text-blue-400 hover:text-blue-300"
-                onClick={() => { setSelectedProject(quickLook!); setShowStructure(true); setQuickLook(null); }}
-              >
-                Open Details
-              </button>
-              <a
-                href={quickLook!.repoUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-sm text-gray-300 hover:text-blue-400"
-              >
-                Open Repo
-              </a>
-              {quickLook!.liveUrl && (
+          </div>
+        </div>
+      </DraggableWindow>
+
+      {quickLook && (
+        <div
+          className="fixed inset-0 z-[70]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Quick Look"
+        >
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setQuickLook(null)}
+          />
+          <div className="relative mx-auto mt-16 w-[92%] max-w-3xl rounded-xl border border-white/10 bg-gray-900/95 shadow-2xl">
+            <div className="p-4 md:p-6">
+              <div className="flex items-start justify-between mb-3">
+                <h3 className="text-xl font-semibold text-white">{quickLook!.title}</h3>
+                <button
+                  className="text-gray-400 hover:text-gray-200"
+                  onClick={() => setQuickLook(null)}
+                >
+                  ✕
+                </button>
+              </div>
+              {quickLook!.images && quickLook!.images.length > 0 && (
+                <div className="rounded-lg overflow-hidden mb-3 bg-gray-700/50 relative">
+                  {!imageLoadStates[`quicklook-${quickLook!.id}`] && (
+                    <div className="absolute inset-0 animate-pulse bg-gray-700/50" />
+                  )}
+                  <img
+                    src={quickLook!.images[0].url}
+                    alt={quickLook!.images[0].alt}
+                    className={`w-full max-h-[400px] object-contain transition-opacity duration-300 ${
+                      imageLoadStates[`quicklook-${quickLook!.id}`] ? 'opacity-100' : 'opacity-0'
+                    }`}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={() =>
+                      setImageLoadStates(prev => ({
+                        ...prev,
+                        [`quicklook-${quickLook!.id}`]: true,
+                      }))
+                    }
+                  />
+                </div>
+              )}
+              <p className="text-gray-300 mb-3">{quickLook!.description}</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {quickLook!.techStack.map((tech: string) => (
+                  <span key={tech} className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">
+                    {tech}
+                  </span>
+                ))}
+              </div>
+              <div className="flex gap-3">
+                <button
+                  className="text-sm text-blue-400 hover:text-blue-300"
+                  onClick={() => {
+                    setSelectedProject(quickLook!);
+                    setShowStructure(true);
+                    setQuickLook(null);
+                  }}
+                >
+                  Open Details
+                </button>
                 <a
-                  href={quickLook!.liveUrl}
+                  href={quickLook!.repoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-green-400 hover:text-green-300"
+                  className="text-sm text-gray-300 hover:text-blue-400"
                 >
-                  Open Live
+                  Open Repo
                 </a>
-              )}
+                {quickLook!.liveUrl && (
+                  <a
+                    href={quickLook!.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-green-400 hover:text-green-300"
+                  >
+                    Open Live
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    )}
+      )}
     </>
   );
 };
 
-export default GitHubViewer; 
+export default GitHubViewer;

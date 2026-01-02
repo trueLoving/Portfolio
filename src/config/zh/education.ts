@@ -12,7 +12,8 @@ export const education: readonly Education[] = [
     institution: '杭州师范大学',
     location: '中国，杭州',
     year: '2017-2021',
-    description: '相关课程：数据结构、数据结构和算法、操作系统、计算机网络、软件工程、生物医学信息学、人工智能、机器学习、深度学习、计算机视觉、自然语言处理、计算机网络、操作系统、计算机体系结构、计算机组成、计算机安全、计算机图形学、计算机系统等',
+    description:
+      '相关课程：数据结构、数据结构和算法、操作系统、计算机网络、软件工程、生物医学信息学、人工智能、机器学习、深度学习、计算机视觉、自然语言处理、计算机网络、操作系统、计算机体系结构、计算机组成、计算机安全、计算机图形学、计算机系统等',
     images: [
       {
         url: 'https://www.hznu.edu.cn/upload/resources/image/2021/08/10/7657092.jpg',
@@ -51,5 +52,3 @@ export const courses: readonly Course[] = [
     ],
   },
 ] as const;
-
-

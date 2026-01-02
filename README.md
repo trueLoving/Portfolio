@@ -34,6 +34,7 @@ This project is based on [macos-terminal-portfolio](https://github.com/aabdoo23/
 Based on the original project, this version adds the following features:
 
 **1. Dynamic Video Background Support**
+
 - Support for MP4 video files as wallpapers
 - Automatic playback, loop, and mute
 - Smooth transitions between backgrounds
@@ -41,6 +42,7 @@ Based on the original project, this version adds the following features:
 - Video files should be placed in `public/background/video/`
 
 **2. Complete Internationalization**
+
 - English/Chinese (Simplified) language switching (default: English)
 - Language preference saved in localStorage
 - All UI elements and content support both languages
@@ -48,15 +50,18 @@ Based on the original project, this version adds the following features:
 - Easy to extend to additional languages
 
 **3. Multi-language Configuration System**
+
 - Configuration files organized by language directory (`src/config/en/` and `src/config/zh/`)
 - Supports localization of personal info, education, experience, skills, etc.
 - Unified configuration loader and React hooks
 
 **4. Server-side Locale Inference (SEO follows language)**
+
 - Server infers locale via: query (`?lang=` / `?locale=`) → cookie (`locale=`) → `Accept-Language`
 - SEO/OG meta tags are generated from `getUserConfig(locale)` on the server
 
 **5. Localized Resume PDFs**
+
 - English: `/resume/resume-en.pdf`
 - Chinese: `/resume/resume-zh.pdf`
 
@@ -130,6 +135,7 @@ alter table public.contact_messages enable row level security;
 Configuration files are located in `src/config/` directory, organized by language:
 
 **English Configuration** (`src/config/en/`):
+
 - `personal.ts` — Personal information (name, role, location, website)
 - `education.ts` — Education background
 - `experience.ts` — Work experience
@@ -141,6 +147,7 @@ Configuration files are located in `src/config/` directory, organized by languag
 - `apps.ts` — Resume and Spotify configuration
 
 **Chinese Configuration** (`src/config/zh/`):
+
 - Same structure as English configuration, with Chinese translations
 
 ### 6. Add Background Resources
@@ -178,19 +185,23 @@ pnpm run preview
 #### Method 1: Using Vercel CLI (Recommended)
 
 1. **Build the project**
+
 ```bash
 pnpm run build
 ```
 
 2. **Deploy to production**
+
 ```bash
 npx vercel deploy --prod
 ```
 
 Or deploy to preview first:
+
 ```bash
 npx vercel deploy
 ```
+
 Then select the deployment from the Vercel dashboard.
 
 #### Method 2: Automatic Deployment via GitHub
@@ -207,10 +218,12 @@ Then select the deployment from the Vercel dashboard.
 Configure in Vercel Project Settings → Environment Variables:
 
 **Required Variables**:
+
 - `PUBLIC_SITE_URL` — Production URL (e.g., `https://your-domain.tld`)
 - `GROQ_API_KEY` — Groq API key (for AI Terminal)
 
 **Optional Variables** (for contact form and admin dashboard):
+
 - `SUPABASE_URL` — Supabase project URL
 - `SUPABASE_SERVICE_ROLE_KEY` — Supabase service role key
 - `ADMIN_USERNAME` — Admin dashboard username
@@ -265,6 +278,7 @@ Configuration files are organized by language in `src/config/en/` and `src/confi
 ### Using Configuration
 
 **In React Components**:
+
 ```typescript
 import { useUserConfig } from '../../config/hooks';
 
@@ -275,6 +289,7 @@ function MyComponent() {
 ```
 
 **In Astro Pages** (server-side, locale-aware):
+
 ```typescript
 import { getUserConfig } from '../config/loader';
 import { inferServerLocale } from '../i18n/server';

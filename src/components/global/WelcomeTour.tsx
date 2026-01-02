@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { IoSearch, IoBookmarksOutline, IoDocumentTextOutline } from 'react-icons/io5';
 import { FaWindowRestore, FaMousePointer } from 'react-icons/fa';
-import { BsGithub, BsStickyFill } from 'react-icons/bs';
+import { BsGithub } from 'react-icons/bs';
 
 type Actions = {
   openSpotlight: () => void;
@@ -19,64 +19,67 @@ interface WelcomeTourProps {
 }
 
 export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps) {
-  const slides = useMemo(() => [
-    {
-      id: 'welcome',
-      title: 'Welcome to my macOS-style portfolio',
-      desc: 'Explore projects, experience, and more through a familiar desktop interface.',
-      icon: <FaWindowRestore className="text-white/90" size={28} />,
-      cta: { label: 'Start tour', onClick: undefined as undefined | (() => void) },
-    },
-    {
-      id: 'spotlight',
-      title: 'Spotlight Search',
-      desc: 'Cmd/Ctrl+K to search projects, actions, skills, and links. Use arrows, Enter, and Shift+Enter (Live).',
-      icon: <IoSearch className="text-white/90" size={28} />,
-      cta: { label: 'Try Spotlight', onClick: actions.openSpotlight },
-      tip: 'Pinned actions appear first. Type to fuzzy-search across everything.'
-    },
-    {
-      id: 'mission',
-      title: 'Mission Control',
-      desc: 'View and switch between open windows. Use Ctrl/Cmd+↑ or F3.',
-      icon: <FaWindowRestore className="text-white/90" size={28} />,
-      cta: { label: 'Open Mission Control', onClick: actions.openMissionControl },
-      tip: 'Click a window to focus it; close windows right from the grid.'
-    },
-    {
-      id: 'dock',
-      title: 'Dock with magnification',
-      desc: 'Hover the dock to smoothly magnify icons. Click to open Notes, Projects, Terminal, and more.',
-      icon: <FaMousePointer className="text-white/90" size={28} />,
-      cta: undefined,
-      tip: 'Active apps show a white indicator dot.'
-    },
-    {
-      id: 'projects-notes',
-      title: 'Projects & Notes',
-      desc: 'Deep-link into Projects and Notes sections directly from Spotlight or the dock.',
-      icon: <BsGithub className="text-white/90" size={28} />,
-      cta: { label: 'Open Projects', onClick: actions.openGitHub },
-      altCta: { label: 'Open Notes', onClick: actions.openNotes },
-      tip: 'Use Space on a project to Quick Look; Enter to open.'
-    },
-    {
-      id: 'contact',
-      title: 'Contact',
-      desc: 'Reach out directly via the built-in contact form (stored securely in Supabase).',
-      icon: <IoDocumentTextOutline className="text-white/90" size={28} />,
-      cta: { label: 'Open Contact', onClick: actions.openContact },
-      tip: 'You can also press C or find it in Spotlight.'
-    },
-    {
-      id: 'shortcuts',
-      title: 'Shortcuts',
-      desc: 'Press ? at any time for a list of keyboard shortcuts and tips.',
-      icon: <IoBookmarksOutline className="text-white/90" size={28} />,
-      cta: { label: 'Finish', onClick: onClose },
-      tip: 'Prefer the keyboard? Most features are just a keystroke away.'
-    },
-  ], [actions, onClose]);
+  const slides = useMemo(
+    () => [
+      {
+        id: 'welcome',
+        title: 'Welcome to my macOS-style portfolio',
+        desc: 'Explore projects, experience, and more through a familiar desktop interface.',
+        icon: <FaWindowRestore className="text-white/90" size={28} />,
+        cta: { label: 'Start tour', onClick: undefined as undefined | (() => void) },
+      },
+      {
+        id: 'spotlight',
+        title: 'Spotlight Search',
+        desc: 'Cmd/Ctrl+K to search projects, actions, skills, and links. Use arrows, Enter, and Shift+Enter (Live).',
+        icon: <IoSearch className="text-white/90" size={28} />,
+        cta: { label: 'Try Spotlight', onClick: actions.openSpotlight },
+        tip: 'Pinned actions appear first. Type to fuzzy-search across everything.',
+      },
+      {
+        id: 'mission',
+        title: 'Mission Control',
+        desc: 'View and switch between open windows. Use Ctrl/Cmd+↑ or F3.',
+        icon: <FaWindowRestore className="text-white/90" size={28} />,
+        cta: { label: 'Open Mission Control', onClick: actions.openMissionControl },
+        tip: 'Click a window to focus it; close windows right from the grid.',
+      },
+      {
+        id: 'dock',
+        title: 'Dock with magnification',
+        desc: 'Hover the dock to smoothly magnify icons. Click to open Notes, Projects, Terminal, and more.',
+        icon: <FaMousePointer className="text-white/90" size={28} />,
+        cta: undefined,
+        tip: 'Active apps show a white indicator dot.',
+      },
+      {
+        id: 'projects-notes',
+        title: 'Projects & Notes',
+        desc: 'Deep-link into Projects and Notes sections directly from Spotlight or the dock.',
+        icon: <BsGithub className="text-white/90" size={28} />,
+        cta: { label: 'Open Projects', onClick: actions.openGitHub },
+        altCta: { label: 'Open Notes', onClick: actions.openNotes },
+        tip: 'Use Space on a project to Quick Look; Enter to open.',
+      },
+      {
+        id: 'contact',
+        title: 'Contact',
+        desc: 'Reach out directly via the built-in contact form (stored securely in Supabase).',
+        icon: <IoDocumentTextOutline className="text-white/90" size={28} />,
+        cta: { label: 'Open Contact', onClick: actions.openContact },
+        tip: 'You can also press C or find it in Spotlight.',
+      },
+      {
+        id: 'shortcuts',
+        title: 'Shortcuts',
+        desc: 'Press ? at any time for a list of keyboard shortcuts and tips.',
+        icon: <IoBookmarksOutline className="text-white/90" size={28} />,
+        cta: { label: 'Finish', onClick: onClose },
+        tip: 'Prefer the keyboard? Most features are just a keystroke away.',
+      },
+    ],
+    [actions, onClose]
+  );
 
   const [index, setIndex] = useState(0);
   const [showSkipMenu, setShowSkipMenu] = useState(false);
@@ -89,22 +92,28 @@ export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps
 
   useEffect(() => {
     if (!open) return;
+    const slide = slides[index];
+    const handlePrimary = () => {
+      if (slide.cta?.onClick) slide.cta.onClick();
+      if (slide.id !== 'shortcuts') setIndex(i => Math.min(i + 1, slides.length - 1));
+      else onClose();
+    };
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') return onClose();
-      if (e.key === 'ArrowRight') setIndex((i) => Math.min(i + 1, slides.length - 1));
-      if (e.key === 'ArrowLeft') setIndex((i) => Math.max(i - 1, 0));
+      if (e.key === 'ArrowRight') setIndex(i => Math.min(i + 1, slides.length - 1));
+      if (e.key === 'ArrowLeft') setIndex(i => Math.max(i - 1, 0));
       if (e.key === 'Enter') handlePrimary();
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
-  }, [open, slides.length]);
+  }, [open, slides, index, onClose]);
 
   if (!open) return null;
 
   const slide = slides[index];
   const handlePrimary = () => {
     if (slide.cta?.onClick) slide.cta.onClick();
-    if (slide.id !== 'shortcuts') setIndex((i) => Math.min(i + 1, slides.length - 1));
+    if (slide.id !== 'shortcuts') setIndex(i => Math.min(i + 1, slides.length - 1));
     else onClose();
   };
 
@@ -143,7 +152,7 @@ export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps
             </div>
             <div className="flex items-center gap-2">
               <div className="relative">
-                <button 
+                <button
                   onClick={() => setShowSkipMenu(!showSkipMenu)}
                   className="text-sm text-gray-400 hover:text-white flex items-center gap-1"
                 >

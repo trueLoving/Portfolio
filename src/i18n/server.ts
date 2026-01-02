@@ -45,5 +45,3 @@ export function inferServerLocale(params: {
     fallback
   );
 }
-
-

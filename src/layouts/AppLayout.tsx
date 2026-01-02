@@ -1,28 +1,21 @@
 import { useEffect, useReducer, useState } from 'react';
-import Spotlight from '../components/global/Spotlight';
-import MacToolbar from '../components/global/MacToolbar';
-import MacTerminal from '../components/global/MacTerminal';
-import MobileDock from '../components/global/MobileDock';
-import DesktopDock from '../components/global/DesktopDock';
-import NotesApp from '../components/global/NotesApp';
-import type { Section as NotesSection } from '../components/global/NotesApp';
-import GitHubViewer from '../components/global/GitHubViewer';
-import ResumeViewer from '../components/global/ResumeViewer';
-import ShortcutsOverlay from '../components/global/ShortcutsOverlay';
-import MissionControl from '../components/global/MissionControl';
 import ContactWidget from '../components/global/ContactWidget';
+import DesktopDock from '../components/global/DesktopDock';
+import GitHubViewer from '../components/global/GitHubViewer';
+import MacTerminal from '../components/global/MacTerminal';
+import MacToolbar from '../components/global/MacToolbar';
+import MissionControl from '../components/global/MissionControl';
+import MobileDock from '../components/global/MobileDock';
+import type { Section as NotesSection } from '../components/global/NotesApp';
+import NotesApp from '../components/global/NotesApp';
+import ResumeViewer from '../components/global/ResumeViewer';
 import ShortcutHint from '../components/global/ShortcutHint';
+import ShortcutsOverlay from '../components/global/ShortcutsOverlay';
+import Spotlight from '../components/global/Spotlight';
 import WelcomeTour from '../components/global/WelcomeTour';
-import { I18nProvider, useI18n } from '../i18n/context';
-import type { BackgroundItem, AppLayoutProps } from '../types';
+import { I18nProvider } from '../i18n/context';
 import type { Locale } from '../i18n/types';
-
-type TutorialStep = {
-  title: string;
-  content: string;
-  action?: () => void;
-  buttonText?: string;
-};
+import type { AppLayoutProps } from '../types';
 
 export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [currentBg, setCurrentBg] = useState<string>(initialBg);
@@ -39,7 +32,9 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
       case 'TOGGLE':
         return { windows: { ...state.windows, [action.app]: !state.windows[action.app] } };
       case 'CLOSE_ALL':
-        return { windows: { terminal: false, notes: false, github: false, resume: false, spotify: false } };
+        return {
+          windows: { terminal: false, notes: false, github: false, resume: false, spotify: false },
+        };
       default:
         return state;
     }
@@ -56,15 +51,17 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [notesSection, setNotesSection] = useState<NotesSection | undefined>(undefined);
   const [selectedProjectId, setSelectedProjectId] = useState<string | undefined>(undefined);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
-  const [focusedApp, setFocusedApp] = useState<'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null>(null);
+  const [focusedApp, setFocusedApp] = useState<
+    'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null
+  >(null);
   const [hasUnread, setHasUnread] = useState<{ contact?: boolean }>({});
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState<string | null>(null);
+  const [_videoError, setVideoError] = useState<string | null>(null);
   const [showToast, setShowToast] = useState<string | null>(null);
   // 服务器端和客户端都初始化为 false，避免 hydration mismatch
   // 客户端挂载后再根据实际条件更新
   const [showShortcutHint, setShowShortcutHint] = useState(false);
-  
+
   // 客户端挂载后设置实际值
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -81,7 +78,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   // 服务器端和客户端都初始化为 false，避免 hydration 不匹配
   // 客户端 hydration 后，useEffect 会同步 localStorage 和系统偏好
   const [reducedMotion, setReducedMotion] = useState(false);
-  
+
   // 客户端挂载后，从 localStorage 或系统偏好读取 reducedMotion 设置
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -134,7 +131,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
     if (videoRef && currentBackground?.type === 'video') {
       setVideoLoaded(false);
       setVideoError(null);
-      videoRef.play().catch((error) => {
+      videoRef.play().catch(error => {
         console.warn('Video autoplay failed:', error);
       });
     }
@@ -143,15 +140,14 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   // 只在客户端执行，避免服务器端和客户端使用不同的随机值
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const lastBg = localStorage.getItem('lastBackground');
     const hasCompletedTutorial = localStorage.getItem('hasCompletedTutorial') === 'true';
 
     if (lastBg === initialBg) {
       const bgKeys = Object.keys(backgroundMap);
-      const availableBgs = bgKeys.filter((bg) => bg !== lastBg);
-      const newBg =
-        availableBgs[Math.floor(Math.random() * availableBgs.length)];
+      const availableBgs = bgKeys.filter(bg => bg !== lastBg);
+      const newBg = availableBgs[Math.floor(Math.random() * availableBgs.length)];
       setCurrentBg(newBg);
     }
 
@@ -171,16 +167,24 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
       if (cmdOrCtrl && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         setIsSpotlightOpen(true);
-      } else if (e.key === '?' || (e.key === '/' && e.shiftKey) || (cmdOrCtrl && (e.key === 'h' || e.key === 'H'))) {
+      } else if (
+        e.key === '?' ||
+        (e.key === '/' && e.shiftKey) ||
+        (cmdOrCtrl && (e.key === 'h' || e.key === 'H'))
+      ) {
         e.preventDefault();
-        setShowShortcuts((s) => !s);
-      } else if ((cmdOrCtrl && e.key === 'ArrowUp') || e.key === 'F3' || (cmdOrCtrl && (e.key === 'm' || e.key === 'M'))) {
+        setShowShortcuts(s => !s);
+      } else if (
+        (cmdOrCtrl && e.key === 'ArrowUp') ||
+        e.key === 'F3' ||
+        (cmdOrCtrl && (e.key === 'm' || e.key === 'M'))
+      ) {
         e.preventDefault();
-        setIsMissionControlOpen((m) => !m);
+        setIsMissionControlOpen(m => !m);
       } else if (cmdOrCtrl && (e.key === 'c' || e.key === 'C')) {
         // Quick open contact with `ctrl+c`
         e.preventDefault();
-        setIsContactOpen((o) => !o);
+        setIsContactOpen(o => !o);
       }
     };
     window.addEventListener('keydown', handler);
@@ -201,7 +205,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const closeAllWindows = () => dispatch({ type: 'CLOSE_ALL' });
   const shuffleBackground = () => {
     const bgKeys = Object.keys(backgroundMap);
-    const availableBgs = bgKeys.filter((bg) => bg !== currentBg);
+    const availableBgs = bgKeys.filter(bg => bg !== currentBg);
     const newBg = availableBgs[Math.floor(Math.random() * availableBgs.length)];
     setCurrentBg(newBg);
     localStorage.setItem('lastBackground', newBg);
@@ -228,7 +232,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
       setFocusedApp(null);
     }
   };
-  
+
   // Track contact widget open/close for focus
   const handleContactOpen = () => {
     setIsContactOpen(true);
@@ -244,7 +248,7 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
 
   return (
     <I18nProvider>
-    <div className='relative w-screen h-screen overflow-hidden'>
+      <div className="relative w-screen h-screen overflow-hidden">
         {currentBackground?.type === 'video' ? (
           <>
             <video
@@ -258,160 +262,188 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
               loop
               muted
               playsInline
-              preload='auto'
+              preload="auto"
               poster={currentBackground.src.replace('.mp4', '.webp')}
               onLoadedData={() => {
                 setVideoLoaded(true);
                 setVideoError(null);
               }}
-              onError={(e) => {
+              onError={e => {
                 console.error('Video background failed to load:', currentBackground.src);
                 console.error('Video element error:', e);
                 setVideoError('视频加载失败');
                 setShowToast('背景视频加载失败，已切换到图片背景');
                 // Fallback to first image background if video fails
-                const firstImageBg = Object.entries(backgroundMap).find(([_, bg]) => bg.type === 'image');
+                const firstImageBg = Object.entries(backgroundMap).find(
+                  ([_, bg]) => bg.type === 'image'
+                );
                 if (firstImageBg) {
                   setCurrentBg(firstImageBg[0]);
                 }
               }}
             >
-              <source src={currentBackground.src} type='video/mp4' />
+              <source src={currentBackground.src} type="video/mp4" />
             </video>
             {/* Poster is handled by video element's poster attribute */}
           </>
         ) : (
-      <div
-        className='absolute inset-0 bg-cover bg-center'
+          <div
+            className="absolute inset-0 bg-cover bg-center"
             style={{ backgroundImage: `url(${currentBackground?.src || ''})` }}
-      />
+          />
         )}
 
-      <div className='relative z-10'>
-        <MacToolbar 
-          onShowTutorial={resetTutorial}
-          onOpenSpotlight={() => setIsSpotlightOpen(true)}
-          onOpenMissionControl={() => setIsMissionControlOpen(true)}
-          onOpenContact={handleContactOpen}
-          onToggleShortcuts={() => setShowShortcuts((s) => !s)}
-          onCloseAllWindows={closeAllWindows}
-          onShuffleBackground={shuffleBackground}
-          onOpenAdmin={() => { window.location.href = '/admin'; }}
-          reducedMotion={reducedMotion}
-          onToggleReducedMotion={() => setReducedMotion(!reducedMotion)}
-          showShortcutHint={showShortcutHint}
-          onToggleShortcutHint={() => {
-            const newShow = !showShortcutHint;
-            setShowShortcutHint(newShow);
-            if (typeof window !== 'undefined') {
-              localStorage.setItem('showShortcutHint', newShow.toString());
-            }
+        <div className="relative z-10">
+          <MacToolbar
+            onShowTutorial={resetTutorial}
+            onOpenSpotlight={() => setIsSpotlightOpen(true)}
+            onOpenMissionControl={() => setIsMissionControlOpen(true)}
+            onOpenContact={handleContactOpen}
+            onToggleShortcuts={() => setShowShortcuts(s => !s)}
+            onCloseAllWindows={closeAllWindows}
+            onShuffleBackground={shuffleBackground}
+            onOpenAdmin={() => {
+              window.location.href = '/admin';
+            }}
+            reducedMotion={reducedMotion}
+            onToggleReducedMotion={() => setReducedMotion(!reducedMotion)}
+            showShortcutHint={showShortcutHint}
+            onToggleShortcutHint={() => {
+              const newShow = !showShortcutHint;
+              setShowShortcutHint(newShow);
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('showShortcutHint', newShow.toString());
+              }
+            }}
+            onLanguageSwitch={(locale: Locale) => {
+              const langName = locale === 'zh-CN' ? '中文' : 'English';
+              const message =
+                locale === 'zh-CN'
+                  ? `语言已切换为 ${langName}。UI、内容和简历已更新。`
+                  : `Language switched to ${langName}. UI, content, and resume have been updated.`;
+              setShowToast(message);
+            }}
+          />
+        </div>
+
+        <div className="relative z-0 flex items-center justify-center h-[calc(100vh-10rem)] md:h-[calc(100vh-1.5rem)] pt-6"></div>
+
+        <MobileDock
+          onGitHubClick={() => {
+            handleAppOpen('github');
           }}
-          onLanguageSwitch={(locale: Locale) => {
-            const langName = locale === 'zh-CN' ? '中文' : 'English';
-            const message = locale === 'zh-CN' 
-              ? `语言已切换为 ${langName}。UI、内容和简历已更新。`
-              : `Language switched to ${langName}. UI, content, and resume have been updated.`;
-            setShowToast(message);
+          onNotesClick={() => {
+            handleAppOpen('notes');
+          }}
+          onResumeClick={() => {
+            handleAppOpen('resume');
+          }}
+          onTerminalClick={() => {
+            handleAppOpen('terminal');
           }}
         />
+        <DesktopDock
+          onTerminalClick={() => {
+            handleAppOpen('terminal');
+          }}
+          onNotesClick={() => {
+            handleAppOpen('notes');
+          }}
+          onGitHubClick={() => {
+            handleAppOpen('github');
+          }}
+          onContactClick={handleContactOpen}
+          activeApps={activeApps}
+          focusedApp={focusedApp}
+          hasUnread={hasUnread}
+        />
+
+        <NotesApp
+          isOpen={state.windows.notes}
+          onClose={() => {
+            handleAppClose('notes');
+          }}
+          section={notesSection}
+          onFocus={() => setFocusedApp('notes')}
+        />
+        <GitHubViewer
+          isOpen={state.windows.github}
+          onClose={() => {
+            handleAppClose('github');
+          }}
+          selectedProjectId={selectedProjectId}
+          onFocus={() => setFocusedApp('github')}
+        />
+        <ResumeViewer
+          isOpen={state.windows.resume}
+          onClose={() => {
+            handleAppClose('resume');
+          }}
+          onFocus={() => setFocusedApp('resume')}
+        />
+        <MacTerminal
+          isOpen={state.windows.terminal}
+          onClose={() => {
+            handleAppClose('terminal');
+          }}
+          onFocus={() => setFocusedApp('terminal')}
+        />
+        <Spotlight
+          isOpen={isSpotlightOpen}
+          onClose={() => setIsSpotlightOpen(false)}
+          actions={{
+            openTerminal: () => handleAppOpen('terminal'),
+            openNotes: () => handleAppOpen('notes'),
+            openContact: handleContactOpen,
+            openNotesSection: s => openNotesSection(s as NotesSection),
+            openGitHub: () => handleAppOpen('github'),
+            openResume: () => handleAppOpen('resume'),
+            showTutorial: resetTutorial,
+            closeAllWindows,
+            shuffleBackground,
+            openProjectById,
+          }}
+        />
+        <WelcomeTour
+          open={showTutorial}
+          onClose={() => {
+            setShowTutorial(false);
+            localStorage.setItem('hasCompletedTutorial', 'true');
+          }}
+          actions={{
+            openSpotlight: () => setIsSpotlightOpen(true),
+            openMissionControl: () => setIsMissionControlOpen(true),
+            openNotes: () => handleAppOpen('notes'),
+            openGitHub: () => handleAppOpen('github'),
+            openContact: handleContactOpen,
+            closeAll: closeAllWindows,
+          }}
+        />
+        <ShortcutsOverlay open={showShortcuts} onClose={() => setShowShortcuts(false)} />
+        <ShortcutHint
+          show={showShortcutHint}
+          onToggle={show => {
+            setShowShortcutHint(show);
+            if (typeof window !== 'undefined') {
+              localStorage.setItem('showShortcutHint', show.toString());
+            }
+          }}
+        />
+        <ContactWidget open={isContactOpen} onClose={handleContactClose} />
+        <MissionControl
+          isOpen={isMissionControlOpen}
+          onClose={() => setIsMissionControlOpen(false)}
+          activeApps={activeApps}
+          onAppClick={app => handleAppOpen(app)}
+          onAppClose={app => handleAppClose(app)}
+        />
+        {/* Toast notification */}
+        {showToast && (
+          <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[100] bg-gray-900/95 text-white px-4 py-3 rounded-lg shadow-xl border border-white/10 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4">
+            <p className="text-sm">{showToast}</p>
+          </div>
+        )}
       </div>
-
-      <div className='relative z-0 flex items-center justify-center h-[calc(100vh-10rem)] md:h-[calc(100vh-1.5rem)] pt-6'>
-      </div>
-
-      <MobileDock
-        onGitHubClick={() => {
-          handleAppOpen('github');
-        }}
-        onNotesClick={() => {
-          handleAppOpen('notes');
-        }}
-        onResumeClick={() => {
-          handleAppOpen('resume');
-        }}
-        onTerminalClick={() => {
-          handleAppOpen('terminal');
-        }}
-      />
-      <DesktopDock
-        onTerminalClick={() => {
-          handleAppOpen('terminal');
-        }}
-        onNotesClick={() => {
-          handleAppOpen('notes');
-        }}
-        onGitHubClick={() => {
-          handleAppOpen('github');
-        }}
-        onContactClick={handleContactOpen}
-        activeApps={activeApps}
-        focusedApp={focusedApp}
-        hasUnread={hasUnread}
-      />
-
-      <NotesApp isOpen={state.windows.notes} onClose={() => {
-        handleAppClose('notes');
-      }} section={notesSection} onFocus={() => setFocusedApp('notes')} />
-      <GitHubViewer isOpen={state.windows.github} onClose={() => {
-        handleAppClose('github');
-      }} selectedProjectId={selectedProjectId} onFocus={() => setFocusedApp('github')} />
-      <ResumeViewer isOpen={state.windows.resume} onClose={() => {
-        handleAppClose('resume');
-      }} onFocus={() => setFocusedApp('resume')} />
-      <MacTerminal isOpen={state.windows.terminal} onClose={() => {
-        handleAppClose('terminal');
-      }} onFocus={() => setFocusedApp('terminal')} />
-      <Spotlight
-        isOpen={isSpotlightOpen}
-        onClose={() => setIsSpotlightOpen(false)}
-        actions={{
-          openTerminal: () => handleAppOpen('terminal'),
-          openNotes: () => handleAppOpen('notes'),
-          openContact: handleContactOpen,
-          openNotesSection: (s) => openNotesSection(s as NotesSection),
-          openGitHub: () => handleAppOpen('github'),
-          openResume: () => handleAppOpen('resume'),
-          showTutorial: resetTutorial,
-          closeAllWindows,
-          shuffleBackground,
-          openProjectById,
-        }}
-      />
-      <WelcomeTour
-        open={showTutorial}
-        onClose={() => { setShowTutorial(false); localStorage.setItem('hasCompletedTutorial', 'true'); }}
-        actions={{
-          openSpotlight: () => setIsSpotlightOpen(true),
-          openMissionControl: () => setIsMissionControlOpen(true),
-          openNotes: () => handleAppOpen('notes'),
-          openGitHub: () => handleAppOpen('github'),
-          openContact: handleContactOpen,
-          closeAll: closeAllWindows,
-        }}
-      />
-      <ShortcutsOverlay open={showShortcuts} onClose={() => setShowShortcuts(false)} />
-      <ShortcutHint show={showShortcutHint} onToggle={(show) => {
-        setShowShortcutHint(show);
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('showShortcutHint', show.toString());
-        }
-      }} />
-      <ContactWidget open={isContactOpen} onClose={handleContactClose} />
-      <MissionControl
-        isOpen={isMissionControlOpen}
-        onClose={() => setIsMissionControlOpen(false)}
-        activeApps={activeApps}
-        onAppClick={(app) => handleAppOpen(app)}
-        onAppClose={(app) => handleAppClose(app)}
-      />
-      {/* Toast notification */}
-      {showToast && (
-        <div className="fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[100] bg-gray-900/95 text-white px-4 py-3 rounded-lg shadow-xl border border-white/10 backdrop-blur-sm animate-in fade-in slide-in-from-bottom-4">
-          <p className="text-sm">{showToast}</p>
-        </div>
-      )}
-    </div>
     </I18nProvider>
   );
 }

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useEffect, useState } from 'react';
 
 type Message = {
   id: string;
@@ -16,7 +15,7 @@ export default function AdminDashboard() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [token, setToken] = useState<string | null>(null);
+  const [_token, setToken] = useState<string | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -54,8 +53,8 @@ export default function AdminDashboard() {
       sessionStorage.setItem('admin_session_token', sessionToken);
       setIsLoggedIn(true);
       fetchMessages(sessionToken);
-    } catch (err: any) {
-      setLoginError(err.message || 'Login failed');
+    } catch (err: unknown) {
+      setLoginError(err instanceof Error ? err.message : 'Login failed');
     } finally {
       setLoading(false);
     }
@@ -77,7 +76,7 @@ export default function AdminDashboard() {
       }
 
       setMessages(data.data || []);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError(err.message || 'Error fetching messages');
     } finally {
       setLoading(false);
@@ -102,11 +101,14 @@ export default function AdminDashboard() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-sm text-gray-300 mb-1">Username</label>
+              <label htmlFor="username" className="block text-sm text-gray-300 mb-1">
+                Username
+              </label>
               <input
+                id="username"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={e => setUsername(e.target.value)}
                 className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 placeholder="admin"
                 required
@@ -114,11 +116,14 @@ export default function AdminDashboard() {
             </div>
 
             <div>
-              <label className="block text-sm text-gray-300 mb-1">Password</label>
+              <label htmlFor="password" className="block text-sm text-gray-300 mb-1">
+                Password
+              </label>
               <input
+                id="password"
                 type="password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg outline-none focus:ring-2 focus:ring-blue-500 text-white"
                 placeholder="••••••••"
                 required
@@ -174,7 +179,7 @@ export default function AdminDashboard() {
         )}
 
         <div className="space-y-4">
-          {messages.map((msg) => (
+          {messages.map(msg => (
             <div key={msg.id} className="bg-gray-900 rounded-xl border border-white/10 p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
