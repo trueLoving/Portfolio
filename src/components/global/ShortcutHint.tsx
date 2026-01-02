@@ -13,11 +13,8 @@ export default function ShortcutHint({ show: controlledShow, onToggle }: Shortcu
   // 服务器端和客户端都初始化为 false，避免 hydration mismatch
   // 客户端挂载后再根据实际条件更新
   const [internalShow, setInternalShow] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-
   // 客户端挂载后设置实际值
   useEffect(() => {
-    setIsClient(true);
     if (controlledShow === undefined) {
       const saved = localStorage.getItem('showShortcutHint');
       if (saved !== null) {
@@ -66,12 +63,18 @@ export default function ShortcutHint({ show: controlledShow, onToggle }: Shortcu
     { key: '(CTRL/⌘)+K', label: t('shortcutHint.search'), icon: <IoSearch size={14} /> },
     { key: '(CTRL/⌘)+C', label: t('shortcutHint.contact'), icon: <IoMail size={14} /> },
     { key: '? or (CTRL/⌘)+H', label: t('shortcutHint.help'), icon: <FaRegKeyboard size={14} /> },
-    { key: '(CTRL/⌘)+M or (CTRL/⌘)+Up', label: t('shortcutHint.missionControl'), icon: <IoDocumentTextOutline size={14} /> },
-
+    {
+      key: '(CTRL/⌘)+M or (CTRL/⌘)+Up',
+      label: t('shortcutHint.missionControl'),
+      icon: <IoDocumentTextOutline size={14} />,
+    },
   ];
-  
+
   return (
-    <div className="fixed top-8 left-4 z-[1] animate-fade-in hidden md:block" suppressHydrationWarning>
+    <div
+      className="fixed top-8 left-4 z-[1] animate-fade-in hidden md:block"
+      suppressHydrationWarning
+    >
       <div className="bg-gray-900/90 backdrop-blur-sm border border-white/10 rounded-lg px-3 py-2 shadow-xl relative group">
         <button
           onClick={handleToggle}

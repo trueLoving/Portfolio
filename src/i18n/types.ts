@@ -158,4 +158,3 @@ export interface Translations {
     missionControl: string;
   };
 }
-

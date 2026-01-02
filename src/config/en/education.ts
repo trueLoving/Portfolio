@@ -12,7 +12,8 @@ export const education: readonly Education[] = [
     institution: 'Hangzhou Normal University',
     location: 'Hangzhou, China',
     year: '2017-2021',
-    description: 'Relevant coursework: Data Structures, Data Structures and Algorithms, Operating Systems, Computer Networks, Software Engineering, Biomedical Informatics, Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, Natural Language Processing, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems',
+    description:
+      'Relevant coursework: Data Structures, Data Structures and Algorithms, Operating Systems, Computer Networks, Software Engineering, Biomedical Informatics, Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, Natural Language Processing, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems',
     images: [
       {
         url: 'https://www.hznu.edu.cn/upload/resources/image/2021/08/10/7657092.jpg',

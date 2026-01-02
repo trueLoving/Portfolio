@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getLocale, setLocale, getTranslations, defaultLocale } from './index';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { defaultLocale, getLocale, getTranslations, setLocale } from './index';
 import type { Locale, Translations } from './types';
 import { updateHtmlLang } from './updateLang';
 
@@ -21,7 +21,7 @@ export function I18nProvider({ children }: I18nProviderProps) {
   // 服务器端和客户端都初始化为默认语言，确保初始渲染一致
   // 客户端挂载后再更新为用户的实际语言偏好
   const [locale, setLocaleState] = useState<Locale>(defaultLocale);
-  const [translations, setTranslations] = useState<Translations>(() => 
+  const [translations, setTranslations] = useState<Translations>(() =>
     getTranslations(defaultLocale)
   );
   const [isClient, setIsClient] = useState(false);
@@ -86,4 +86,3 @@ export function useI18n(): I18nContextType {
   }
   return context;
 }
-

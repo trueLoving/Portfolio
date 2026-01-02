@@ -11,7 +11,7 @@ export const defaultLocale: Locale = 'en';
 
 export const getLocale = (): Locale => {
   if (typeof window === 'undefined') return defaultLocale;
-  
+
   // 优先使用服务端传入的语言，确保服务端和客户端初始语言一致
   const serverLocale = (window as any).__SERVER_LOCALE__;
   if (serverLocale && (serverLocale === 'en' || serverLocale === 'zh-CN')) {
@@ -22,7 +22,7 @@ export const getLocale = (): Locale => {
     }
     return serverLocale;
   }
-  
+
   // 如果没有服务端语言，从 localStorage 读取
   const stored = localStorage.getItem('locale') as Locale | null;
   if (stored && (stored === 'en' || stored === 'zh-CN')) {
@@ -39,5 +39,3 @@ export const setLocale = (locale: Locale): void => {
 export const getTranslations = (locale: Locale): Translations => {
   return locales[locale] || locales[defaultLocale];
 };
-
-

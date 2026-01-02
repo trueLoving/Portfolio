@@ -30,9 +30,9 @@ export default function ResumeViewer({ isOpen, onClose, onFocus }: ResumeViewerP
     <DraggableWindow
       title="Resume.pdf"
       onClose={onClose}
-      initialPosition={{ 
-        x: Math.floor(window.innerWidth * 0.4), 
-        y: Math.floor(window.innerHeight * 0.2) 
+      initialPosition={{
+        x: Math.floor(window.innerWidth * 0.4),
+        y: Math.floor(window.innerHeight * 0.2),
       }}
       className="w-[90%] h-[90%] max-w-5xl"
       initialSize={{ width: 800, height: 600 }}
@@ -40,24 +40,30 @@ export default function ResumeViewer({ isOpen, onClose, onFocus }: ResumeViewerP
     >
       <div className="h-full bg-white">
         <figure className="h-full">
-          <object 
+          <object
             key={`${locale}-${userConfig.resume.localPath}`}
-            data={userConfig.resume.localPath} 
-            type="application/pdf" 
-            width="100%" 
+            data={userConfig.resume.localPath}
+            type="application/pdf"
+            width="100%"
             className="h-full"
             aria-label="Embedded resume PDF"
             title="Resume PDF"
           >
             <p className="p-4 text-sm text-gray-700">
-              Your browser can’t display this PDF. 
-              <a href={userConfig.resume.url} target="_blank" rel="noreferrer noopener" className="text-blue-600 underline">
+              Your browser can’t display this PDF.
+              <a
+                href={userConfig.resume.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="text-blue-600 underline"
+              >
                 Open the resume in a new tab
-              </a>.
+              </a>
+              .
             </p>
           </object>
         </figure>
       </div>
     </DraggableWindow>
   );
-} 
+}

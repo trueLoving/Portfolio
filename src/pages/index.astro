@@ -1,9 +1,8 @@
 ---
-import Layout from '../layouts/Layout.astro';
 import LandingPage from '../components/LandingPage.astro';
 import { getUserConfig } from '../config/loader';
 import { inferServerLocale } from '../i18n/server';
-import type { Locale } from '../i18n/types';
+import Layout from '../layouts/Layout.astro';
 
 const url = new URL(Astro.request.url);
 const locale = inferServerLocale({ request: Astro.request, url });

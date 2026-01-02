@@ -30,16 +30,18 @@ export default function MacTerminal({ isOpen, onClose, onFocus }: MacTerminalPro
   const userConfig = useUserConfig();
   // 初始化为 null，客户端挂载后再设置，避免 hydration mismatch
   const [currentDate, setCurrentDate] = useState<Date | null>(null);
-  
+
   useEffect(() => {
     setCurrentDate(new Date());
   }, []);
-  
-  const formattedDate = currentDate ? currentDate.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  }) : '';
+
+  const formattedDate = currentDate
+    ? currentDate.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric',
+      })
+    : '';
   const computedAge = currentDate ? currentDate.getFullYear() - userConfig.yearOfBirth : 0;
 
   const [chatHistory, setChatHistory] = useState<ChatHistory>({
@@ -61,12 +63,10 @@ export default function MacTerminal({ isOpen, onClose, onFocus }: MacTerminalPro
       if (isDeleting) {
         if (placeholder.length === 0) {
           setIsDeleting(false);
-          setCurrentPlaceholderIndex(
-            (prev) => (prev + 1) % PLACEHOLDER_MESSAGES.length
-          );
+          setCurrentPlaceholderIndex(prev => (prev + 1) % PLACEHOLDER_MESSAGES.length);
           timeout = setTimeout(animatePlaceholder, 400);
         } else {
-          setPlaceholder((prev) => prev.slice(0, -1));
+          setPlaceholder(prev => prev.slice(0, -1));
           timeout = setTimeout(animatePlaceholder, 80);
         }
       } else {
@@ -141,12 +141,9 @@ Response rules:
 If a question is unrelated to my work or portfolio, say: "That's outside my area of expertise. Feel free to email me at ${userConfig.contact.email} and we can discuss further!"`;
 
   useEffect(() => {
-    setChatHistory((prev) => ({
+    setChatHistory(prev => ({
       ...prev,
-      messages: [
-        ...prev.messages,
-        { role: 'assistant', content: welcomeMessage },
-      ],
+      messages: [...prev.messages, { role: 'assistant', content: welcomeMessage }],
     }));
   }, []);
 
@@ -166,21 +163,21 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
           inputRef.current.focus();
         }
       };
-      
+
       // Try immediately
       focusInput();
-      
+
       // Try after a short delay
       const timer1 = setTimeout(focusInput, 50);
-      
+
       // Try after window is fully rendered
       const timer2 = setTimeout(focusInput, 200);
-      
+
       // Try after next animation frame
       requestAnimationFrame(() => {
         setTimeout(focusInput, 100);
       });
-      
+
       return () => {
         clearTimeout(timer1);
         clearTimeout(timer2);
@@ -189,7 +186,7 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
   }, [isOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChatHistory((prev) => ({ ...prev, input: e.target.value }));
+    setChatHistory(prev => ({ ...prev, input: e.target.value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -198,7 +195,7 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
 
     if (!userInput) return;
 
-    setChatHistory((prev) => ({
+    setChatHistory(prev => ({
       messages: [...prev.messages, { role: 'user', content: userInput }],
       input: '',
     }));
@@ -224,15 +221,12 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
 
       const data = await response.json();
 
-      setChatHistory((prev) => ({
+      setChatHistory(prev => ({
         ...prev,
-        messages: [
-          ...prev.messages,
-          { role: 'assistant', content: data.message },
-        ],
+        messages: [...prev.messages, { role: 'assistant', content: data.message }],
       }));
-    } catch (error) {
-      setChatHistory((prev) => ({
+    } catch (_error) {
+      setChatHistory(prev => ({
         ...prev,
         messages: [
           ...prev.messages,
@@ -255,10 +249,12 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
   const handleContentClick = (e: React.MouseEvent) => {
     // Only focus input if clicking on non-interactive areas
     const target = e.target as HTMLElement;
-    const isInteractive = target.closest('input, textarea, button, [role="button"], a, select, form');
+    const isInteractive = target.closest(
+      'input, textarea, button, [role="button"], a, select, form'
+    );
     const isHeader = target.closest('.window-header');
     const isResizeHandle = target.closest('.resize-handle');
-    
+
     // Don't focus if clicking on interactive elements, header, or resize handle
     if (!isInteractive && !isHeader && !isResizeHandle) {
       // Use a longer timeout to ensure this runs after DraggableWindow's onMouseDown
@@ -273,10 +269,12 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
   // Also handle mousedown to catch focus earlier
   const handleContentMouseDown = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
-    const isInteractive = target.closest('input, textarea, button, [role="button"], a, select, form');
+    const isInteractive = target.closest(
+      'input, textarea, button, [role="button"], a, select, form'
+    );
     const isHeader = target.closest('.window-header');
     const isResizeHandle = target.closest('.resize-handle');
-    
+
     if (!isInteractive && !isHeader && !isResizeHandle) {
       // Prevent window container from getting focus
       e.stopPropagation();
@@ -295,53 +293,68 @@ If a question is unrelated to my work or portfolio, say: "That's outside my area
     <DraggableWindow
       title={`${userConfig.website} ⸺ zsh`}
       onClose={onClose}
-      initialPosition={{ 
-        x: Math.floor(window.innerWidth * 0.1), 
-        y: Math.floor(window.innerHeight * 0.1) 
+      initialPosition={{
+        x: Math.floor(window.innerWidth * 0.1),
+        y: Math.floor(window.innerHeight * 0.1),
       }}
       initialSize={{ width: 700, height: 500 }}
       className="bg-black/90 backdrop-blur-sm"
       onFocus={onFocus}
     >
-      <div 
-        className='p-1 text-gray-200 font-mono text-sm h-full flex flex-col overflow-hidden'
+      <div
+        className="p-1 text-gray-200 font-mono text-sm h-full flex flex-col overflow-hidden"
         onClick={handleContentClick}
         onMouseDown={handleContentMouseDown}
       >
-        <div className='flex-1 overflow-y-auto rounded-lg p-1' aria-live="polite" aria-atomic="false">
+        <div
+          className="flex-1 overflow-y-auto rounded-lg p-1"
+          aria-live="polite"
+          aria-atomic="false"
+        >
           {chatHistory.messages.map((msg, index) => (
-            <div key={index} className='mb-2'>
+            <div key={index} className="mb-2">
               {msg.role === 'user' ? (
-                <div className='flex items-start space-x-2'>
-                  <span className='text-green-400 font-bold'>{'>'}</span>
-                  <pre className='whitespace-pre-wrap'>{msg.content}</pre>
+                <div className="flex items-start space-x-2">
+                  <span className="text-green-400 font-bold">{'>'}</span>
+                  <pre className="whitespace-pre-wrap">{msg.content}</pre>
                 </div>
               ) : (
-                <div className='flex items-start space-x-2'>
-                  <span className='text-green-400 font-bold'>${userConfig.website}</span>
-                  <pre className='whitespace-pre-wrap'>{msg.content}</pre>
+                <div className="flex items-start space-x-2">
+                  <span className="text-green-400 font-bold">${userConfig.website}</span>
+                  <pre className="whitespace-pre-wrap">{msg.content}</pre>
                 </div>
               )}
             </div>
           ))}
           {isTyping && (
-            <div className='flex items-center space-x-1'>
-              <div className='w-2 h-2 bg-green-400 rounded-full animate-bounce' style={{ animationDelay: '0ms' }}></div>
-              <div className='w-2 h-2 bg-green-400 rounded-full animate-bounce' style={{ animationDelay: '150ms' }}></div>
-              <div className='w-2 h-2 bg-green-400 rounded-full animate-bounce' style={{ animationDelay: '300ms' }}></div>
+            <div className="flex items-center space-x-1">
+              <div
+                className="w-2 h-2 bg-green-400 rounded-full animate-bounce"
+                style={{ animationDelay: '0ms' }}
+              ></div>
+              <div
+                className="w-2 h-2 bg-green-400 rounded-full animate-bounce"
+                style={{ animationDelay: '150ms' }}
+              ></div>
+              <div
+                className="w-2 h-2 bg-green-400 rounded-full animate-bounce"
+                style={{ animationDelay: '300ms' }}
+              ></div>
             </div>
           )}
           <div ref={messagesEndRef} />
         </div>
-        <form onSubmit={handleSubmit} className='mt-2 rounded-lg p-2'>
-          <div className='flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2'>
-            <span className='whitespace-nowrap text-green-400 font-bold'>{userConfig.website} root %</span>
+        <form onSubmit={handleSubmit} className="mt-2 rounded-lg p-2">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-2">
+            <span className="whitespace-nowrap text-green-400 font-bold">
+              {userConfig.website} root %
+            </span>
             <input
               ref={inputRef}
-              type='text'
+              type="text"
               value={chatHistory.input}
               onChange={handleInputChange}
-              className='w-full sm:flex-1 bg-transparent outline-none text-white placeholder-gray-400'
+              className="w-full sm:flex-1 bg-transparent outline-none text-white placeholder-gray-400"
               placeholder={placeholder}
               aria-label="Terminal input"
               name="terminal-input"

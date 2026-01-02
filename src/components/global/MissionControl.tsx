@@ -17,7 +17,13 @@ interface MissionControlProps {
   onAppClose: (app: 'terminal' | 'notes' | 'github' | 'resume' | 'spotify') => void;
 }
 
-export default function MissionControl({ isOpen, onClose, activeApps, onAppClick, onAppClose }: MissionControlProps) {
+export default function MissionControl({
+  isOpen,
+  onClose,
+  activeApps,
+  onAppClick,
+  onAppClose,
+}: MissionControlProps) {
   useEffect(() => {
     if (!isOpen) return;
 
@@ -36,22 +42,57 @@ export default function MissionControl({ isOpen, onClose, activeApps, onAppClick
   if (!isOpen) return null;
 
   const apps = [
-    { id: 'github' as const, name: 'GitHub Projects', icon: BsGithub, color: 'from-black to-black/60', active: activeApps.github },
-    { id: 'notes' as const, name: 'Notes', icon: BsStickyFill, color: 'from-yellow-600 to-yellow-400', active: activeApps.notes },
-    { id: 'terminal' as const, name: 'Terminal', icon: RiTerminalFill, color: 'from-black to-black/60', active: activeApps.terminal },
-    { id: 'resume' as const, name: 'Resume', icon: BsFilePdf, color: 'from-red-600 to-red-400', active: activeApps.resume },
-    { id: 'spotify' as const, name: 'Spotify', icon: BsSpotify, color: 'from-green-600 to-green-400', active: activeApps.spotify },
+    {
+      id: 'github' as const,
+      name: 'GitHub Projects',
+      icon: BsGithub,
+      color: 'from-black to-black/60',
+      active: activeApps.github,
+    },
+    {
+      id: 'notes' as const,
+      name: 'Notes',
+      icon: BsStickyFill,
+      color: 'from-yellow-600 to-yellow-400',
+      active: activeApps.notes,
+    },
+    {
+      id: 'terminal' as const,
+      name: 'Terminal',
+      icon: RiTerminalFill,
+      color: 'from-black to-black/60',
+      active: activeApps.terminal,
+    },
+    {
+      id: 'resume' as const,
+      name: 'Resume',
+      icon: BsFilePdf,
+      color: 'from-red-600 to-red-400',
+      active: activeApps.resume,
+    },
+    {
+      id: 'spotify' as const,
+      name: 'Spotify',
+      icon: BsSpotify,
+      color: 'from-green-600 to-green-400',
+      active: activeApps.spotify,
+    },
   ];
 
-  const activeWindows = apps.filter((app) => app.active);
+  const activeWindows = apps.filter(app => app.active);
 
-  const handleAppClick = (app: typeof apps[0]) => {
+  const handleAppClick = (app: (typeof apps)[0]) => {
     onAppClick(app.id);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-[90]" role="dialog" aria-modal="true" aria-label="Mission Control">
+    <div
+      className="fixed inset-0 z-[90]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mission Control"
+    >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
       <div className="relative h-full flex flex-col items-center justify-center p-8">
         <h2 className="text-white text-2xl font-semibold mb-8">Mission Control</h2>
@@ -59,7 +100,7 @@ export default function MissionControl({ isOpen, onClose, activeApps, onAppClick
           <p className="text-gray-400 text-lg">No open windows</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl">
-            {activeWindows.map((app) => {
+            {activeWindows.map(app => {
               const Icon = app.icon;
               return (
                 <button
@@ -69,14 +110,16 @@ export default function MissionControl({ isOpen, onClose, activeApps, onAppClick
                   aria-label={`Switch to ${app.name}`}
                 >
                   <div className="flex flex-col items-center gap-4">
-                    <div className={`w-24 h-24 bg-gradient-to-t ${app.color} rounded-xl flex items-center justify-center shadow-lg`}>
+                    <div
+                      className={`w-24 h-24 bg-gradient-to-t ${app.color} rounded-xl flex items-center justify-center shadow-lg`}
+                    >
                       <Icon size={50} className="text-white" />
                     </div>
                     <span className="text-white text-lg font-medium">{app.name}</span>
                   </div>
                   <div className="absolute top-3 right-3">
                     <button
-                      onClick={(e) => {
+                      onClick={e => {
                         e.stopPropagation();
                         onAppClose(app.id);
                       }}

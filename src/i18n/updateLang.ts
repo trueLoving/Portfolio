@@ -6,5 +6,3 @@ export function updateHtmlLang(locale: string) {
     document.documentElement.lang = locale === 'zh-CN' ? 'zh-CN' : 'en';
   }
 }
-
-

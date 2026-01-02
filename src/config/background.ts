@@ -2,7 +2,6 @@
  * Background configuration
  * Defines all available background images and videos
  */
-
 import type { BackgroundItem } from '../types';
 
 export interface BackgroundConfig {
@@ -18,8 +17,7 @@ export interface BackgroundConfig {
  * All paths are relative to the public directory
  */
 export const backgroundConfig: BackgroundConfig = {
-  images: [
-  ],
+  images: [],
   videos: [
     '/background/video/Toy-Aeroplane-4K.mp4',
     '/background/video/Glowing-Star-Girl-4096x2160.mp4',
@@ -36,7 +34,7 @@ export const backgroundConfig: BackgroundConfig = {
  */
 export function getBackgroundMap(): Record<string, BackgroundItem> {
   const map: Record<string, BackgroundItem> = {};
-  
+
   // Add image backgrounds
   backgroundConfig.images.forEach((path, index) => {
     map[`bg-${index}`] = {
@@ -44,7 +42,7 @@ export function getBackgroundMap(): Record<string, BackgroundItem> {
       src: path,
     };
   });
-  
+
   // Add video backgrounds
   backgroundConfig.videos.forEach((path, index) => {
     map[`bg-${backgroundConfig.images.length + index}`] = {
@@ -52,7 +50,7 @@ export function getBackgroundMap(): Record<string, BackgroundItem> {
       src: path,
     };
   });
-  
+
   return map;
 }
 
@@ -69,4 +67,3 @@ export function getRandomBackgroundKey(): string {
   }
   return keys[Math.floor(Math.random() * keys.length)];
 }
-
