@@ -22,7 +22,6 @@ export interface SpotlightProps {
   actions: {
     openTerminal: () => void;
     openNotes: () => void;
-    openContact: () => void;
     openNotesSection: (section: 'education' | 'experience' | 'courses' | 'skills') => void;
     openGitHub: () => void;
     openResume: () => void;
@@ -95,14 +94,6 @@ export default function Spotlight({ isOpen, onClose, actions }: SpotlightProps) 
     }));
 
     const quickActions: SpotlightItem[] = [
-      {
-        id: 'action:contact',
-        title: t('spotlight.actions.openContactForm'),
-        subtitle: t('spotlight.actions.openContactFormSubtitle'),
-        category: t('spotlight.categories.actions'),
-        icon: <IoDocumentTextOutline className="text-gray-300" />,
-        action: actions.openContact,
-      },
       {
         id: 'action:terminal',
         title: t('spotlight.actions.openTerminal'),

@@ -60,8 +60,6 @@
       "actions": "Actions"
     },
     "actions": {
-      "openContactForm": "Open Contact Form",
-      "openContactFormSubtitle": "Send a message directly",
       "openTerminal": "Open Terminal",
       "openTerminalSubtitle": "Ask questions or run commands",
       "openNotesExperience": "Open Notes: Experience",
@@ -158,5 +156,22 @@
     "contact": "Contact",
     "help": "Help",
     "missionControl": "Mission Control"
+  },
+  "projects": {
+    "title": "GitHub Projects",
+    "myProjects": "My Projects",
+    "backToProjects": "Back to Projects",
+    "highlights": "✨ Highlights",
+    "technicalChallenges": "🎯 Technical Challenges",
+    "techStack": "🛠️ Tech Stack",
+    "screenshots": "Screenshots",
+    "repository": "Repository",
+    "liveDemo": "Live Demo",
+    "quickLook": "Quick Look",
+    "visitGitHub": "Visit GitHub Repository",
+    "visitLiveSite": "Visit Live Site",
+    "openDetails": "Open Details",
+    "openRepo": "Open Repo",
+    "openLive": "Open Live"
   }
 }

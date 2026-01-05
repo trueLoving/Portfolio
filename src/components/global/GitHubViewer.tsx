@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import {
   FaGithub,
   FaExternalLinkAlt,
-  FaFolder,
-  FaFile,
   FaChevronLeft,
   FaLink,
 } from 'react-icons/fa';
 import { useUserConfig } from '../../config/hooks';
-import type { Project, FileNode, ProjectStructure } from '../../types';
+import { useI18n } from '../../i18n/context';
+import type { Project } from '../../types';
 import DraggableWindow from './DraggableWindow';
 
 interface GitHubViewerProps {
@@ -20,79 +19,20 @@ interface GitHubViewerProps {
 
 const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubViewerProps) => {
   const userConfig = useUserConfig();
+  const { t } = useI18n();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [expandedNodes, setExpandedNodes] = useState<Set<string>>(new Set());
   const [showStructure, setShowStructure] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [quickLook, setQuickLook] = useState<Project | null>(null);
   const [imageLoadStates, setImageLoadStates] = useState<Record<string, boolean>>({});
 
-  const toggleNode = (path: string) => {
-    const newExpandedNodes = new Set(expandedNodes);
-    if (newExpandedNodes.has(path)) {
-      newExpandedNodes.delete(path);
-    } else {
-      newExpandedNodes.add(path);
-    }
-    setExpandedNodes(newExpandedNodes);
-  };
-
-  const renderFileTree = (node: FileNode, path: string = '') => {
-    const currentPath = path ? `${path}/${node.name}` : node.name;
-    const isExpanded = expandedNodes.has(currentPath);
-
-    return (
-      <div key={currentPath} className="ml-4">
-        <div
-          className="flex items-center cursor-pointer hover:bg-gray-700/50 p-1 rounded"
-          role="treeitem"
-          aria-expanded={node.type === 'directory' ? isExpanded : undefined}
-          tabIndex={0}
-          onKeyDown={e => {
-            if ((e.key === 'Enter' || e.key === ' ') && node.type === 'directory') {
-              e.preventDefault();
-              toggleNode(currentPath);
-            }
-          }}
-          onClick={() => node.type === 'directory' && toggleNode(currentPath)}
-        >
-          {node.type === 'directory' ? (
-            <FaFolder className="text-yellow-500 mr-2" />
-          ) : (
-            <FaFile className="text-blue-400 mr-2" />
-          )}
-          <span className="text-gray-200">{node.name}</span>
-        </div>
-        {node.type === 'directory' && isExpanded && node.children && (
-          <div className="ml-4" role="group">
-            {node.children.map((child: FileNode) => renderFileTree(child, currentPath))}
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  const renderProjectStructure = (projectStructure: ProjectStructure) => {
-    // Create the root node first
-    return (
-      <div role="tree" aria-label="Project structure">
-        <div className="flex items-center p-1 rounded">
-          <FaFolder className="text-yellow-500 mr-2" />
-          <span className="text-gray-200 font-bold">{projectStructure.root}</span>
-        </div>
-        <div className="ml-4">
-          {projectStructure.children.map((child: FileNode) =>
-            renderFileTree(child, projectStructure.root)
-          )}
-        </div>
-      </div>
-    );
-  };
 
   const handleProjectClick = (project: Project) => {
     setSelectedProject(project);
     setShowStructure(true);
     setActiveImageIndex(0);
+    // Reset image load states when switching projects
+    setImageLoadStates({});
   };
 
   const handleBackClick = () => {
@@ -125,7 +65,6 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
         setSelectedProject(proj);
         setShowStructure(true);
         setActiveImageIndex(0);
-        // Reset image load states when switching projects
         setImageLoadStates({});
       }
     }
@@ -136,7 +75,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
   return (
     <>
       <DraggableWindow
-        title={showStructure ? selectedProject?.title || 'GitHub Projects' : 'GitHub Projects'}
+        title={showStructure ? selectedProject?.title || t('projects.title') : t('projects.title')}
         onClose={onClose}
         initialPosition={{
           x: Math.floor(window.innerWidth * 0.2),
@@ -150,7 +89,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
           <div className="overflow-y-auto flex-grow min-h-0 p-4 md:p-6">
             {!showStructure ? (
               <>
-                <h2 className="text-2xl font-bold mb-4 text-gray-200">My Projects</h2>
+                <h2 className="text-2xl font-bold mb-4 text-gray-200">{t('projects.myProjects')}</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {userConfig.projects.map(project => (
                     <div
@@ -193,7 +132,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                               setQuickLook(project);
                             }}
                           >
-                            Quick Look
+                            {t('projects.quickLook')}
                           </button>
                         </div>
                       )}
@@ -203,7 +142,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                         {project.techStack.map(tech => (
                           <span
                             key={tech}
-                            className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300"
+                            className="px-3 py-1.5 bg-gray-700/50 rounded-lg text-xs text-gray-200 border border-gray-600/50"
                           >
                             {tech}
                           </span>
@@ -218,7 +157,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                           onClick={e => e.stopPropagation()}
                         >
                           <FaGithub />
-                          <span>Repository</span>
+                          <span>{t('projects.repository')}</span>
                         </a>
                         {project.liveUrl && (
                           <a
@@ -229,7 +168,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                             onClick={e => e.stopPropagation()}
                           >
                             <FaExternalLinkAlt />
-                            <span>Live Demo</span>
+                            <span>{t('projects.liveDemo')}</span>
                           </a>
                         )}
                       </div>
@@ -241,29 +180,99 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
               <div>
                 <button
                   onClick={handleBackClick}
-                  aria-label="Back to Projects"
+                  aria-label={t('projects.backToProjects')}
                   className="flex items-center gap-2 text-gray-300 hover:text-gray-100 mb-4"
                 >
                   <FaChevronLeft />
-                  <span>Back to Projects</span>
+                  <span>{t('projects.backToProjects')}</span>
                 </button>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-gray-800/50 rounded-lg p-4">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-200">Project Structure</h3>
-                    <div className="font-mono text-sm">
-                      {selectedProject &&
-                        renderProjectStructure(
-                          selectedProject.structure as unknown as ProjectStructure
-                        )}
+                {selectedProject && (
+                  <div className="mb-6 space-y-4">
+                    <div>
+                      <div className="flex items-start justify-between gap-4 mb-2">
+                        <h3 className="text-2xl font-bold text-gray-200 flex-1">{selectedProject.title}</h3>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          {selectedProject.repoUrl && (
+                            <a
+                              href={selectedProject.repoUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 text-sm hover:text-blue-400 text-gray-300 hover:bg-gray-700/50 px-3 py-1.5 rounded-lg transition-colors"
+                              title={t('projects.visitGitHub')}
+                            >
+                              <FaGithub />
+                              <span className="hidden sm:inline">{t('projects.repository')}</span>
+                            </a>
+                          )}
+                          {selectedProject.liveUrl && (
+                            <a
+                              href={selectedProject.liveUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1.5 text-sm hover:text-green-400 text-gray-300 hover:bg-gray-700/50 px-3 py-1.5 rounded-lg transition-colors"
+                              title={t('projects.visitLiveSite')}
+                            >
+                              <FaLink />
+                              <span className="hidden sm:inline">{t('projects.liveDemo')}</span>
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                      <p className="text-gray-300 mb-4">{selectedProject.description}</p>
                     </div>
-                  </div>
 
-                  {selectedProject &&
-                    selectedProject.images &&
-                    selectedProject.images.length > 0 && (
+                    {selectedProject.highlights && selectedProject.highlights.length > 0 && (
                       <div className="bg-gray-800/50 rounded-lg p-4">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-200">Screenshots</h3>
+                        <h4 className="text-lg font-semibold mb-3 text-gray-200">{t('projects.highlights')}</h4>
+                        <ul className="space-y-2">
+                          {selectedProject.highlights.map((highlight, i) => (
+                            <li key={i} className="text-gray-300 text-sm flex items-start">
+                              <span className="mr-2">•</span>
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {selectedProject.challenges && selectedProject.challenges.length > 0 && (
+                      <div className="bg-gray-800/50 rounded-lg p-4">
+                        <h4 className="text-lg font-semibold mb-3 text-gray-200">{t('projects.technicalChallenges')}</h4>
+                        <ul className="space-y-2">
+                          {selectedProject.challenges.map((challenge, i) => (
+                            <li key={i} className="text-gray-300 text-sm flex items-start">
+                              <span className="mr-2">•</span>
+                              <span>{challenge}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {selectedProject.techStack && selectedProject.techStack.length > 0 && (
+                      <div className="bg-gray-800/50 rounded-lg p-4">
+                        <h4 className="text-lg font-semibold mb-3 text-gray-200">{t('projects.techStack')}</h4>
+                        <div className="flex flex-wrap gap-2">
+                          {selectedProject.techStack.map(tech => (
+                            <span
+                              key={tech}
+                              className="px-3 py-1.5 bg-gray-700/50 rounded-lg text-sm text-gray-200 border border-gray-600/50"
+                            >
+                              {tech}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {selectedProject &&
+                  selectedProject.images &&
+                  selectedProject.images.length > 0 && (
+                    <div className="bg-gray-800/50 rounded-lg p-4">
+                        <h3 className="text-xl font-semibold mb-4 text-gray-200">{t('projects.screenshots')}</h3>
                         <div className="relative">
                           <div className="rounded-lg overflow-hidden mb-2 bg-gray-700/50 relative">
                             {!imageLoadStates[
@@ -314,35 +323,8 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                             </div>
                           )}
                         </div>
-                        {selectedProject.repoUrl && (
-                          <div className="mt-4">
-                            <a
-                              href={selectedProject.repoUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
-                            >
-                              <FaGithub />
-                              <span>Visit GitHub Repository</span>
-                            </a>
-                          </div>
-                        )}
-                        {selectedProject.liveUrl && (
-                          <div className="mt-4">
-                            <a
-                              href={selectedProject.liveUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-sm hover:text-blue-400 text-gray-300 bg-gray-700/50 p-2 rounded-lg"
-                            >
-                              <FaLink />
-                              <span>Visit Live Site</span>
-                            </a>
-                          </div>
-                        )}
                       </div>
                     )}
-                </div>
               </div>
             )}
           </div>
@@ -354,7 +336,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
           className="fixed inset-0 z-[70]"
           role="dialog"
           aria-modal="true"
-          aria-label="Quick Look"
+          aria-label={t('projects.quickLook')}
         >
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -396,7 +378,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
               <p className="text-gray-300 mb-3">{quickLook!.description}</p>
               <div className="flex flex-wrap gap-2 mb-4">
                 {quickLook!.techStack.map((tech: string) => (
-                  <span key={tech} className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300">
+                  <span key={tech} className="px-3 py-1.5 bg-gray-700/50 rounded-lg text-xs text-gray-200 border border-gray-600/50">
                     {tech}
                   </span>
                 ))}
@@ -410,7 +392,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                     setQuickLook(null);
                   }}
                 >
-                  Open Details
+                  {t('projects.openDetails')}
                 </button>
                 <a
                   href={quickLook!.repoUrl}
@@ -418,7 +400,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                   rel="noopener noreferrer"
                   className="text-sm text-gray-300 hover:text-blue-400"
                 >
-                  Open Repo
+                  {t('projects.openRepo')}
                 </a>
                 {quickLook!.liveUrl && (
                   <a
@@ -427,7 +409,7 @@ const GitHubViewer = ({ isOpen, onClose, selectedProjectId, onFocus }: GitHubVie
                     rel="noopener noreferrer"
                     className="text-sm text-green-400 hover:text-green-300"
                   >
-                    Open Live
+                    {t('projects.openLive')}
                   </a>
                 )}
               </div>

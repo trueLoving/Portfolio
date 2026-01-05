@@ -11,7 +11,6 @@ interface DesktopDockProps {
   onTerminalClick: () => void;
   onNotesClick: () => void;
   onGitHubClick: () => void;
-  onContactClick: () => void;
   activeApps: {
     terminal: boolean;
     notes: boolean;
@@ -19,20 +18,15 @@ interface DesktopDockProps {
     resume: boolean;
     spotify: boolean;
   };
-  focusedApp?: 'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null;
-  hasUnread?: {
-    contact?: boolean;
-  };
+  focusedApp?: 'terminal' | 'notes' | 'github' | 'resume' | null;
 }
 
 const DesktopDock = ({
   onTerminalClick,
   onNotesClick,
   onGitHubClick,
-  onContactClick,
   activeApps,
   focusedApp,
-  hasUnread,
 }: DesktopDockProps) => {
   const { t } = useI18n();
   const userConfig = useUserConfig();
@@ -182,16 +176,6 @@ const DesktopDock = ({
       isFocused: focusedApp === 'resume',
     },
     {
-      id: 'email',
-      label: t('dock.contact'),
-      onClick: onContactClick,
-      icon: IoIosMail,
-      color: 'from-blue-600 to-blue-400',
-      active: false,
-      isFocused: focusedApp === 'contact',
-      hasUnread: hasUnread?.contact,
-    },
-    {
       id: 'links',
       label: t('dock.links'),
       onClick: handleLinksClick,
@@ -255,7 +239,7 @@ const DesktopDock = ({
                     }`}
                   >
                     <Icon
-                      size={item.id === 'email' ? 40 : item.id === 'links' ? 30 : 35}
+                      size={item.id === 'links' ? 30 : 35}
                       className="text-white"
                     />
                     {/* Active indicator: small dot at bottom */}
@@ -266,13 +250,6 @@ const DesktopDock = ({
                       />
                     )}
                     {/* Focused indicator: brighter ring (already handled by ring-2 ring-blue-400 above) */}
-                    {/* Unread badge: small red dot at top-right */}
-                    {item.hasUnread && (
-                      <span
-                        className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-gray-600/50"
-                        aria-label="Unread"
-                      />
-                    )}
                   </div>
                   {hoveredIcon === item.id && <Tooltip text={item.label} />}
                   {item.id === 'links' && showLinksPopup && <LinksPopup />}

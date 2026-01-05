@@ -29,7 +29,6 @@ interface MacToolbarProps {
   onShowTutorial?: () => void;
   onOpenSpotlight?: () => void;
   onOpenMissionControl?: () => void;
-  onOpenContact?: () => void;
   onToggleShortcuts?: () => void;
   onCloseAllWindows?: () => void;
   onShuffleBackground?: () => void;
@@ -45,7 +44,6 @@ export default function MacToolbar({
   onShowTutorial,
   onOpenSpotlight,
   onOpenMissionControl,
-  onOpenContact,
   onToggleShortcuts,
   onCloseAllWindows,
   onShuffleBackground,
@@ -157,7 +155,7 @@ export default function MacToolbar({
           if (onOpenAdmin) {
             onOpenAdmin();
           } else {
-            window.location.assign('/admin');
+            window.open('/admin', '_blank');
           }
         },
       },
@@ -205,11 +203,6 @@ export default function MacToolbar({
         : []),
     ],
     [t('toolbar.window')]: [
-      {
-        label: t('toolbar.contact'),
-        icon: <IoMail size={16} />,
-        action: () => onOpenContact?.(),
-      },
       {
         label: t('toolbar.closeAllWindows'),
         icon: <IoDocumentText size={16} />,
