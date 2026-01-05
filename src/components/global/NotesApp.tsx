@@ -131,13 +131,13 @@ const NotesApp = ({ isOpen, onClose, section, onFocus }: NotesAppProps) => {
     <div className="space-y-6">
       {renderBackButton()}
       <h2 className="text-2xl font-bold text-gray-200 mb-6">{t('notes.education.title')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="flex flex-wrap gap-6">
         {education.map((item, index) => {
           const itemId = `education-${index}`;
           return (
             <div
               key={itemId}
-              className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+              className="bg-gray-800/50 p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow flex-1 min-w-[300px]"
             >
               <h3 className="text-xl font-semibold text-gray-200 mb-2">
                 {item.degree} {item.major && `- ${item.major}`}
@@ -147,6 +147,21 @@ const NotesApp = ({ isOpen, onClose, section, onFocus }: NotesAppProps) => {
               </div>
               <div className="text-gray-400 mb-3">{item.year}</div>
               <p className="text-gray-300 mb-4">{item.description}</p>
+              {item.relevantCourses && item.relevantCourses.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-200 mb-2">Relevant Courses:</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {item.relevantCourses.map((course, i) => (
+                      <span
+                        key={i}
+                        className="px-2 py-1 bg-gray-700 rounded text-xs text-gray-300"
+                      >
+                        {course}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
               {item.images && item.images.length > 0 && renderImageCarousel(itemId, item.images)}
             </div>
           );
@@ -159,7 +174,7 @@ const NotesApp = ({ isOpen, onClose, section, onFocus }: NotesAppProps) => {
     <div className="space-y-6">
       {renderBackButton()}
       <h2 className="text-2xl font-bold text-gray-200 mb-6">{t('notes.experience.title')}</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-6">
         {experience.map((item, index) => {
           const itemId = `experience-${index}`;
           return (
@@ -173,6 +188,16 @@ const NotesApp = ({ isOpen, onClose, section, onFocus }: NotesAppProps) => {
               </div>
               <div className="text-gray-400 mb-3">{item.period}</div>
               <p className="text-gray-300 mb-4">{item.description}</p>
+              {item.achievements && item.achievements.length > 0 && (
+                <div className="mb-4">
+                  <h4 className="text-sm font-semibold text-gray-200 mb-2">Key Achievements:</h4>
+                  <ul className="list-disc list-inside space-y-1 text-sm text-gray-300">
+                    {item.achievements.map((achievement, i) => (
+                      <li key={i}>{achievement}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
               {item.technologies && (
                 <div className="flex flex-wrap gap-2 mb-4">
                   {item.technologies.map((tech, i) => (

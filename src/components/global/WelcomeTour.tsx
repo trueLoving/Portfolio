@@ -8,7 +8,6 @@ type Actions = {
   openMissionControl: () => void;
   openNotes: () => void;
   openGitHub: () => void;
-  openContact: () => void;
   closeAll?: () => void;
 };
 
@@ -60,14 +59,6 @@ export default function WelcomeTour({ open, onClose, actions }: WelcomeTourProps
         cta: { label: 'Open Projects', onClick: actions.openGitHub },
         altCta: { label: 'Open Notes', onClick: actions.openNotes },
         tip: 'Use Space on a project to Quick Look; Enter to open.',
-      },
-      {
-        id: 'contact',
-        title: 'Contact',
-        desc: 'Reach out directly via the built-in contact form (stored securely in Supabase).',
-        icon: <IoDocumentTextOutline className="text-white/90" size={28} />,
-        cta: { label: 'Open Contact', onClick: actions.openContact },
-        tip: 'You can also press C or find it in Spotlight.',
       },
       {
         id: 'shortcuts',

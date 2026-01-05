@@ -58,8 +58,6 @@ export interface Translations {
       actions: string;
     };
     actions: {
-      openContactForm: string;
-      openContactFormSubtitle: string;
       openTerminal: string;
       openTerminalSubtitle: string;
       openNotesExperience: string;
@@ -156,5 +154,22 @@ export interface Translations {
     contact: string;
     help: string;
     missionControl: string;
+  };
+  projects: {
+    title: string;
+    myProjects: string;
+    backToProjects: string;
+    highlights: string;
+    technicalChallenges: string;
+    techStack: string;
+    screenshots: string;
+    repository: string;
+    liveDemo: string;
+    quickLook: string;
+    visitGitHub: string;
+    visitLiveSite: string;
+    openDetails: string;
+    openRepo: string;
+    openLive: string;
   };
 }

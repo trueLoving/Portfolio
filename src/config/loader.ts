@@ -12,7 +12,8 @@ export { backgroundConfig, getBackgroundMap, getRandomBackgroundKey } from './ba
 // Non-localized configs (same for all languages) - using English as default
 import { social } from './en/social';
 import { contact } from './en/contact';
-import { projects } from './en/projects';
+import { projects as enProjects } from './en/projects';
+import { projects as zhProjects } from './zh/projects';
 import { spotify } from './en/apps';
 
 // Localized configs for English
@@ -61,7 +62,7 @@ export function getUserConfig(locale: Locale = 'en'): UserConfig {
     courses: isZh ? zhCourses : enCourses,
     skills: isZh ? zhSkills : enSkills,
     experience: isZh ? zhExperience : enExperience,
-    projects,
+    projects: isZh ? zhProjects : enProjects,
   } as const;
 }
 

@@ -1,5 +1,4 @@
 import { useEffect, useReducer, useState } from 'react';
-import ContactWidget from '../components/global/ContactWidget';
 import DesktopDock from '../components/global/DesktopDock';
 import GitHubViewer from '../components/global/GitHubViewer';
 import MacTerminal from '../components/global/MacTerminal';
@@ -47,14 +46,12 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
   const [isSpotlightOpen, setIsSpotlightOpen] = useState(false);
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [isMissionControlOpen, setIsMissionControlOpen] = useState(false);
-  const [isContactOpen, setIsContactOpen] = useState(false);
   const [notesSection, setNotesSection] = useState<NotesSection | undefined>(undefined);
   const [selectedProjectId, setSelectedProjectId] = useState<string | undefined>(undefined);
   const [videoRef, setVideoRef] = useState<HTMLVideoElement | null>(null);
   const [focusedApp, setFocusedApp] = useState<
-    'terminal' | 'notes' | 'github' | 'resume' | 'contact' | null
+    'terminal' | 'notes' | 'github' | 'resume' | null
   >(null);
-  const [hasUnread, setHasUnread] = useState<{ contact?: boolean }>({});
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [_videoError, setVideoError] = useState<string | null>(null);
   const [showToast, setShowToast] = useState<string | null>(null);
@@ -181,10 +178,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
       ) {
         e.preventDefault();
         setIsMissionControlOpen(m => !m);
-      } else if (cmdOrCtrl && (e.key === 'c' || e.key === 'C')) {
-        // Quick open contact with `ctrl+c`
-        e.preventDefault();
-        setIsContactOpen(o => !o);
       }
     };
     window.addEventListener('keydown', handler);
@@ -229,19 +222,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
     dispatch({ type: 'CLOSE', app });
     // Clear focused app if it was the one being closed
     if (focusedApp === app) {
-      setFocusedApp(null);
-    }
-  };
-
-  // Track contact widget open/close for focus
-  const handleContactOpen = () => {
-    setIsContactOpen(true);
-    setFocusedApp('contact');
-    setHasUnread(prev => ({ ...prev, contact: false })); // Clear unread when opening
-  };
-  const handleContactClose = () => {
-    setIsContactOpen(false);
-    if (focusedApp === 'contact') {
       setFocusedApp(null);
     }
   };
@@ -298,12 +278,11 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
             onShowTutorial={resetTutorial}
             onOpenSpotlight={() => setIsSpotlightOpen(true)}
             onOpenMissionControl={() => setIsMissionControlOpen(true)}
-            onOpenContact={handleContactOpen}
             onToggleShortcuts={() => setShowShortcuts(s => !s)}
             onCloseAllWindows={closeAllWindows}
             onShuffleBackground={shuffleBackground}
             onOpenAdmin={() => {
-              window.location.href = '/admin';
+              window.open('/admin', '_blank');
             }}
             reducedMotion={reducedMotion}
             onToggleReducedMotion={() => setReducedMotion(!reducedMotion)}
@@ -352,10 +331,8 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
           onGitHubClick={() => {
             handleAppOpen('github');
           }}
-          onContactClick={handleContactOpen}
           activeApps={activeApps}
           focusedApp={focusedApp}
-          hasUnread={hasUnread}
         />
 
         <NotesApp
@@ -394,7 +371,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
           actions={{
             openTerminal: () => handleAppOpen('terminal'),
             openNotes: () => handleAppOpen('notes'),
-            openContact: handleContactOpen,
             openNotesSection: s => openNotesSection(s as NotesSection),
             openGitHub: () => handleAppOpen('github'),
             openResume: () => handleAppOpen('resume'),
@@ -415,7 +391,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
             openMissionControl: () => setIsMissionControlOpen(true),
             openNotes: () => handleAppOpen('notes'),
             openGitHub: () => handleAppOpen('github'),
-            openContact: handleContactOpen,
             closeAll: closeAllWindows,
           }}
         />
@@ -429,7 +404,6 @@ export default function Desktop({ initialBg, backgroundMap }: AppLayoutProps) {
             }
           }}
         />
-        <ContactWidget open={isContactOpen} onClose={handleContactClose} />
         <MissionControl
           isOpen={isMissionControlOpen}
           onClose={() => setIsMissionControlOpen(false)}

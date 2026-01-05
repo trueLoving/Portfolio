@@ -13,7 +13,15 @@ export const education: readonly Education[] = [
     location: 'Hangzhou, China',
     year: '2017-2021',
     description:
-      'Relevant coursework: Data Structures, Data Structures and Algorithms, Operating Systems, Computer Networks, Software Engineering, Biomedical Informatics, Artificial Intelligence, Machine Learning, Deep Learning, Computer Vision, Natural Language Processing, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems, Computer Networks, Operating Systems, Computer Architecture, Computer Organization, Computer Security, Computer Graphics, Computer Systems',
+      'Focused on software engineering, algorithms, and modern web technologies. Completed capstone project on cross-platform application development.',
+    relevantCourses: [
+      'Data Structures and Algorithms',
+      'Operating Systems',
+      'Computer Networks',
+      'Software Engineering',
+      'Machine Learning',
+      'Computer Vision',
+    ],
     images: [
       {
         url: 'https://www.hznu.edu.cn/upload/resources/image/2021/08/10/7657092.jpg',

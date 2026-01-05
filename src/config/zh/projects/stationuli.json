@@ -1,0 +1,35 @@
+{
+  "id": "stationuli",
+  "title": "Stationuli",
+  "description": "完全离线的 P2P 文件传输和设备控制解决方案，使用 Rust 和 Tauri 构建",
+  "repoUrl": "https://github.com/trueLoving/Stationuli",
+  "liveUrl": "https://github.com/trueLoving/Stationuli/releases/tag/v0.0.1",
+  "techStack": ["React", "TypeScript", "Tailwind CSS", "Tauri", "Rust"],
+  "highlights": [
+    "🔒 隐私优先：完全离线，无云依赖，端到端加密",
+    "⚡ 性能卓越：使用 Rust 后端和 QUIC 协议，延迟 <50ms",
+    "📱 跨平台：支持桌面（Tauri）和移动端（React Native）",
+    "🔄 实时通信：基于 WebSocket 的设备发现和文件传输",
+    "🛡️ 安全可靠：实现加密和安全密钥交换"
+  ],
+  "challenges": [
+    "使用 mDNS 和 QUIC 设计高效的 P2P 网络架构",
+    "优化 Rust 后端以实现低延迟文件传输",
+    "实现安全的设备配对和身份验证"
+  ],
+  "metrics": {
+    "transferSpeed": "本地网络最高 100MB/s",
+    "latency": "<50ms",
+    "maxFileSize": "10GB+"
+  },
+  "images": [
+    {
+      "url": "/projects/stationuli/desktop.webp",
+      "alt": "stationuli-desktop"
+    },
+    {
+      "url": "/projects/stationuli/mobile.webp",
+      "alt": "stationuli-mobile"
+    }
+  ]
+}

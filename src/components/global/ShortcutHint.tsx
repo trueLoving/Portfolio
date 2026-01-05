@@ -61,7 +61,6 @@ export default function ShortcutHint({ show: controlledShow, onToggle }: Shortcu
 
   const shortcuts = [
     { key: '(CTRL/⌘)+K', label: t('shortcutHint.search'), icon: <IoSearch size={14} /> },
-    { key: '(CTRL/⌘)+C', label: t('shortcutHint.contact'), icon: <IoMail size={14} /> },
     { key: '? or (CTRL/⌘)+H', label: t('shortcutHint.help'), icon: <FaRegKeyboard size={14} /> },
     {
       key: '(CTRL/⌘)+M or (CTRL/⌘)+Up',

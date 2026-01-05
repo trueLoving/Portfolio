@@ -40,6 +40,17 @@ export interface Project {
   techStack: readonly string[];
   structure: ProjectStructure;
   images: readonly Image[];
+  highlights?: readonly string[];
+  challenges?: readonly string[];
+  metrics?: {
+    users?: string;
+    imagesProcessed?: string;
+    performance?: string;
+    transferSpeed?: string;
+    latency?: string;
+    maxFileSize?: string;
+    [key: string]: string | undefined;
+  };
 }
 
 // ============================================
@@ -53,6 +64,9 @@ export interface Education {
   location: string;
   year: string;
   description?: string;
+  relevantCourses?: readonly string[];
+  gpa?: string;
+  achievements?: readonly string[];
   images?: readonly Image[];
 }
 
@@ -75,6 +89,7 @@ export interface Experience {
   location: string;
   period: string;
   description: string;
+  achievements?: readonly string[];
   technologies?: readonly string[];
   images?: readonly Image[];
 }
@@ -122,6 +137,14 @@ export interface SEOConfig {
   title: string;
   description: string;
   keywords: readonly string[];
+  openGraph?: {
+    type?: string;
+    image?: string;
+  };
+  twitter?: {
+    card?: string;
+    creator?: string;
+  };
 }
 
 export interface ThemeConfig {

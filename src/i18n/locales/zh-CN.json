@@ -60,8 +60,6 @@
       "actions": "操作"
     },
     "actions": {
-      "openContactForm": "打开联系表单",
-      "openContactFormSubtitle": "直接发送消息",
       "openTerminal": "打开终端",
       "openTerminalSubtitle": "提问或运行命令",
       "openNotesExperience": "打开笔记：工作经历",
@@ -159,5 +157,22 @@
     "contact": "联系",
     "help": "帮助",
     "missionControl": "调度中心"
+  },
+  "projects": {
+    "title": "GitHub 项目",
+    "myProjects": "我的项目",
+    "backToProjects": "返回项目列表",
+    "highlights": "✨ 亮点",
+    "technicalChallenges": "🎯 技术挑战",
+    "techStack": "🛠️ 技术栈",
+    "screenshots": "截图",
+    "repository": "代码库",
+    "liveDemo": "在线演示",
+    "quickLook": "快速预览",
+    "visitGitHub": "访问 GitHub 代码库",
+    "visitLiveSite": "访问在线网站",
+    "openDetails": "查看详情",
+    "openRepo": "打开代码库",
+    "openLive": "打开在线网站"
   }
 }

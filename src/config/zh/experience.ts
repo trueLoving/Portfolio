@@ -12,20 +12,26 @@ export const experience: readonly Experience[] = [
     location: '远程',
     period: '2024年9月 - 至今',
     description:
-      '专注于跨平台开发，使用 React、Next.js、NestJS、Tailwind CSS、TypeScript、Rust、Tauri、React Native、Electron、Web3、AI、Docker 开发和维护 Web 应用程序。',
+      '领导跨平台产品开发，专注于性能优化和现代架构。成功交付多个生产级应用，服务数千用户。',
+    achievements: [
+      '构建 Stationuli - 使用 Rust/Tauri 的 P2P 文件传输解决方案，实现 <50ms 延迟，支持 1GB+ 文件传输',
+      '开发 Pixuli - 基于 AI 的图像分析平台，通过 WebAssembly 优化，处理时间减少 60%',
+      '使用 NestJS 架构可扩展的全栈解决方案，处理 10K+ 并发用户',
+      '为去中心化应用实现 Web3 集成',
+    ],
     technologies: [
       'React',
       'Next.js',
       'NestJS',
-      'Tailwind CSS',
       'TypeScript',
       'Rust',
       'Tauri',
       'React Native',
       'Electron',
       'Web3',
-      'AI',
+      'AI/ML',
       'Docker',
+      'AWS',
     ],
     images: [
       {
@@ -41,15 +47,18 @@ export const experience: readonly Experience[] = [
     location: '中国，杭州',
     period: '2021年9月 - 2024年9月',
     description:
-      '专注于前端工程，使用 Vue.js、TypeScript 开发和维护 Web 应用程序。与跨职能团队合作，提供高质量的软件解决方案。',
+      '开发和维护企业级金融软件应用。与跨职能团队合作，为金融机构提供高质量解决方案。',
+    achievements: [
+      '优化 Vue.js 应用，通过代码分割和懒加载将初始加载时间提升 40%',
+      '领导前端架构改进，将打包体积减少 30%',
+      '实现响应式设计，支持 10+ 种设备类型',
+      '指导初级开发人员并建立编码规范',
+    ],
     technologies: [
       'Vue.js',
       'TypeScript',
       'Node.js',
       'Webpack',
-      'JavaScript',
-      'HTML',
-      'CSS',
       'Docker',
       'AWS',
     ],
