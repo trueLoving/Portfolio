@@ -16,8 +16,8 @@ const ogUrl = Astro.props.openGraph?.url || siteOrigin;
 // Use configured background as OG image if available and site is known
 const ogImageUrl =
   siteOrigin && backgroundConfig.defaultOgImage
-    ? new URL(backgroundConfig.defaultOgImage, siteOrigin).toString()
-    : undefined;
+  ? new URL(backgroundConfig.defaultOgImage, siteOrigin).toString()
+  : undefined;
 ---
 
 <!-- Core meta tags -->
@@ -48,19 +48,19 @@ const ogImageUrl =
   siteOrigin &&
     (() => {
       const websiteSchema = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'WebSite',
-        url: siteOrigin,
-        name: userConfig.name,
-        description: userConfig.seo.description,
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      url: siteOrigin,
+      name: userConfig.name,
+      description: userConfig.seo.description,
       });
       const personSchema = JSON.stringify({
-        '@context': 'https://schema.org',
-        '@type': 'Person',
-        name: userConfig.name,
-        jobTitle: userConfig.role,
-        url: siteOrigin,
-        sameAs: [userConfig.social.github, userConfig.social.linkedin].filter(Boolean),
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: userConfig.name,
+      jobTitle: userConfig.role,
+      url: siteOrigin,
+      sameAs: [userConfig.social.github, userConfig.social.linkedin].filter(Boolean),
       });
       return (
         <>
@@ -86,23 +86,23 @@ const ogImageUrl =
 <!-- Preload background images for performance -->
 {
   backgroundConfig.defaultPreloadImage && (
-    <link
+  <link
       rel="preload"
-      href={backgroundConfig.defaultPreloadImage}
+    href={backgroundConfig.defaultPreloadImage}
       as="image"
-      type={backgroundConfig.defaultPreloadImage.endsWith('.svg') ? 'image/svg+xml' : 'image/jpeg'}
+    type={backgroundConfig.defaultPreloadImage.endsWith('.svg') ? 'image/svg+xml' : 'image/jpeg'}
       fetchpriority="high"
-    />
+  />
   )
 }
 {
   backgroundConfig.defaultPreloadVideo && (
-    <link
+  <link
       rel="preload"
-      href={backgroundConfig.defaultPreloadVideo}
+    href={backgroundConfig.defaultPreloadVideo}
       as="video"
       type="video/mp4"
       fetchpriority="high"
-    />
+  />
   )
 }

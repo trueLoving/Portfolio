@@ -1,4 +1,4 @@
-# macOS User-friendly Portfolio
+# Profiliuli
 
 <div align="center">
 
@@ -15,7 +15,19 @@
 
 ## 项目简介
 
-本项目基于 [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio) 开发，是一个采用 Astro、React 和 Tailwind CSS 构建的现代化作品集网站。
+**Profiliuli** 是一个采用 Astro、React 和 Tailwind CSS 构建的现代化作品集网站，具有 macOS 风格界面、动态视频背景和双语支持。
+
+本项目基于 [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio) 开发。
+
+### 📛 项目名称：Profiliuli
+
+**名称来源**：项目名称 "Profiliuli" 由 **Profile**（个人档案）+ **uli** 组成，遵循了作品集中其他项目的命名规范（Pixuli、Stationuli）。后缀 "uli" 保持了项目间一致的品牌标识。
+
+**含义**：
+- **Profile** 代表个人档案或专业作品集，强调项目展示个人竞争力、技能和成就的核心目的。
+- 后缀 "uli" 与现有项目命名模式保持一致，形成统一的品牌形象。
+
+**发音**：/ˈproʊfɪljuːli/
 
 ### 🎯 核心特性
 

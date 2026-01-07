@@ -1,6 +1,6 @@
 {
-  "id": "macos-terminal-portfolio",
-  "title": "macOS 终端作品集",
+  "id": "profiliuli",
+  "title": "Profiliuli",
   "description": "一个现代化的交互式作品集网站，采用 macOS 风格 UI，包含终端界面、可拖拽窗口和沉浸式用户体验",
   "repoUrl": "https://github.com/trueLoving/portfolio",
   "liveUrl": "https://trueloving.vercel.app/",
@@ -26,18 +26,18 @@
   },
   "images": [
     {
-      "url": "/projects/macos-terminal-portfolio/home.webp",
-      "alt": "macos-terminal-portfolio-home",
+      "url": "/projects/profiliuli/home.webp",
+      "alt": "profiliuli-home",
       "description": "采用 macOS 风格的主页界面"
     },
     {
-      "url": "/projects/macos-terminal-portfolio/terminal.webp",
-      "alt": "macos-terminal-portfolio-terminal",
+      "url": "/projects/profiliuli/terminal.webp",
+      "alt": "profiliuli-terminal",
       "description": "交互式终端界面"
     },
     {
-      "url": "/projects/macos-terminal-portfolio/github-viewer.webp",
-      "alt": "macos-terminal-portfolio-github",
+      "url": "/projects/profiliuli/github-viewer.webp",
+      "alt": "profiliuli-github",
       "description": "GitHub 项目查看器窗口"
     }
   ]

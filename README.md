@@ -1,4 +1,4 @@
-# macOS User-friendly Portfolio
+# Profiliuli
 
 <div align="center">
 
@@ -15,9 +15,19 @@
 
 ## About
 
-A modern, interactive portfolio website with a macOS-inspired interface, featuring dynamic video backgrounds and bilingual language support.
+**Profiliuli** is a modern, interactive portfolio website with a macOS-inspired interface, featuring dynamic video backgrounds and bilingual language support.
 
 This project is based on [macos-terminal-portfolio](https://github.com/aabdoo23/portfolio), built with Astro, React, and Tailwind CSS.
+
+### 📛 Project Name: Profiliuli
+
+**Name Origin**: The name "Profiliuli" is derived from **Profile** + **uli**, following the naming convention of other projects in the portfolio (Pixuli, Stationuli). The "uli" suffix creates a consistent brand identity across projects.
+
+**Meaning**: 
+- **Profile** represents a personal profile or professional portfolio, emphasizing the project's core purpose of showcasing personal competitiveness, skills, and achievements.
+- The "uli" suffix maintains consistency with the existing project naming pattern, creating a cohesive brand identity.
+
+**Pronunciation**: /ˈproʊfɪljuːli/
 
 ### 🎯 Core Features
 

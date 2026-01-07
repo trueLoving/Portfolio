@@ -1,6 +1,6 @@
 {
-  "id": "macos-terminal-portfolio",
-  "title": "macOS Terminal Portfolio",
+  "id": "profiliuli",
+  "title": "Profiliuli",
   "description": "A modern, interactive portfolio website with macOS-inspired UI, featuring terminal interface, draggable windows, and immersive user experience",
   "repoUrl": "https://github.com/trueLoving/portfolio",
   "liveUrl": "https://trueloving.vercel.app/",
@@ -26,18 +26,18 @@
   },
   "images": [
     {
-      "url": "/projects/macos-terminal-portfolio/home.webp",
-      "alt": "macos-terminal-portfolio-home",
+      "url": "/projects/profiliuli/home.webp",
+      "alt": "profiliuli-home",
       "description": "Home page with macOS-inspired interface"
     },
     {
-      "url": "/projects/macos-terminal-portfolio/terminal.webp",
-      "alt": "macos-terminal-portfolio-terminal",
+      "url": "/projects/profiliuli/terminal.webp",
+      "alt": "profiliuli-terminal",
       "description": "Interactive terminal interface"
     },
     {
-      "url": "/projects/macos-terminal-portfolio/github-viewer.webp",
-      "alt": "macos-terminal-portfolio-github",
+      "url": "/projects/profiliuli/github-viewer.webp",
+      "alt": "profiliuli-github",
       "description": "GitHub projects viewer window"
     }
   ]

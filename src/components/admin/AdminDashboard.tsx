@@ -77,7 +77,7 @@ export default function AdminDashboard() {
 
       setMessages(data.data || []);
     } catch (err: unknown) {
-      setError(err.message || 'Error fetching messages');
+      setError(err instanceof Error ? err.message : 'Error fetching messages');
     } finally {
       setLoading(false);
     }
