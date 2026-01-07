@@ -38,7 +38,7 @@ export interface Project {
   repoUrl: string;
   liveUrl?: string;
   techStack: readonly string[];
-  structure: ProjectStructure;
+  structure?: ProjectStructure;
   images: readonly Image[];
   highlights?: readonly string[];
   challenges?: readonly string[];

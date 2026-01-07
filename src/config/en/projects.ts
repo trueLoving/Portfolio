@@ -7,5 +7,6 @@ import type { Project } from '../../types';
 
 import pixuli from './projects/pixuli.json';
 import stationuli from './projects/stationuli.json';
+import macosTerminalPortfolio from './projects/macos-terminal-portfolio.json';
 
-export const projects: readonly Project[] = [pixuli, stationuli] as Project[];
+export const projects: readonly Project[] = [pixuli, stationuli, macosTerminalPortfolio] as Project[];

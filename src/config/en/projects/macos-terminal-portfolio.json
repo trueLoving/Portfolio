@@ -1,0 +1,45 @@
+{
+  "id": "macos-terminal-portfolio",
+  "title": "macOS Terminal Portfolio",
+  "description": "A modern, interactive portfolio website with macOS-inspired UI, featuring terminal interface, draggable windows, and immersive user experience",
+  "repoUrl": "https://github.com/trueLoving/portfolio",
+  "liveUrl": "https://trueloving.vercel.app/",
+  "techStack": ["Astro", "React", "TypeScript", "Tailwind CSS", "Vercel", "Supabase"],
+  "highlights": [
+    "🎨 macOS-Inspired UI: Authentic macOS design with draggable windows, dock, and mission control",
+    "💻 Interactive Terminal: AI-powered terminal chat interface with command history",
+    "🌐 Multi-Language: Full i18n support for English and Chinese",
+    "⚡ Performance: Built with Astro for optimal loading speed and SEO",
+    "🎯 Modern Stack: React components in Astro, TypeScript for type safety",
+    "📱 Responsive: Fully responsive design for desktop and mobile"
+  ],
+  "challenges": [
+    "Implemented complex state management for draggable windows and app lifecycle",
+    "Built custom terminal interface with command parsing and AI integration",
+    "Created seamless i18n system with locale switching and persistence",
+    "Optimized performance with Astro's island architecture and code splitting"
+  ],
+  "metrics": {
+    "performance": "Lighthouse score 95+",
+    "bundleSize": "Optimized with Astro islands",
+    "seo": "Full SEO optimization with meta tags and OpenGraph"
+  },
+  "images": [
+    {
+      "url": "/projects/macos-terminal-portfolio/home.webp",
+      "alt": "macos-terminal-portfolio-home",
+      "description": "Home page with macOS-inspired interface"
+    },
+    {
+      "url": "/projects/macos-terminal-portfolio/terminal.webp",
+      "alt": "macos-terminal-portfolio-terminal",
+      "description": "Interactive terminal interface"
+    },
+    {
+      "url": "/projects/macos-terminal-portfolio/github-viewer.webp",
+      "alt": "macos-terminal-portfolio-github",
+      "description": "GitHub projects viewer window"
+    }
+  ]
+}
+

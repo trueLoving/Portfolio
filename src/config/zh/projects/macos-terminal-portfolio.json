@@ -1,0 +1,45 @@
+{
+  "id": "macos-terminal-portfolio",
+  "title": "macOS 终端作品集",
+  "description": "一个现代化的交互式作品集网站，采用 macOS 风格 UI，包含终端界面、可拖拽窗口和沉浸式用户体验",
+  "repoUrl": "https://github.com/trueLoving/portfolio",
+  "liveUrl": "https://trueloving.vercel.app/",
+  "techStack": ["Astro", "React", "TypeScript", "Tailwind CSS", "Vercel", "Supabase"],
+  "highlights": [
+    "🎨 macOS 风格 UI：真实的 macOS 设计，包含可拖拽窗口、Dock 和 Mission Control",
+    "💻 交互式终端：AI 驱动的终端聊天界面，支持命令历史",
+    "🌐 多语言支持：完整的中英文国际化支持",
+    "⚡ 性能优化：使用 Astro 构建，实现最佳加载速度和 SEO",
+    "🎯 现代技术栈：Astro 中的 React 组件，TypeScript 类型安全",
+    "📱 响应式设计：完全响应式设计，支持桌面和移动端"
+  ],
+  "challenges": [
+    "实现了可拖拽窗口和应用生命周期的复杂状态管理",
+    "构建了自定义终端界面，包含命令解析和 AI 集成",
+    "创建了无缝的 i18n 系统，支持语言切换和持久化",
+    "使用 Astro 的岛屿架构和代码分割优化性能"
+  ],
+  "metrics": {
+    "performance": "Lighthouse 评分 95+",
+    "bundleSize": "使用 Astro islands 优化",
+    "seo": "完整的 SEO 优化，包含 meta 标签和 OpenGraph"
+  },
+  "images": [
+    {
+      "url": "/projects/macos-terminal-portfolio/home.webp",
+      "alt": "macos-terminal-portfolio-home",
+      "description": "采用 macOS 风格的主页界面"
+    },
+    {
+      "url": "/projects/macos-terminal-portfolio/terminal.webp",
+      "alt": "macos-terminal-portfolio-terminal",
+      "description": "交互式终端界面"
+    },
+    {
+      "url": "/projects/macos-terminal-portfolio/github-viewer.webp",
+      "alt": "macos-terminal-portfolio-github",
+      "description": "GitHub 项目查看器窗口"
+    }
+  ]
+}
+
